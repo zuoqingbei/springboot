@@ -2,6 +2,8 @@ package org.jon.lv.interceptors;
 
 import com.alibaba.fastjson.JSON;
 import org.jon.lv.result.ResultDO;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.core.MethodParameter;
 import org.springframework.http.MediaType;
 import org.springframework.http.server.ServerHttpRequest;
@@ -12,20 +14,22 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseBodyAdvice;
 
 import javax.servlet.http.HttpServletRequest;
 import java.lang.reflect.Method;
+import java.util.Date;
 
 /**
- * Package: org.jon.lv.interceptor.AppResponseInterceptor
- * Description: 全局响应拦截
- * Copyright: Copyright (c) 2017
- *
- * @author lv bin
- * Date: 2018/1/19 17:10
- * Version: V1.0.0
+ * @Description: 统一响应结果处理
+ * Author lv bin
+ * @date 2017/3/17 10:45
+ * version V1.0.0
  */
 @ControllerAdvice
 public class AppResponseInterceptor implements ResponseBodyAdvice {
+
+    private Logger logger = LoggerFactory.getLogger(AppResponseInterceptor.class);
+
     @Override
     public boolean supports(MethodParameter methodParameter, Class aClass) {
+
         return true;
     }
 
@@ -43,9 +47,19 @@ public class AppResponseInterceptor implements ResponseBodyAdvice {
 
                 HttpServletRequest httpServletRequest = request.getServletRequest();
 
+                Date requestTime = (Date) httpServletRequest.getAttribute(AppInterceptors.REQUEST_TIME);
+
+                long useTime = System.currentTimeMillis() - requestTime.getTime();
+
                 Method method = methodParameter.getMethod();
 
+                logger.debug("request controller:" + method.getDeclaringClass() + " request method:" + method.getName());
+
+                logger.debug("request link:" + serverHttpRequest.getURI() + " times:" + useTime);
             }
+
+
+            logger.debug("response content:" + JSON.toJSONString(o));
         }
 
         return o;

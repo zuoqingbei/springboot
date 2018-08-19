@@ -1,6 +1,7 @@
 package org.jon.lv.interceptors;
 
 import java.io.BufferedReader;
+import java.util.Date;
 import java.util.regex.Pattern;
 
 import javax.servlet.http.HttpServletRequest;
@@ -48,11 +49,19 @@ public class AppInterceptors extends WebMvcConfigurerAdapter{
     public String DEFAULT_AUTH_NAME = "X-Auth";
 
     public String DEFAULT_PLATFORM = "X-Platform";
-
+    public static String REQUEST_TIME = "http_request_time";
 
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
-        registry.addInterceptor(new ApiInterceptor()).addPathPatterns("/api/{version}/*");
+    	registry.addInterceptor(new HandlerInterceptorAdapter() {
+            @Override
+            public boolean preHandle(HttpServletRequest request, HttpServletResponse response,
+                                     Object handler) throws Exception {
+                request.setAttribute(REQUEST_TIME, new Date());
+                return true;
+            }
+        }).addPathPatterns("/*");
+        registry.addInterceptor(new ApiInterceptor()).addPathPatterns("/api/*/*","/user/**");
     }
 
     /**

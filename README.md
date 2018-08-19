@@ -3,7 +3,6 @@
 分页插件依赖另外一个项目:https://github.com/L316476844/mybatis-pageplugin <br>
 动态数据源依赖于项目：https://github.com/L316476844/Mybatis-DynamicDataSource 分支 release_05_18 <br>
 
-**QQ交流群：374044564添加QQ群获取springboot、springcloud、dubbo等视频教程及资料**
 
 + springboot例子
 + springboot 自动装载功能和注解方式实现自动装载例子。[boot-custom-autoconfiguration](https://github.com/L316476844/boot-custom-autoconfiguration)

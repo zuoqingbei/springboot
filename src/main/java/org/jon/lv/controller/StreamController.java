@@ -23,7 +23,7 @@ import com.alibaba.fastjson.JSON;
  * Version: V1.0.0
  */
 @RestController
-@RequestMapping("/api/{version}")
+@RequestMapping("/api/v1")
 public class StreamController {
 
     /**
