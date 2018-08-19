@@ -47,15 +47,15 @@ public class AppResponseInterceptor implements ResponseBodyAdvice {
 
                 HttpServletRequest httpServletRequest = request.getServletRequest();
 
-                Date requestTime = (Date) httpServletRequest.getAttribute(AppInterceptors.REQUEST_TIME);
+               /* Date requestTime = (Date) httpServletRequest.getAttribute(AppInterceptors.REQUEST_TIME);
 
-                long useTime = System.currentTimeMillis() - requestTime.getTime();
+                long useTime = System.currentTimeMillis() - requestTime.getTime();*/
 
                 Method method = methodParameter.getMethod();
 
                 logger.debug("request controller:" + method.getDeclaringClass() + " request method:" + method.getName());
 
-                logger.debug("request link:" + serverHttpRequest.getURI() + " times:" + useTime);
+                logger.debug("request link:" + serverHttpRequest.getURI() );
             }
 
 

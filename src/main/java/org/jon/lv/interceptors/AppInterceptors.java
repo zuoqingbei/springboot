@@ -53,15 +53,15 @@ public class AppInterceptors extends WebMvcConfigurerAdapter{
 
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
-    	registry.addInterceptor(new HandlerInterceptorAdapter() {
+    	/*registry.addInterceptor(new HandlerInterceptorAdapter() {
             @Override
             public boolean preHandle(HttpServletRequest request, HttpServletResponse response,
                                      Object handler) throws Exception {
                 request.setAttribute(REQUEST_TIME, new Date());
                 return true;
             }
-        }).addPathPatterns("/*");
-        registry.addInterceptor(new ApiInterceptor()).addPathPatterns("/api/*/*","/user/**");
+        }).addPathPatterns("/*","/user/**");*/
+        registry.addInterceptor(new ApiInterceptor()).addPathPatterns("/api/**");
     }
 
     /**
@@ -81,7 +81,7 @@ public class AppInterceptors extends WebMvcConfigurerAdapter{
             boolean avoidPower = true;
 
             boolean avoidSign = true;
-
+            boolean avoidPlatform = true;
             if(handler instanceof HandlerMethod) {
 
                 HandlerMethod method = (HandlerMethod) handler;
@@ -90,13 +90,14 @@ public class AppInterceptors extends WebMvcConfigurerAdapter{
                 avoidLogin = authPower.avoidLogin();
                 avoidPower = authPower.avoidPower();
                 avoidSign = authPower.avoidSign();
+                avoidPlatform=authPower.avoidPlatform();
             }
 
-           /* String platform =  request.getHeader(TokenConstants.X_PLATFORM);
+            String platform =  request.getHeader(TokenConstants.X_PLATFORM);
 
-            if(StringUtils.isEmpty(platform) || PlatformType.getTypeByPlatform(platform) == null){
+            if(!avoidPlatform&&(StringUtils.isEmpty(platform) || PlatformType.getTypeByPlatform(platform) == null)){
                 throw new AppWebException("平台类型异常：只能为PC、ANDROID、IOS");
-            }*/
+            }
 
             String version = "/api/".concat(APP_VERSION);
 
@@ -128,7 +129,8 @@ public class AppInterceptors extends WebMvcConfigurerAdapter{
                 throw new AppWebException("没有访问权限!");
             }
 
-            if(!avoidSign){
+            String signAuth = request.getHeader(DEFAULT_AUTH_NAME);
+            if(!avoidSign&&StringUtils.isEmpty(signAuth)){
                 // 判断是否需要校验参数规则  是否验签名
                 throw new AppWebException("非法签名 !");
 

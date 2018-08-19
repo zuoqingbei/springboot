@@ -4,6 +4,8 @@ import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
+
+import org.jon.lv.annotation.AuthPower;
 import org.jon.lv.domain.User;
 import org.jon.lv.result.ResultDO;
 import org.jon.lv.service.UserService;
@@ -19,15 +21,15 @@ import org.springframework.web.bind.annotation.*;
  * version V1.0.0
  */
 @RestController
-@RequestMapping("/api/user/v1")
+@RequestMapping("/api/{version}/user")
 public class UserController {
 
     @Autowired
     private UserService userService;
-
+    @AuthPower(avoidVersion = false,avoidPower = true,avoidSign = true,avoidLogin = true,avoidPlatform=true)
     @ApiOperation(value = "查询单个用户",notes = "根据传入id查找用户",httpMethod = "GET")
     @RequestMapping(value ="/get/{id}", method = RequestMethod.GET)
-    public ResultDO<User> get(@PathVariable("id")Integer id){
+    public ResultDO<User> get(@PathVariable("version")Integer version,@PathVariable("id")Integer id){
         ResultDO<User> resultDO = new ResultDO<>();
         resultDO.setSuccess(true);
         resultDO.setData(userService.getUserById(id));
@@ -40,7 +42,7 @@ public class UserController {
     })*/
     @ApiOperation(value="新增用户信息", notes="根据过来的user信息来新增用户")
     @RequestMapping(value = "/add", method = {RequestMethod.GET,RequestMethod.POST})
-    public ResultDO<Integer> add(User user){
+    public ResultDO<Integer> add(@PathVariable("version")Integer version,User user){
         ResultDO<Integer> resultDO = new ResultDO<>();
         resultDO.setSuccess(true);
         resultDO.setData(userService.save(user));

@@ -70,19 +70,19 @@ public class SwaggerConfig extends WebMvcConfigurerAdapter {
     public Docket createRestApi() {
 
         ParameterBuilder tokenParams = new ParameterBuilder();
-        tokenParams.name("X-Token").description("令牌").modelRef(new ModelRef("string")).parameterType("header").required(true).build();
-        ParameterBuilder TimeParams = new ParameterBuilder();
-        TimeParams.name("X-Timestamp").description("时间戳").modelRef(new ModelRef("string")).parameterType("header").required(true).build();
-        ParameterBuilder signParams = new ParameterBuilder();
-        signParams.name("X-Sign").description("签名").modelRef(new ModelRef("string")).parameterType("header").required(true).build();
-        
         ParameterBuilder platformParams = new ParameterBuilder();
-        platformParams.name("X-Platform").description("平台").modelRef(new ModelRef("string")).parameterType("header").required(true).build();
-
+        platformParams.name("X-Platform").description("平台").modelRef(new ModelRef("string")).parameterType("header").required(false).build();
+        tokenParams.name("X-Token").description("令牌").modelRef(new ModelRef("string")).parameterType("header").required(false).build();
+      /*  ParameterBuilder TimeParams = new ParameterBuilder();
+        TimeParams.name("X-Timestamp").description("时间戳").modelRef(new ModelRef("string")).parameterType("header").required(false).build();*/
+        ParameterBuilder signParams = new ParameterBuilder();
+        signParams.name("X-Sign").description("签名").modelRef(new ModelRef("string")).parameterType("header").required(false).build();
+        
+      
         List<Parameter> headerParams = new ArrayList<Parameter>();
-       /* headerParams.add(tokenParams.build());
-        headerParams.add(TimeParams.build());
-        headerParams.add(signParams.build());*/
+        headerParams.add(tokenParams.build());
+        //headerParams.add(TimeParams.build());
+        headerParams.add(signParams.build());
         headerParams.add(platformParams.build());
         return new Docket(DocumentationType.SWAGGER_2)
                 .apiInfo(apiInfo())

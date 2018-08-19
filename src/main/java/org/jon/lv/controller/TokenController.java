@@ -19,7 +19,7 @@ import org.springframework.web.bind.annotation.RestController;
  * @date 2018/1/22
  */
 @RestController
-@RequestMapping("/api/v1")
+@RequestMapping("/api/{version}")
 public class TokenController {
 
     @Autowired

@@ -42,4 +42,9 @@ public @interface AuthPower {
      * @return
      */
     boolean avoidSign() default true;
+    /**
+     * 免平台校验  PC、ANDROID、IOS
+     * @return
+     */
+    boolean avoidPlatform() default true;
 }
