@@ -25,8 +25,21 @@ public class User implements Serializable{
     private Integer sex;
 
     private String password;
+    public User() {
+		super();
+	}
+    public User(Integer id, String head, String name, String phone, String picture, Integer sex, String password) {
+		super();
+		this.id = id;
+		this.head = head;
+		this.name = name;
+		this.phone = phone;
+		this.picture = picture;
+		this.sex = sex;
+		this.password = password;
+	}
 
-    public String getPassword() {
+	public String getPassword() {
 		return password;
 	}
 
