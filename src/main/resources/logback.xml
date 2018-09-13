@@ -172,7 +172,7 @@
 
     <!--myibatis log configure-->
     <!-- project default level -->
-    <logger name="org.jon.lv" level="debug" />
+    <logger name="com.hailian" level="debug" />
 
     <!--log4jdbc -->
     <logger name="jdbc.sqltiming" level="debug"/>

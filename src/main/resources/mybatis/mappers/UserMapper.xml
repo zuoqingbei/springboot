@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="org.jon.lv.mapper.UserMapper">
-  <resultMap id="BaseResultMap" type="org.jon.lv.domain.User">
+<mapper namespace="com.hailian.mapper.UserMapper">
+  <resultMap id="BaseResultMap" type="com.hailian.domain.User">
     <id column="id" jdbcType="INTEGER" property="id" />
     <result column="head" jdbcType="VARCHAR" property="head" />
     <result column="name" jdbcType="VARCHAR" property="name" />
@@ -22,7 +22,7 @@
     delete from user
     where id = #{id,jdbcType=INTEGER}
   </delete>
-  <insert id="insert" keyProperty="id" parameterType="org.jon.lv.domain.User" useGeneratedKeys="true">
+  <insert id="insert" keyProperty="id" parameterType="com.hailian.domain.User" useGeneratedKeys="true">
     insert into user (id, head, name, 
       phone, picture, sex
       )
@@ -30,7 +30,7 @@
       #{phone,jdbcType=VARCHAR}, #{picture,jdbcType=VARCHAR}, #{sex,jdbcType=INTEGER}
       )
   </insert>
-  <insert id="insertSelective" keyProperty="id" parameterType="org.jon.lv.domain.User" useGeneratedKeys="true">
+  <insert id="insertSelective" keyProperty="id" parameterType="com.hailian.domain.User" useGeneratedKeys="true">
     insert into user
     <trim prefix="(" suffix=")" suffixOverrides=",">
       <if test="id != null">
@@ -73,7 +73,7 @@
       </if>
     </trim>
   </insert>
-  <update id="updateByPrimaryKeySelective" parameterType="org.jon.lv.domain.User">
+  <update id="updateByPrimaryKeySelective" parameterType="com.hailian.domain.User">
     update user
     <set>
       <if test="head != null">
@@ -94,7 +94,7 @@
     </set>
     where id = #{id,jdbcType=INTEGER}
   </update>
-  <update id="updateByPrimaryKey" parameterType="org.jon.lv.domain.User">
+  <update id="updateByPrimaryKey" parameterType="com.hailian.domain.User">
     update user
     set head = #{head,jdbcType=VARCHAR},
       name = #{name,jdbcType=VARCHAR},

@@ -5,6 +5,6 @@
        http://www.springframework.org/schema/beans/spring-beans.xsd">
 
     <!-- 注入spring boot无法扫描到的bean. -->
-    <bean id="helloService" class="org.jon.lv.xml.HelloService"></bean>
+    <bean id="helloService" class="com.hailian.xml.HelloService"></bean>
 
 </beans>
