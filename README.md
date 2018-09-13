@@ -31,7 +31,7 @@
 + actuator监控
 + kafka消息队列
 + Swagger2配置  http://localhost:8080/swagger-ui.html
-+ Swagger2 所有api请求头header添加X-Token令牌 X-Timestamp 时间戳 X-Sign 签名信息
++ Swagger2 所有api请求头header添加X-Token令牌 X-Timestamp 时间戳 X-Sign 版本 version请求参数 签名信息 
 + dubbo注解方式 dubbo版本2.5.5
 + dubboxml配置方式-分支：dubbo_xml_config
 + elasticsearch搜索引擎

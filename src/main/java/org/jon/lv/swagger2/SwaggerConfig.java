@@ -31,6 +31,7 @@ import java.util.List;
 public class SwaggerConfig extends WebMvcConfigurerAdapter {
 
     //http://localhost:8080/swagger-ui.html
+	//https://blog.csdn.net/xupeng874395012/article/details/68946676
 
    /**
      * 使用enableMVC注解的话,该配置必须,否则无法映射资源
@@ -78,12 +79,16 @@ public class SwaggerConfig extends WebMvcConfigurerAdapter {
         ParameterBuilder signParams = new ParameterBuilder();
         signParams.name("X-Sign").description("签名").modelRef(new ModelRef("string")).parameterType("header").required(false).build();
         
-      
+        //添加公用参数
+        ParameterBuilder versionParams = new ParameterBuilder();
+        versionParams.name("version").description("版本").modelRef(new ModelRef("string")).parameterType("path").required(true).build();
+        
         List<Parameter> headerParams = new ArrayList<Parameter>();
         headerParams.add(tokenParams.build());
         //headerParams.add(TimeParams.build());
         headerParams.add(signParams.build());
         headerParams.add(platformParams.build());
+        headerParams.add(versionParams.build());
         return new Docket(DocumentationType.SWAGGER_2)
                 .apiInfo(apiInfo())
                 .groupName("api")
