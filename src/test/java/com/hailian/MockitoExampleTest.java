@@ -1,12 +1,5 @@
 package com.hailian;
 
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Test;
-import org.mockito.*;
-import org.springframework.beans.factory.annotation.Autowired;
-
-import com.hailian.service.UserService;
 
 
 public class MockitoExampleTest extends SpringbootexampleApplicationTests  {

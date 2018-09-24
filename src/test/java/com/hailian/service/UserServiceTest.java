@@ -1,4 +1,4 @@
-package com.hailian.service;
+/*package com.hailian.service;
 
 import org.jon.lv.pagination.Page;
 import org.junit.Test;
@@ -7,14 +7,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import com.hailian.SpringbootexampleApplicationTests;
 import com.hailian.domain.User;
 
-/**
+*//**
  * @Package com.hailian.service.UserServiceTest
  * @Description: UserServiceTest
  * @Copyright: Copyright (c) 2016
  * Author lv bin
  * @date 2017/5/12 17:21
  * version V1.0.0
- */
+ *//*
 public class UserServiceTest extends SpringbootexampleApplicationTests {
 
     @Autowired
@@ -51,3 +51,4 @@ public class UserServiceTest extends SpringbootexampleApplicationTests {
         System.out.println(user);
     }
 }
+*/
