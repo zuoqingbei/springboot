@@ -16,7 +16,7 @@ import java.util.List;
  * @author zuoqb123
  * @date 2018-09-24
  */
- @Mapper
+@Mapper
 public interface DataDatasourceConfigMapper extends BaseMapper<DataDatasourceConfig> {
 	@ResultMap(value = "BaseResultMap")
     @Select("SELECT * FROM data_datasource_config WHERE  id = #{id}")

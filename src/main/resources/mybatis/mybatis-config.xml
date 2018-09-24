@@ -50,5 +50,6 @@
 		</plugin>
 		<plugin interceptor="com.hailian.spy.SqlCostInterceptor"/>
 	</plugins>
+		
 
 </configuration>
