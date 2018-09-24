@@ -1,18 +1,31 @@
 package ${package.Mapper};
-
+import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.ResultMap;
+import org.apache.ibatis.annotations.Select;
+import org.jon.lv.pagination.Page;
 import ${package.Entity}.${entity};
-import ${superMapperClassPackage};
+import com.baomidou.mybatisplus.mapper.BaseMapper;
+import java.util.List;
 
 /**
  * <p>
   * $!{table.comment} Mapper 接口
  * </p>
- *
  * @author ${author}
- * @since ${date}
+ * @date ${date}
  */
+ @Mapper
 public interface ${table.mapperName} extends ${superMapperClass}<${entity}> {
-
+	@ResultMap(value = "BaseResultMap")
+    @Select("SELECT * FROM ${table.name} WHERE  id = #{id}")
+    List<${entity}> selectListBySQL(Integer id);
+    /**
+	 * 
+	 * @todo   分页查询$!{table.comment}
+	 * @author ${author}
+	 * @date ${date}
+	 */
+	List<${entity}> queryPage(Page<${entity}> page);
 }
 
 

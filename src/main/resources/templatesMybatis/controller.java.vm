@@ -1,6 +1,6 @@
 package ${package.Controller};
 
-
+import org.jon.lv.pagination.Page;
 #if(${restControllerStyle})
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
@@ -56,6 +56,12 @@ public class ${table.controllerName} extends BaseController{
     @Autowired
     public ${table.serviceName} i${entity}Service;
 
+	 /**
+     * @time   ${date}
+     * @author ${author}
+     * @todo   查询单个对象
+     */
+    @ResponseBody
  	@AuthPower(avoidVersion = false, avoidPower = true, avoidSign = true, avoidLogin = true, avoidPlatform = true)
   	@ApiOperation(value = "查询单个$!{table.comment}", notes = "查询单个$!{table.comment}", httpMethod = "GET")
   	@RequestMapping(value = "/get/{id}", method = {RequestMethod.GET,RequestMethod.POST})
@@ -66,6 +72,19 @@ public class ${table.controllerName} extends BaseController{
   		return resultDO;
   	}
 
-
+	 /**
+     * @time   ${date}
+     * @author ${author}
+     * @todo   分页查询
+     */
+    @ResponseBody
+ 	@AuthPower(avoidVersion = false, avoidPower = true, avoidSign = true, avoidLogin = true, avoidPlatform = true)
+  	@ApiOperation(value = "分页查询$!{table.comment}", notes = "分页查询$!{table.comment}", httpMethod = "GET")
+  	@RequestMapping(value = "/queryPage", method = {RequestMethod.GET,RequestMethod.POST})
+    public Page<${entity}> queryPage(Integer pageNumber, Integer pageSize){
+        Page<${entity}> page = new Page<>(pageNumber, pageSize);
+        i${entity}Service.queryPage(page);
+        return page;
+    }
 }
 

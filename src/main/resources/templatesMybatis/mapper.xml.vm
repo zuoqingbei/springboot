@@ -30,9 +30,27 @@
     <!-- 通用查询结果列 -->
     <sql id="Base_Column_List">
 #foreach($field in ${table.commonFields})
-   #if(${field.name} == ${field.propertyName})${field.name}#else${field.name} AS ${field.propertyName}#end,
+   #if(${field.name} == ${field.propertyName})${field.name}#else${field.name}#end,
 #end
-        ${table.fieldNames}
-    </sql>
+#foreach($field in ${table.fields})
+#if(!${field.keyFlag})##生成普通字段
+      ${field.name},
 #end
+#end
+</sql>
+#end
+
+  <!-- 查询单个对象 -->
+  <select id="selectById" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+	    select 
+	    <include refid="Base_Column_List" />
+	    from ${table.name}
+	    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <!-- 查询分页对象 -->
+  <select id="queryPage" resultMap="BaseResultMap">
+	    select
+	       <include refid="Base_Column_List" />
+	    from ${table.name}
+  </select>
 </mapper>

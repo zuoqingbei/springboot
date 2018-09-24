@@ -27,18 +27,37 @@
 
     <!-- 通用查询结果列 -->
     <sql id="Base_Column_List">
-        id, user_id, name, enname, db_type, db_diver, db_url, db_name, db_password, max_num, useable, create_by, create_date, update_by, update_date , remarks, del_flag, db_version, suport_transaction
-    </sql>
-    <!-- 查询单个duix -->
+      user_id,
+      name,
+      enname,
+      db_type,
+      db_diver,
+      db_url,
+      db_name,
+      db_password,
+      max_num,
+      useable,
+      create_by,
+      create_date,
+      update_by,
+      update_date,
+      remarks,
+      del_flag,
+      db_version,
+      suport_transaction
+</sql>
+
+  <!-- 查询单个对象 -->
     <select id="selectById" parameterType="java.lang.Integer" resultMap="BaseResultMap">
     select 
     <include refid="Base_Column_List" />
     from data_datasource_config
     where id = #{id,jdbcType=INTEGER}
   </select>
+  <!-- 查询分页对象 -->
   <select id="queryPage" resultMap="BaseResultMap">
     select
-       *
+       <include refid="Base_Column_List" />
     from data_datasource_config
   </select>
 </mapper>

@@ -19,9 +19,8 @@ import lombok.experimental.Accessors;
  * <p>
  * $!{table.comment}
  * </p>
- *
  * @author ${author}
- * @since ${date}
+ * @date ${date}
  */
 #if(${entityLombokModel})
 @Data
