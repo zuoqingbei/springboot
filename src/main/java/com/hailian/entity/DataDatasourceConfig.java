@@ -5,16 +5,14 @@ import java.util.Date;
 
 import com.baomidou.mybatisplus.activerecord.Model;
 import com.baomidou.mybatisplus.annotations.TableField;
-import com.baomidou.mybatisplus.annotations.TableId;
 import com.baomidou.mybatisplus.annotations.TableName;
 
 /**
  * <p>
  * 数据源配置
  * </p>
- *
  * @author zuoqb123
- * @since 2018-09-24
+ * @date 2018-09-25
  */
 @TableName("data_datasource_config")
 public class DataDatasourceConfig extends Model<DataDatasourceConfig> {
@@ -24,7 +22,6 @@ public class DataDatasourceConfig extends Model<DataDatasourceConfig> {
     /**
      * 编号
      */
-   @TableId
    private String id;
     /**
      * 创建用户
@@ -274,7 +271,7 @@ public class DataDatasourceConfig extends Model<DataDatasourceConfig> {
    @Override
    public String toString() {
       return "DataDatasourceConfig{" +
-         "id=" + id +
+         ", id=" + id +
          ", userId=" + userId +
          ", name=" + name +
          ", enname=" + enname +

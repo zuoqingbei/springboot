@@ -1,4 +1,4 @@
-/*package com.hailian.conf;
+package com.hailian.conf;
 
 import java.util.List;
 
@@ -6,7 +6,6 @@ import javax.sql.DataSource;
 
 import org.apache.ibatis.mapping.DatabaseIdProvider;
 import org.apache.ibatis.plugin.Interceptor;
-import org.apache.ibatis.session.SqlSessionFactory;
 import org.jon.lv.jdbc.dataSource.DynamicDataSource;
 import org.jon.lv.jdbc.manager.DynamicDataSourceTransactionManager;
 import org.mybatis.spring.boot.autoconfigure.ConfigurationCustomizer;
@@ -23,14 +22,16 @@ import org.springframework.core.io.ResourceLoader;
 import org.springframework.jdbc.datasource.DataSourceTransactionManager;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 
-*//**
+import com.baomidou.mybatisplus.spring.MybatisSqlSessionFactoryBean;
+
+/**
  * @Package com.hailian.conf.DruidDataSourceConfiguration
  * @Description: DruidDataSourceConfiguration
  * @Copyright: Copyright (c) 2016
  * Author lv bin
  * @date 2017/5/12 15:15
  * version V1.0.0
- *//*
+ */
 @Configuration
 @EnableTransactionManagement
 public class DruidDataSourceConfiguration extends MybatisAutoConfiguration {
@@ -66,8 +67,11 @@ public class DruidDataSourceConfiguration extends MybatisAutoConfiguration {
     }
 
     @Bean(name = "sqlSessionFactory")
-    public SqlSessionFactory sqlSessionFactoryBean() throws Exception {
-        return super.sqlSessionFactory(dynamicDataSource());
+    public MybatisSqlSessionFactoryBean sqlSessionFactoryBean() throws Exception {
+    	MybatisSqlSessionFactoryBean mb=new MybatisSqlSessionFactoryBean();
+    	mb.setDataSource(dynamicDataSource());
+    	return mb;
+    	//return super.sqlSessionFactory(dynamicDataSource());
     }
 
 
@@ -78,13 +82,12 @@ public class DruidDataSourceConfiguration extends MybatisAutoConfiguration {
 //    }
 
 
-    *//**
+    /**
      * 配置事务管理器
-     *//*
+     */
     @Bean
     @Primary
     public DataSourceTransactionManager transactionManager() throws Exception{
         return new DynamicDataSourceTransactionManager(dynamicDataSource());
     }
 }
-*/

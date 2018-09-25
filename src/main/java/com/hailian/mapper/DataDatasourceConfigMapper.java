@@ -21,7 +21,6 @@ public interface DataDatasourceConfigMapper extends BaseMapper<DataDatasourceCon
 	 * @todo   分页查询数据源配置
 	 */
 	List<DataDatasourceConfig> queryPage(Page<DataDatasourceConfig> page);
-	DataDatasourceConfig selectByIds(Integer id);
 }
 
 

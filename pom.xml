@@ -201,17 +201,21 @@
 		    <version>2.0</version>
 		</dependency>
 		<!-- 多数据源读写分离 -->
-		<!-- <dependency>
+		<dependency>
 			<groupId>org.jon.lv</groupId>
 			<artifactId>Mybatis-DynamicDataSource</artifactId>
 			<version>1.0-SNAPSHOT</version>
-		</dependency> -->
+		</dependency>
 		<dependency>
 			<groupId>org.jodd</groupId>
 			<artifactId>jodd</artifactId>
 			<version>3.3.8</version>
 		</dependency>
-
+		<dependency>
+            <groupId>com.github.pagehelper</groupId>
+            <artifactId>pagehelper</artifactId>
+            <version>4.2.1</version>
+        </dependency>
 		
 				
 		

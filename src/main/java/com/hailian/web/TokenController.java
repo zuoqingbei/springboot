@@ -10,8 +10,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.hailian.annotation.AuthPower;
+import com.hailian.base.BaseController;
 import com.hailian.common.TokenConstants;
-import com.hailian.conf.BaseController;
 import com.hailian.enums.PlatformType;
 import com.hailian.repository.UserRepository;
 import com.hailian.result.ResultDO;

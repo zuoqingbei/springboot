@@ -1,4 +1,4 @@
-package com.hailian.conf;
+package com.hailian.base;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -7,9 +7,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 
 import com.alibaba.druid.util.JdbcConstants;
+import com.hailian.conf.Constant;
 import com.hailian.domain.User;
 
 public class BaseController implements Constant{
+	/*@Value("${pager.pageSize}")
+	public Integer pageSize;
+	@Value("${pager.pageNumber}")
+	public String pageNumber;*/
 	@Autowired
 	public JdbcTemplate jdbcTemplate;
 	public String DB_TYPE = JdbcConstants.MYSQL;

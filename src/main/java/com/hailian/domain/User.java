@@ -12,7 +12,7 @@ import java.io.Serializable;
  * version v1.0.0
  */
 public class User implements Serializable{
-    private Integer id;
+    private String id;
 
     private String head;
 
@@ -28,7 +28,7 @@ public class User implements Serializable{
     public User() {
 		super();
 	}
-    public User(Integer id, String head, String name, String phone, String picture, Integer sex, String password) {
+    public User(String id, String head, String name, String phone, String picture, Integer sex, String password) {
 		super();
 		this.id = id;
 		this.head = head;
@@ -47,21 +47,15 @@ public class User implements Serializable{
 		this.password = password;
 	}
 
+	
+
+    public String getId() {
+		return id;
+	}
+	public void setId(String id) {
+		this.id = id;
+	}
 	/**
-     * @return id
-     */
-    public Integer getId() {
-        return id;
-    }
-
-    /**
-     * @param id
-     */
-    public void setId(Integer id) {
-        this.id = id;
-    }
-
-    /**
      * @return head
      */
     public String getHead() {

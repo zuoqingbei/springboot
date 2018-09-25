@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.alibaba.fastjson.JSON;
 import com.hailian.annotation.AuthPower;
-import com.hailian.conf.BaseController;
+import com.hailian.base.BaseController;
 import com.hailian.domain.User;
 import com.hailian.result.ResultDO;
 
