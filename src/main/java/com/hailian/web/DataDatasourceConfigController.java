@@ -53,6 +53,9 @@ public class DataDatasourceConfigController extends BaseController {
   	public ResultDO<DataDatasourceConfig> get(@PathVariable("id") Integer id) {
   		ResultDO<DataDatasourceConfig> resultDO = new ResultDO<>();
   		resultDO.setSuccess(true);
+  		List<Integer> idList=new ArrayList<Integer>();
+  		idList.add(id);
+  		List<DataDatasourceConfig>l=iDataDatasourceConfigService.selectBatchIds(idList);
   		resultDO.setData(iDataDatasourceConfigService.selectById(id));
   		return resultDO;
   	}

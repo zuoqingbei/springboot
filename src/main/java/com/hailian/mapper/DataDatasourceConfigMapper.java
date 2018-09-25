@@ -1,13 +1,10 @@
 package com.hailian.mapper;
-import org.apache.ibatis.annotations.Mapper;
-import org.apache.ibatis.annotations.ResultMap;
-import org.apache.ibatis.annotations.Select;
+import java.util.List;
+
 import org.jon.lv.pagination.Page;
 
 import com.baomidou.mybatisplus.mapper.BaseMapper;
 import com.hailian.entity.DataDatasourceConfig;
-
-import java.util.List;
 
 /**
  * <p>
@@ -16,11 +13,7 @@ import java.util.List;
  * @author zuoqb123
  * @date 2018-09-24
  */
-@Mapper
 public interface DataDatasourceConfigMapper extends BaseMapper<DataDatasourceConfig> {
-	@ResultMap(value = "BaseResultMap")
-    @Select("SELECT * FROM data_datasource_config WHERE  id = #{id}")
-    List<DataDatasourceConfig> selectListBySQL(Integer id);
     /**
 	 * 
 	 * @date 2018-09-24

@@ -3,11 +3,13 @@ package com.hailian;
 import javax.servlet.Filter;
 import javax.servlet.MultipartConfigElement;
 
+import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.autoconfigure.web.HttpMessageConverters;
 import org.springframework.boot.web.servlet.MultipartConfigFactory;
 import org.springframework.boot.web.servlet.ServletComponentScan;
+import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.context.annotation.Bean;
 import org.springframework.http.converter.ByteArrayHttpMessageConverter;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
@@ -18,8 +20,9 @@ import org.springframework.web.filter.CharacterEncodingFilter;
 @SpringBootApplication
 @ServletComponentScan
 //启注解事务管理
-@EnableTransactionManagement
-/*@MapperScan(basePackages="com.hailian.mapper.*")*/
+@EnableTransactionManagement(proxyTargetClass = true)
+@MapperScan(basePackages="com.hailian.mapper")
+@EnableCaching
 public class SpringbootApplication{
 
 	// 用于处理编码问题

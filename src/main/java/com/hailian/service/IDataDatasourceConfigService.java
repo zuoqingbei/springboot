@@ -1,10 +1,11 @@
 package com.hailian.service;
 
-import org.jon.lv.pagination.Page;
-import com.hailian.entity.DataDatasourceConfig;
-import com.baomidou.mybatisplus.service.IService;
-
 import java.util.List;
+
+import org.jon.lv.pagination.Page;
+
+import com.baomidou.mybatisplus.service.IService;
+import com.hailian.entity.DataDatasourceConfig;
 
 /**
  * <p>
@@ -14,7 +15,6 @@ import java.util.List;
  * @date 2018-09-24
  */
 public interface IDataDatasourceConfigService extends IService<DataDatasourceConfig> {
- 	List<DataDatasourceConfig> selectListBySQL(Integer id);
 	/**
      * @todo   分页查询
      * @author zuoqb123

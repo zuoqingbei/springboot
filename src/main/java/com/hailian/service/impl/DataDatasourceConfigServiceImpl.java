@@ -25,11 +25,6 @@ public class DataDatasourceConfigServiceImpl extends ServiceImpl<DataDatasourceC
     @Autowired
     private DataDatasourceConfigMapper dataDatasourceConfigMapper;
     
-	@Override
-	public List<DataDatasourceConfig> selectListBySQL(Integer id) {
-		// TODO Auto-generated method stub
-		return dataDatasourceConfigMapper.selectListBySQL(id);
-	}
 	
 	/**
      * @todo   分页查询
