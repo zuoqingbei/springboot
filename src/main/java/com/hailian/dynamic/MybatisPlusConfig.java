@@ -1,4 +1,4 @@
-package com.hailian.dynamic;
+/*package com.hailian.dynamic;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -19,7 +19,12 @@ import com.alibaba.druid.pool.DruidDataSource;
 import com.baomidou.mybatisplus.enums.DBType;
 import com.baomidou.mybatisplus.plugins.PaginationInterceptor;
 import com.baomidou.mybatisplus.spring.MybatisSqlSessionFactoryBean;
-
+*//**
+ * 
+ * @time   2018年9月25日 下午2:38:46
+ * @author zuoqb
+ * @todo   https://blog.csdn.net/FJeKin/article/details/79583744
+ *//*
 @Configuration
 @MapperScan(basePackages={"com.hailian.mapper"})
 public class MybatisPlusConfig
@@ -76,4 +81,4 @@ public class MybatisPlusConfig
     }
     return fb;
   }
-}
+}*/

@@ -44,7 +44,7 @@
 	</typeAliases>
 
 	<plugins>
-		<plugin interceptor="org.jon.lv.jdbc.plugin.DynamicPlugin"/>
+		<!-- <plugin interceptor="com.hailian.dynamic.DatabasePlugin"/> -->
 		<plugin interceptor="org.jon.lv.pagination.PagePlugin">
 			<property name="dialectClass" value="org.jon.lv.dialect.MysqlDialect"/>
 		</plugin>

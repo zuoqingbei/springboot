@@ -21,4 +21,5 @@ public interface IDataDatasourceConfigService extends IService<DataDatasourceCon
      * @date   2018-09-24
      */
 	List<DataDatasourceConfig> queryPage(Page<DataDatasourceConfig> page);
+	DataDatasourceConfig selectByIds(Integer id);
 }

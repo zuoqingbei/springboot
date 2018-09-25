@@ -65,7 +65,7 @@ public class DataDatasourceConfigController extends BaseController {
   		List<Integer> idList=new ArrayList<Integer>();
   		idList.add(id);
   		List<DataDatasourceConfig>l=iDataDatasourceConfigService.selectBatchIds(idList);
-  		resultDO.setData(iDataDatasourceConfigService.selectById(id));
+  		resultDO.setData(iDataDatasourceConfigService.selectByIds(id));
   		return resultDO;
   	}
     
@@ -81,7 +81,10 @@ public class DataDatasourceConfigController extends BaseController {
   	public ResultDO<DataDatasourceConfig> update() {
   		ResultDO<DataDatasourceConfig> resultDO = new ResultDO<>();
   		resultDO.setSuccess(true);
-  		DataDatasourceConfig entity=iDataDatasourceConfigService.selectById(1);
+  		//DataDatasourceConfig entity=iDataDatasourceConfigService.selectById(1);
+  		DataDatasourceConfig entity=new DataDatasourceConfig();
+  		entity.setId("1");
+  		entity.setEnname("zzzzz");
   		iDataDatasourceConfigService.updateById(entity);
   		resultDO.setData(entity);
   		return resultDO;
