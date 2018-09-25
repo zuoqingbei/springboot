@@ -29,11 +29,10 @@ import com.hailian.common.UUIDUtils;
 import com.hailian.entity.DataDatasourceConfig;
 import com.hailian.enums.PublicResultConstant;
 import com.hailian.service.IDataDatasourceConfigService;
-
 /**
  *
  * @author zuoqb123
- * @date 2018-09-24
+ * @date 2018-09-25
  * @todo 数据源配置路由
  */
 @Controller
@@ -45,10 +44,11 @@ public class DataDatasourceConfigController extends BaseController {
     @Autowired
     public IDataDatasourceConfigService iDataDatasourceConfigService;
 
+	
 	 /**
-     * @time   2018-09-24
+     * @date   2018-09-25
      * @author zuoqb123
-     * @todo   查询单个对象
+     * @todo   查询单个数据源配置
      */
     @ResponseBody
  	@AuthPower(avoidVersion = false, avoidPower = true, avoidSign = true, avoidLogin = true, avoidPlatform = true)
@@ -70,8 +70,8 @@ public class DataDatasourceConfigController extends BaseController {
   	}
     
     /**
-     * @time   2018年9月25日 下午3:46:31
-     * @author zuoqb
+     * @date   2018年9月25日 下午3:46:31
+     * @author zuoqb123
      * @todo   保存或者更新数据源配置
      */
     @ResponseBody
@@ -102,8 +102,8 @@ public class DataDatasourceConfigController extends BaseController {
     
     
     /**
-     * @time   2018年9月25日 下午3:46:31
-     * @author zuoqb
+     * @date   2018年9月25日 下午3:46:31
+     * @author zuoqb123
      * @todo   删除数据源配置
      */
     @ResponseBody
@@ -130,7 +130,7 @@ public class DataDatasourceConfigController extends BaseController {
 	}
     
     /**
-     * @time   2018-09-24
+     * @date   2018-09-25
      * @author zuoqb123
      * @todo   按照条件查询数据源配置
      */
@@ -151,7 +151,7 @@ public class DataDatasourceConfigController extends BaseController {
     }
 	
     /**
-     * @time   2018-09-24
+     * @date   2018-09-25
      * @author zuoqb123
      * @todo   分页查询数据源配置
      */
@@ -175,8 +175,8 @@ public class DataDatasourceConfigController extends BaseController {
 
 	}
     /**
-     * @time   2018年9月25日 下午5:36:10
-     * @author zuoqb
+     * @date   2018年9月25日 下午5:36:10
+     * @author zuoqb123
      * @todo   构建查询条件-以后扩展
      */
     private EntityWrapper<DataDatasourceConfig> searchWrapper(HttpServletRequest request, DataDatasourceConfig entity) {
@@ -189,6 +189,5 @@ public class DataDatasourceConfigController extends BaseController {
 		 wrapper.orderBy("create_date", true);
 		return wrapper;
 	}
-	
 }
 

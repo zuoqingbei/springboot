@@ -1,24 +1,14 @@
 package ${package.Service};
 
-import org.jon.lv.pagination.Page;
 import ${package.Entity}.${entity};
 import ${superServiceClassPackage};
 
-import java.util.List;
 
 /**
- * <p>
- * $!{table.comment} 服务类
- * </p>
+ * $!{table.comment}服务类
  * @author ${author}
  * @date ${date}
  */
 public interface ${table.serviceName} extends ${superServiceClass}<${entity}> {
- 	List<${entity}> selectListBySQL(Integer id);
-	/**
-     * @todo   分页查询
-     * @author ${author}
-     * @date   ${date}
-     */
-	List<${entity}> queryPage(Page<${entity}> page);
+ 	
 }

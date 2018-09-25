@@ -40,17 +40,4 @@
 </sql>
 #end
 
-  <!-- 查询单个对象 -->
-  <select id="selectById" parameterType="java.lang.Integer" resultMap="BaseResultMap">
-	    select 
-	    <include refid="Base_Column_List" />
-	    from ${table.name}
-	    where id = #{id,jdbcType=INTEGER}
-  </select>
-  <!-- 查询分页对象 -->
-  <select id="queryPage" resultMap="BaseResultMap">
-	    select
-	       <include refid="Base_Column_List" />
-	    from ${table.name}
-  </select>
 </mapper>

@@ -1,6 +1,5 @@
 package ${package.ServiceImpl};
 
-import org.jon.lv.pagination.Page;
 import ${package.Entity}.${entity};
 import ${package.Mapper}.${table.mapperName};
 import ${package.Service}.${table.serviceName};
@@ -8,12 +7,8 @@ import ${superServiceImplClassPackage};
 import org.springframework.stereotype.Service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.util.List;
 /**
- * <p>
- * $!{table.comment} 服务实现类
- * </p>
+ * $!{table.comment}服务实现类
  * @author ${author}
  * @date ${date}
  */
@@ -21,25 +16,7 @@ import java.util.List;
 @Transactional
 public class ${table.serviceImplName} extends ${superServiceImplClass}<${table.mapperName}, ${entity}> implements ${table.serviceName} {
 
-
     @Autowired
     private ${table.mapperName} ${table.entityPath}Mapper;
-    
-	@Override
-	public List<${entity}> selectListBySQL(Integer id) {
-		// TODO Auto-generated method stub
-		return ${table.entityPath}Mapper.selectListBySQL(id);
-	}
-	
-	/**
-     * @todo   分页查询
-     * @author ${author}
-     * @date   ${date}
-     */
-	@Override
-	public List<${entity}> queryPage(Page<${entity}> page) {
-		// TODO Auto-generated method stub
-		return ${table.entityPath}Mapper.queryPage(page);
-	}
    
 }
