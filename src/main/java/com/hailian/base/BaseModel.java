@@ -4,11 +4,12 @@ import java.util.Date;
 
 import com.baomidou.mybatisplus.activerecord.Model;
 import com.baomidou.mybatisplus.annotations.TableField;
+import com.fasterxml.jackson.annotation.JsonFormat;
 /**
  * 
  * @time   2018年9月26日 下午2:26:29
  * @author zuoqb
- * @todo   通用实体类
+ * @todo   通用实体类，包含公共属性
  */
 @SuppressWarnings({ "serial", "rawtypes" })
 public abstract class BaseModel<T extends Model> extends Model<T> {
@@ -21,6 +22,7 @@ public abstract class BaseModel<T extends Model> extends Model<T> {
 	 * 创建时间
 	 */
 	@TableField("create_date")
+	@JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss",timezone = "GMT+8")//去掉时间后面的.0
 	private Date createDate;
 	/**
 	 * 更新者
@@ -31,6 +33,7 @@ public abstract class BaseModel<T extends Model> extends Model<T> {
 	 * 更新时间
 	 */
 	@TableField("update_date")
+	@JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss",timezone = "GMT+8")//去掉时间后面的.0
 	private Date updateDate;
 	/**
 	 * 备注信息
@@ -41,13 +44,25 @@ public abstract class BaseModel<T extends Model> extends Model<T> {
 	 */
 	@TableField("del_flag")
 	private String delFlag;
+	/**
+	 * 排序字段 值必须对照表中字段
+	 */
 	@TableField(exist = false)
 	private String orderBy;
+	/**
+	 * 排序方式  默认升序排列
+	 */
 	@TableField(exist = false)
 	private boolean asc=true   ;//是否为升序;
 	@TableField(exist = false)
+	/**
+	 * 开始时间（用于检索创建时间）
+	 */
 	private Date startDate;
 	@TableField(exist = false)
+	/**
+	 * 结束时间（用于检索创建时间）
+	 */
 	private Date endDate;
 
 	public String getCreateBy() {
@@ -66,20 +81,20 @@ public abstract class BaseModel<T extends Model> extends Model<T> {
 		this.createDate = createDate;
 	}
 
-	public String getUpdateBy() {
-		return updateBy;
-	}
-
-	public void setUpdateBy(String updateBy) {
-		this.updateBy = updateBy;
-	}
-
 	public Date getUpdateDate() {
 		return updateDate;
 	}
 
 	public void setUpdateDate(Date updateDate) {
 		this.updateDate = updateDate;
+	}
+
+	public String getUpdateBy() {
+		return updateBy;
+	}
+
+	public void setUpdateBy(String updateBy) {
+		this.updateBy = updateBy;
 	}
 
 	public String getRemarks() {

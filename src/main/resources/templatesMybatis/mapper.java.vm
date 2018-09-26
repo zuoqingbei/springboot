@@ -1,6 +1,6 @@
 package ${package.Mapper};
 import ${package.Entity}.${entity};
-import com.baomidou.mybatisplus.mapper.BaseMapper;
+import com.hailian.base.BaseMappers;
 
 /**
   * $!{table.comment}Mapper接口

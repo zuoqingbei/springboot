@@ -1,5 +1,7 @@
 package com.hailian.base;
 
+import java.text.SimpleDateFormat;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -17,11 +19,12 @@ public class BaseController implements Constant{
 	public String pageNumber;*/
 	@Autowired
 	public JdbcTemplate jdbcTemplate;
-	public String DB_TYPE = JdbcConstants.MYSQL;
-	public String DB_URL="jdbc:mysql://10.130.96.74:3306/lianxin?characterEncoding=utf8";
-	public String DB_DRIVER=JdbcConstants.MYSQL_DRIVER;
-	public String DB_USER="root";
-	public String DB_PWD="hl123456";
+	public static final  String DB_TYPE = JdbcConstants.MYSQL;
+	public static final  String DB_URL="jdbc:mysql://10.130.96.74:3306/lianxin?characterEncoding=utf8";
+	public static final  String DB_DRIVER=JdbcConstants.MYSQL_DRIVER;
+	public static final  String DB_USER="root";
+	public static final String DB_PWD="hl123456";
+	public static final SimpleDateFormat sdf=new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 	public void clearSessionUser(HttpServletRequest request,HttpServletResponse response,String key){
 		request.getSession().setAttribute(key, null);
 	}

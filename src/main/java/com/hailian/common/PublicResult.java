@@ -1,5 +1,6 @@
-package com.hailian.base;
+package com.hailian.common;
 
+import com.hailian.base.BaseResult;
 import com.hailian.enums.PublicResultConstant;
 
 

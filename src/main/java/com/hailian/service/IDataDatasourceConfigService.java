@@ -1,14 +1,14 @@
 package com.hailian.service;
 
 import com.hailian.entity.DataDatasourceConfig;
-import com.baomidou.mybatisplus.service.IService;
+import com.hailian.base.BaseService;
 
 
 /**
- * 数据源配置 服务类
+ * 数据源配置服务类
  * @author zuoqb123
- * @date 2018-09-25
+ * @date 2018-09-26
  */
-public interface IDataDatasourceConfigService extends IService<DataDatasourceConfig> {
+public interface IDataDatasourceConfigService extends BaseService<DataDatasourceConfig> {
  	
 }
