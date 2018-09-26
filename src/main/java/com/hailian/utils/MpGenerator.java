@@ -37,7 +37,7 @@ public class MpGenerator {
 		gc.setEnableCache(true);// XML 二级缓存
 		gc.setBaseResultMap(true);// XML ResultMap
 		gc.setBaseColumnList(true);// XML columList
-		// .setKotlin(true) 是否生成 kotlin 代码
+		//gc.setKotlin(true) 是否生成 kotlin 代码
 		gc.setAuthor("zuoqb");
 
 		// 自定义文件命名，注意 %s 会自动填充表实体属性！
@@ -62,9 +62,7 @@ public class MpGenerator {
 		});
 		dsc.setDriverName("com.mysql.jdbc.Driver");
 		dsc.setUsername("root");
-		//dsc.setPassword("TW123");
 		dsc.setPassword("hl123456");
-		//dsc.setUrl("jdbc:mysql://127.0.0.1:3306/tcjn?characterEncoding=utf8");
 		dsc.setUrl("jdbc:mysql://60.205.229.238:3306/springboot?characterEncoding=utf8");
 		mpg.setDataSource(dsc);
 
@@ -100,6 +98,7 @@ public class MpGenerator {
 		// 包配置
 		PackageConfig pc = new PackageConfig();
 		pc.setParent("com.hailian");
+		pc.setController("controller"); 
 		//        pc.setModuleName("entity");
 		mpg.setPackageInfo(pc);
 
@@ -172,7 +171,6 @@ public class MpGenerator {
 		tc.setEntity("/templatesMybatis/entity.java.vm");
 		tc.setMapper("/templatesMybatis/mapper.java.vm");
 		tc.setXml("/templatesMybatis/mapper.xml.vm");
-
 		mpg.setTemplate(tc);
 
 		// 执行生成

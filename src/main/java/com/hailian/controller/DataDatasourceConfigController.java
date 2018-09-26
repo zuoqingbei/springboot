@@ -1,4 +1,4 @@
-package com.hailian.web;
+package com.hailian.controller;
 
 import org.springframework.stereotype.Controller;
 import com.hailian.base.BaseController;

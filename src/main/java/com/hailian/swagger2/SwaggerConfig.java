@@ -97,7 +97,7 @@ public class SwaggerConfig extends WebMvcConfigurerAdapter {
                 .forCodeGeneration(true)
                 .pathMapping("/")
                 .select()
-                .apis(RequestHandlerSelectors.basePackage("com.hailian.web"))
+                .apis(RequestHandlerSelectors.basePackage("com.hailian.controller"))
                 .build()
                 .globalOperationParameters(headerParams);
     }

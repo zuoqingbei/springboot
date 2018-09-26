@@ -1,4 +1,4 @@
-package com.hailian.web;
+package com.hailian.controller;
 
 import io.swagger.annotations.ApiOperation;
 
