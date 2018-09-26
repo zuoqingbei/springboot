@@ -1,38 +1,35 @@
 package com.hailian.web;
 
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiOperation;
-
-import java.util.Date;
-import java.util.List;
+import org.springframework.stereotype.Controller;
+import com.hailian.base.BaseController;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import javax.servlet.http.HttpServletRequest;
-
+import com.hailian.service.IDataDatasourceConfigService;
+import com.hailian.entity.DataDatasourceConfig;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
-
+import java.util.Date;
+import java.util.List;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
+import com.hailian.annotation.AuthPower;
+import com.hailian.base.PublicResult;
+import com.hailian.common.UUIDUtils;
+import com.hailian.enums.PublicResultConstant;
 import com.baomidou.mybatisplus.mapper.EntityWrapper;
 import com.baomidou.mybatisplus.plugins.pagination.PageHelper;
 import com.github.pagehelper.PageInfo;
-import com.hailian.annotation.AuthPower;
-import com.hailian.base.BaseController;
-import com.hailian.base.PublicResult;
-import com.hailian.common.UUIDUtils;
-import com.hailian.entity.DataDatasourceConfig;
-import com.hailian.enums.PublicResultConstant;
-import com.hailian.service.IDataDatasourceConfigService;
 /**
  *
  * @author zuoqb123
- * @date 2018-09-25
+ * @date 2018-09-26
  * @todo 数据源配置路由
  */
 @Controller
@@ -46,7 +43,7 @@ public class DataDatasourceConfigController extends BaseController {
 
 	
 	 /**
-     * @date   2018-09-25
+     * @date   2018-09-26
      * @author zuoqb123
      * @todo   查询单个数据源配置
      */
@@ -130,7 +127,7 @@ public class DataDatasourceConfigController extends BaseController {
 	}
     
     /**
-     * @date   2018-09-25
+     * @date   2018-09-26
      * @author zuoqb123
      * @todo   按照条件查询数据源配置
      */
@@ -151,7 +148,7 @@ public class DataDatasourceConfigController extends BaseController {
     }
 	
     /**
-     * @date   2018-09-25
+     * @date   2018-09-26
      * @author zuoqb123
      * @todo   分页查询数据源配置
      */
@@ -181,12 +178,75 @@ public class DataDatasourceConfigController extends BaseController {
      */
     private EntityWrapper<DataDatasourceConfig> searchWrapper(HttpServletRequest request, DataDatasourceConfig entity) {
 		EntityWrapper<DataDatasourceConfig> wrapper = new EntityWrapper<DataDatasourceConfig>();
-		 wrapper.where("del_flag={0}", 0);
-		 if(getLoginUser(request)!=null&&StringUtils.isNotBlank(getLoginUser(request).getId())){
-			 wrapper.eq("create_by", getLoginUser(request).getId());
-		 }
-		 wrapper.like("remarks", entity.getRemarks());
-		 wrapper.orderBy("create_date", true);
+		wrapper.where("del_flag={0}", 0);
+		if(getLoginUser(request)!=null&&StringUtils.isNotBlank(getLoginUser(request).getId())){
+			if(!isAdmin(request))
+			 wrapper.and("create_by", getLoginUser(request).getId());
+		}
+		//根据编号模糊查询
+		if(entity.getId()!=null&&StringUtils.isNotBlank(String.valueOf(entity.getId()))){
+			wrapper.like("id", String.valueOf(entity.getId()));
+		}
+		//根据创建用户模糊查询
+		if(entity.getUserId()!=null&&StringUtils.isNotBlank(String.valueOf(entity.getUserId()))){
+			wrapper.like("user_id", String.valueOf(entity.getUserId()));
+		}
+		//根据数据源名称模糊查询
+		if(entity.getName()!=null&&StringUtils.isNotBlank(String.valueOf(entity.getName()))){
+			wrapper.like("name", String.valueOf(entity.getName()));
+		}
+		//根据数据源英文名称模糊查询
+		if(entity.getEnname()!=null&&StringUtils.isNotBlank(String.valueOf(entity.getEnname()))){
+			wrapper.like("enname", String.valueOf(entity.getEnname()));
+		}
+		//根据数据源类型模糊查询
+		if(entity.getDbType()!=null&&StringUtils.isNotBlank(String.valueOf(entity.getDbType()))){
+			wrapper.like("db_type", String.valueOf(entity.getDbType()));
+		}
+		//根据数据源驱动模糊查询
+		if(entity.getDbDiver()!=null&&StringUtils.isNotBlank(String.valueOf(entity.getDbDiver()))){
+			wrapper.like("db_diver", String.valueOf(entity.getDbDiver()));
+		}
+		//根据数据连接地址模糊查询
+		if(entity.getDbUrl()!=null&&StringUtils.isNotBlank(String.valueOf(entity.getDbUrl()))){
+			wrapper.like("db_url", String.valueOf(entity.getDbUrl()));
+		}
+		//根据用户名模糊查询
+		if(entity.getDbName()!=null&&StringUtils.isNotBlank(String.valueOf(entity.getDbName()))){
+			wrapper.like("db_name", String.valueOf(entity.getDbName()));
+		}
+		//根据连接密码模糊查询
+		if(entity.getDbPassword()!=null&&StringUtils.isNotBlank(String.valueOf(entity.getDbPassword()))){
+			wrapper.like("db_password", String.valueOf(entity.getDbPassword()));
+		}
+		//根据最大连接数模糊查询
+		if(entity.getMaxNum()!=null&&StringUtils.isNotBlank(String.valueOf(entity.getMaxNum()))){
+			wrapper.like("max_num", String.valueOf(entity.getMaxNum()));
+		}
+		//根据是否可用模糊查询
+		if(entity.getUseable()!=null&&StringUtils.isNotBlank(String.valueOf(entity.getUseable()))){
+			wrapper.like("useable", String.valueOf(entity.getUseable()));
+		}
+		//根据数据库版本模糊查询
+		if(entity.getDbVersion()!=null&&StringUtils.isNotBlank(String.valueOf(entity.getDbVersion()))){
+			wrapper.like("db_version", String.valueOf(entity.getDbVersion()));
+		}
+		//根据是否支持事务模糊查询
+		if(entity.getSuportTransaction()!=null&&StringUtils.isNotBlank(String.valueOf(entity.getSuportTransaction()))){
+			wrapper.like("suport_transaction", String.valueOf(entity.getSuportTransaction()));
+		}
+		if(StringUtils.isNoneBlank(entity.getOrderBy())){
+			wrapper.orderBy(entity.getOrderBy(), entity.isAsc());
+		}else{
+			wrapper.orderBy("create_date", true);
+		}
+		if(entity.getStartDate()!=null){
+			wrapper.ge("create_date", entity.getStartDate());
+		}
+		if(entity.getEndDate()!=null){
+			wrapper.le("create_date", entity.getEndDate());
+		}
+		System.out.println(wrapper.originalSql());
 		return wrapper;
 	}
 }

@@ -54,5 +54,19 @@ public class BaseController implements Constant{
 			user=new User();
 		return user;
 	}
+	/**
+	 * @time   2018年9月26日 上午11:24:33
+	 * @author zuoqb
+	 * @todo   判断是否为超级管理员
+	 * @return_type   boolean
+	 */
+	public boolean isAdmin(HttpServletRequest request){
+		User user=(User) request.getSession().getAttribute(USER_INFO);
+		if(user==null)
+			return false;
+		if(!"1".equals(user.getUserType()))
+			return false;
+		return true;
+	}
 	
 }

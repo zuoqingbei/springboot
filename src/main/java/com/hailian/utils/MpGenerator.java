@@ -81,9 +81,9 @@ public class MpGenerator {
         // strategy.setExclude(new String[]{"test"}); // 排除生成的表
 
         // 自定义实体父类
-//         strategy.setSuperEntityClass("com.baomidou.demo.TestEntity");
+        strategy.setSuperEntityClass("com.hailian.base.BaseModel");
         // 自定义实体，公共字段
-        // strategy.setSuperEntityColumns(new String[] { "test_id", "age" });
+        strategy.setSuperEntityColumns(new String[] { "create_by", "create_date","update_by","update_date","remarks","del_flag"});
         // 自定义 mapper 父类
         // strategy.setSuperMapperClass("com.baomidou.demo.TestMapper");
         // 自定义 service 父类

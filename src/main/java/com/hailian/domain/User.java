@@ -25,6 +25,7 @@ public class User implements Serializable{
     private Integer sex;
 
     private String password;
+    private String userType;//用户类型 1为超级管理员
     public User() {
 		super();
 	}
@@ -39,6 +40,12 @@ public class User implements Serializable{
 		this.password = password;
 	}
 
+	public String getUserType() {
+		return userType;
+	}
+	public void setUserType(String userType) {
+		this.userType = userType;
+	}
 	public String getPassword() {
 		return password;
 	}

@@ -5,6 +5,12 @@
    <!-- 通用查询映射结果 -->
    <resultMap id="BaseResultMap" type="com.hailian.entity.DataDatasourceConfig">
       <id column="id" property="id" />
+      <result column="create_by" property="createBy" />
+      <result column="create_date" property="createDate" />
+      <result column="update_by" property="updateBy" />
+      <result column="update_date" property="updateDate" />
+      <result column="remarks" property="remarks" />
+      <result column="del_flag" property="delFlag" />
       <result column="user_id" property="userId" />
       <result column="name" property="name" />
       <result column="enname" property="enname" />
@@ -15,18 +21,18 @@
       <result column="db_password" property="dbPassword" />
       <result column="max_num" property="maxNum" />
       <result column="useable" property="useable" />
-      <result column="create_by" property="createBy" />
-      <result column="create_date" property="createDate" />
-      <result column="update_by" property="updateBy" />
-      <result column="update_date" property="updateDate" />
-      <result column="remarks" property="remarks" />
-      <result column="del_flag" property="delFlag" />
       <result column="db_version" property="dbVersion" />
       <result column="suport_transaction" property="suportTransaction" />
    </resultMap>
 
     <!-- 通用查询结果列 -->
     <sql id="Base_Column_List">
+      create_by,
+      create_date,
+      update_by,
+      update_date,
+      remarks,
+      del_flag,
       user_id,
       name,
       enname,
@@ -37,13 +43,8 @@
       db_password,
       max_num,
       useable,
-      create_by,
-      create_date,
-      update_by,
-      update_date,
-      remarks,
-      del_flag,
       db_version,
-      suport_transaction
+      suport_transaction,
 </sql>
+
 </mapper>

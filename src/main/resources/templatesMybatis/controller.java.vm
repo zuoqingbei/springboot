@@ -193,12 +193,29 @@ public class ${table.controllerName} extends BaseController{
      */
     private EntityWrapper<${entity}> searchWrapper(HttpServletRequest request, ${entity} entity) {
 		EntityWrapper<${entity}> wrapper = new EntityWrapper<${entity}>();
-		 wrapper.where("del_flag={0}", 0);
-		 if(getLoginUser(request)!=null&&StringUtils.isNotBlank(getLoginUser(request).getId())){
-			 wrapper.eq("create_by", getLoginUser(request).getId());
-		 }
-		 wrapper.like("remarks", entity.getRemarks());
-		 wrapper.orderBy("create_date", true);
+		wrapper.where("del_flag={0}", 0);
+		if(getLoginUser(request)!=null&&StringUtils.isNotBlank(getLoginUser(request).getId())){
+			if(!isAdmin(request))
+			 wrapper.and("create_by", getLoginUser(request).getId());
+		}
+		#foreach($field in ${table.fields})
+		//根据${field.comment}模糊查询
+		if(entity.${getprefix}${field.capitalName}()!=null&&StringUtils.isNotBlank(String.valueOf(entity.${getprefix}${field.capitalName}()))){
+			wrapper.like("${field.name}", String.valueOf(entity.${getprefix}${field.capitalName}()));
+		}
+		#end
+		if(StringUtils.isNoneBlank(entity.getOrderBy())){
+			wrapper.orderBy(entity.getOrderBy(), entity.isAsc());
+		}else{
+			wrapper.orderBy("create_date", true);
+		}
+		if(entity.getStartDate()!=null){
+			wrapper.ge("create_date", entity.getStartDate());
+		}
+		if(entity.getEndDate()!=null){
+			wrapper.le("create_date", entity.getEndDate());
+		}
+		System.out.println(wrapper.originalSql());
 		return wrapper;
 	}
 }
