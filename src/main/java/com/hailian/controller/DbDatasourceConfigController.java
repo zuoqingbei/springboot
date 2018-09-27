@@ -1,31 +1,35 @@
 package com.hailian.controller;
 
-import org.springframework.stereotype.Controller;
-import com.hailian.base.BaseController;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.bind.annotation.RequestParam;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiModelProperty;
+import io.swagger.annotations.ApiOperation;
+
+import java.util.Date;
+import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
-import com.hailian.service.IDbDatasourceConfigService;
-import com.hailian.entity.DbDatasourceConfig;
+
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import java.util.Date;
-import java.util.List;
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiOperation;
-import com.hailian.annotation.AuthPower;
-import com.hailian.common.PublicResult;
-import com.hailian.common.UUIDUtils;
-import com.hailian.enums.PublicResultConstant;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
+
 import com.baomidou.mybatisplus.mapper.EntityWrapper;
 import com.baomidou.mybatisplus.plugins.pagination.PageHelper;
 import com.github.pagehelper.PageInfo;
+import com.hailian.annotation.AuthPower;
+import com.hailian.base.BaseController;
+import com.hailian.common.PublicResult;
+import com.hailian.common.UUIDUtils;
+import com.hailian.entity.DbDatasourceConfig;
+import com.hailian.enums.PublicResultConstant;
+import com.hailian.service.IDbDatasourceConfigService;
 /**
  *
  * @author zuoqb123

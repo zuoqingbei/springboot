@@ -75,7 +75,7 @@ public class SwaggerConfig extends WebMvcConfigurerAdapter {
 
         ParameterBuilder tokenParams = new ParameterBuilder();
         ParameterBuilder platformParams = new ParameterBuilder();
-        platformParams.name(AppInterceptors.DEFAULT_PLATFORM).description("平台").modelRef(new ModelRef("string")).parameterType("header").required(false).build();
+        platformParams.name(AppInterceptors.DEFAULT_PLATFORM).description("平台(PC/ANDROID/IOS)").modelRef(new ModelRef("string")).parameterType("header").required(false).build();
         tokenParams.name(AppInterceptors.DEFAULT_TOKEN_NAME).description("登陆令牌").modelRef(new ModelRef("string")).parameterType("header").required(false).build();
       /*  ParameterBuilder TimeParams = new ParameterBuilder();
         TimeParams.name("X-Timestamp").description("时间戳").modelRef(new ModelRef("string")).parameterType("header").required(false).build();*/
@@ -84,7 +84,7 @@ public class SwaggerConfig extends WebMvcConfigurerAdapter {
         
         //添加公用参数
         ParameterBuilder versionParams = new ParameterBuilder();
-        versionParams.name("version").description("版本").modelRef(new ModelRef("string")).parameterType("path").required(true).build();
+        versionParams.name("version").description("版本，例如v1").modelRef(new ModelRef("string")).parameterType("path").required(true).build();
         
         List<Parameter> headerParams = new ArrayList<Parameter>();
         headerParams.add(tokenParams.build());

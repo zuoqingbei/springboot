@@ -1,6 +1,8 @@
 package com.hailian.controller;
 
 import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiImplicitParam;
+import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
 
 import java.lang.reflect.Method;
@@ -9,6 +11,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
@@ -62,15 +65,19 @@ public class CommonInterfaceController extends BaseController {
 	 * @time   2018年9月13日 上午10:39:24
 	 * @author zuoqb
 	 * @todo   根据数据源与SQL查询数据 或者查询当前库中SQL结果
+	 * isVertical-数据格式，true-垂直 false-横向数据
 	 */
     @ResponseBody
 	@AuthPower(avoidVersion = false, avoidPower = true, avoidSign = true, avoidLogin = true, avoidPlatform = true)
 	@ApiOperation(value = "根据数据源与SQL查询数据", notes = "根据数据源与SQL查询数据", httpMethod = "GET")
 	@RequestMapping(value = "/getBySql", method = RequestMethod.GET)
-	public PublicResult<List<Map<String, Object>>> getBySql(
-			@RequestParam(value="sql",required = true) String sql,
-			@RequestParam(value="dataSourceId",required = false) String dataSourceId,
-			@RequestParam(value="params",required = false) String params,
+    @ApiImplicitParams({
+    	@ApiImplicitParam(name="sql",value="执行的SQL语句",dataType="String",paramType="query",required = true),
+    	@ApiImplicitParam(name="dataSourceId",value="SQL要查询的数据库编码，默认为当前库",dataType="String",paramType="query",required = false),
+    	@ApiImplicitParam(name="params",value="动态参数 格式 time::20180731;;cbkCode::BD1011001",dataType="String",paramType="query",required = false),
+    	@ApiImplicitParam(name="isVertical",value="数据格式，true-垂直 false-横向数据",dataType="boolean",paramType="query",required = false,defaultValue="true")})
+	public PublicResult<?> getBySql(@RequestParam(value="sql",required = true) String sql,@RequestParam(value="dataSourceId",required = false) String dataSourceId,
+			@RequestParam(value="params",required = false) String params,@RequestParam(value="isVertical",required = false,defaultValue="true") boolean isVertical,
 			HttpServletRequest request) {
 		/**
     	 * 开始处理SQL
@@ -90,7 +97,10 @@ public class CommonInterfaceController extends BaseController {
     	/**
     	 * 处理SQL结束
     	 */
-    	return execeSql(sql, dataSourceId, matcher, dealParamsResult,request,"getBySql");
+    	if(!isVertical){
+    		return execeSqlVertical(sql, dataSourceId, matcher, dealParamsResult,request,"getBySql",VERTICAL_DATA_FORMAT);
+    	}
+    	return execeSqlVertical(sql, dataSourceId, matcher, dealParamsResult,request,"getBySql",null);
 	}
 
 	/**
@@ -102,13 +112,13 @@ public class CommonInterfaceController extends BaseController {
 	 * header需要添加平台签名X-Sign 如果是当前库 签名为Constant.Default_X_SIGN 否则为数据库里面配置
 	 */
     @ResponseBody
-   	@AuthPower(avoidVersion = false, avoidPower = true, avoidSign = false, avoidLogin = true, avoidPlatform = true)
+   	@AuthPower(avoidVersion = false, avoidPower = true, avoidSign = true, avoidLogin = true, avoidPlatform = true)
    	@ApiOperation(value = "统一接口查询数据", notes = "统一接口查询数据", httpMethod = "GET")
    	@RequestMapping(value = "/getByDataType", method = RequestMethod.GET)
-   	public PublicResult<Map<String,List<Map<String, Object>>>>  getByDataType(
-   			@RequestParam(value="dataType",required = true) String dataType,
-   			@RequestParam(value="params",required = false) String params,
-   			HttpServletRequest request) {
+    @ApiImplicitParams({
+    	@ApiImplicitParam(name="dataType",value="查询指标标识",dataType="String",paramType="query",required = true),
+    	@ApiImplicitParam(name="params",value="动态参数 格式 time::20180731;;cbkCode::BD1011001",dataType="String",paramType="query",required = false)})
+   	public PublicResult<?>  getByDataType(@RequestParam(value="dataType",required = true) String dataType,@RequestParam(value="params",required = false) String params,HttpServletRequest request) {
     	if(StringUtils.isBlank(dataType)){
 			return new PublicResult<>(PublicResultConstant.INVALID_PARAM_EMPTY,"dataType参数不能为空!", null);
 		}
@@ -140,11 +150,11 @@ public class CommonInterfaceController extends BaseController {
     	 * 处理SQL结束
     	 */
     	String dataSourceId=entity.getDbDatasourceId();
-    	PublicResult<List<Map<String, Object>>> execeResult=execeSql(sql, dataSourceId, matcher, dealParamsResult,request,"getByDataType");
+    	PublicResult<?> execeResult=execeSqlVertical(sql, dataSourceId, matcher, dealParamsResult,request,"getByDataType",entity.getTransformData());
     	if(!PublicResultConstant.SUCCESS.msg.equals(execeResult.getMsg())){
     		return new PublicResult<>(PublicResultConstant.PARAM_ERROR,execeResult.getErrorMsg(), null);
     	}
-    	Map<String,List<Map<String, Object>>> result=new HashMap<String, List<Map<String,Object>>>();
+    	Map<String,Object> result=new HashMap<String,Object>();
     	result.put(entity.getDataSpace(), execeResult.getData());
     	return new PublicResult<>(PublicResultConstant.SUCCESS, result);
    	}
@@ -153,10 +163,10 @@ public class CommonInterfaceController extends BaseController {
      * 
      * @time   2018年9月27日 下午2:38:39
      * @author zuoqb
-     * @todo   执行SQL返回执行结果
+     * @todo   执行SQL返回执行垂直格式数据结果[{},{},{}]
      */
-    public PublicResult<List<Map<String, Object>>> execeSql(String sql, String dataSourceId, List<String> matcher,
-			PublicResult<Map<String, String>> dealParamsResult,HttpServletRequest request,String methodName) {
+    public PublicResult<?> execeSqlVertical(String sql, String dataSourceId, List<String> matcher,
+			PublicResult<Map<String, String>> dealParamsResult,HttpServletRequest request,String methodName,String entity) {
 	    	AuthPower authPower =null;
 		try {
 			Method[] methods=CommonInterfaceController.class.getMethods();
@@ -217,8 +227,14 @@ public class CommonInterfaceController extends BaseController {
     				}
     			}
     			rs = pstmt.executeQuery();
-    			List<Map<String, Object>> list = JdbcUtil.parseResultSet2List(rs);
-    			return new PublicResult<>(PublicResultConstant.SUCCESS, list);
+    			List<Map<String, Object>> verticalData = JdbcUtil.parseResultSet2List(rs);
+    			//转成横向数据格式
+    	    	Map<String,List<Object>> horizontalData=new HashMap<String, List<Object>>();
+    	    	if(VERTICAL_DATA_FORMAT.equals(entity)){
+    	    		return verticalToHorizontal(verticalData, horizontalData);
+    	    	}else{
+    	    		return new PublicResult<>(PublicResultConstant.SUCCESS, verticalData);
+    	    	}
     		} catch (Exception e) {
     			e.printStackTrace();
     			logger.error(e.getMessage());
@@ -266,13 +282,49 @@ public class CommonInterfaceController extends BaseController {
         		}else{
         			list=jdbcTemplate.queryForList(sql);
         		}
-    			return new PublicResult<>(PublicResultConstant.SUCCESS, list);
+        		//转成横向数据格式
+    	    	Map<String,List<Object>> horizontalData=new HashMap<String, List<Object>>();
+    	    	if(VERTICAL_DATA_FORMAT.equals(entity)){
+    	    		return verticalToHorizontal(list, horizontalData);
+    	    	}else{
+    	    		return new PublicResult<>(PublicResultConstant.SUCCESS, list);
+    	    	}
 			} catch (Exception e) {
 				e.printStackTrace();
 				logger.error(e.getMessage());
 				return new PublicResult<>(PublicResultConstant.FAILED,e.getMessage(),null);
 			}
     	}
+	}
+    
+    /**
+     * 
+     * @time   2018年9月27日 下午5:28:55
+     * @author zuoqb
+     * @todo   纵向数据转横向
+     * @return_type   PublicResult<?>
+     */
+	public PublicResult<?> verticalToHorizontal(List<Map<String, Object>> verticalData,
+			Map<String, List<Object>> horizontalData) {
+		if(verticalData.size()>0){
+			Iterator<String> iter = verticalData.get(0).keySet().iterator();
+			while(iter.hasNext()){
+				String key=iter.next();
+				horizontalData.put(key, new ArrayList<Object>());
+			}
+		}
+		for(Map<String, Object> map:verticalData){
+			Iterator<String> iter = map.keySet().iterator();
+			while(iter.hasNext()){
+				String key=iter.next();
+				Object value = map.get(key);
+				if(value==null){
+					value="";
+				}
+				horizontalData.get(key).add(value);
+			}
+		}
+		return new PublicResult<>(PublicResultConstant.SUCCESS, horizontalData);
 	}
     
     /**
@@ -333,7 +385,7 @@ public class CommonInterfaceController extends BaseController {
 		//判断SQL中需要的参数必须都传递
 		for(String sqlParam:matcher){
 			String variableName=replaceSymbol(sqlParam);
-			if(StringUtils.isBlank(dealParamsResult.getData().get(variableName))){
+			if(!dealParamsResult.getData().containsKey(variableName)){
 				return false;
 			}
 		}
@@ -354,12 +406,22 @@ public class CommonInterfaceController extends BaseController {
 		String[] keyValues=params.split(";;");
 		boolean isLegal=true;
 		for(String para:keyValues){
-			String[] split=para.split("::");
-			if(split.length!=2){
+			if(para.indexOf("::")!=-1){
+				String[] split=para.split("::");
+				if(split.length>1){
+					map.put(split[0], split[1]);
+				}else{
+					if(para.endsWith("::")){
+						map.put(split[0], "");
+					}else{
+						isLegal=false;
+						break;
+					}
+				}
+			}else{
 				isLegal=false;
 				break;
 			}
-			map.put(split[0], split[1]);
 		}
 		if(isLegal){
 			return new PublicResult<>(PublicResultConstant.SUCCESS, map);
