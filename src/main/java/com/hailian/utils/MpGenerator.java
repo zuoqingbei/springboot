@@ -34,7 +34,7 @@ public class MpGenerator {
 		gc.setOutputDir("D://");
 		gc.setFileOverride(true);
 		gc.setActiveRecord(true);// 不需要ActiveRecord特性的请改为false
-		gc.setEnableCache(true);// XML 二级缓存
+		gc.setEnableCache(false);// XML 二级缓存
 		gc.setBaseResultMap(true);// XML ResultMap
 		gc.setBaseColumnList(true);// XML columList
 		//gc.setKotlin(true) 是否生成 kotlin 代码
@@ -71,7 +71,7 @@ public class MpGenerator {
 		// strategy.setCapitalMode(true);// 全局大写命名 ORACLE 注意
 		strategy.setTablePrefix(new String[] { "" });// 此处可以修改为您的表前缀
 		strategy.setNaming(NamingStrategy.underline_to_camel);// 表名生成策略
-		strategy.setInclude(new String[] { "data_datasource_config" }); // 需要生成的表
+		strategy.setInclude(new String[] { "common_interface_exc","db_datasource_config","sys_plat_info" }); // 需要生成的表
 		// strategy.setExclude(new String[]{"test"}); // 排除生成的表
 
 		// 自定义实体父类

@@ -10,8 +10,8 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import javax.servlet.http.HttpServletRequest;
-import com.hailian.service.IDataDatasourceConfigService;
-import com.hailian.entity.DataDatasourceConfig;
+import com.hailian.service.IDbDatasourceConfigService;
+import com.hailian.entity.DbDatasourceConfig;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -29,66 +29,43 @@ import com.github.pagehelper.PageInfo;
 /**
  *
  * @author zuoqb123
- * @date 2018-09-26
+ * @date 2018-09-27
  * @todo 数据源配置路由
  */
 @Controller
-@RequestMapping("/api/{version}/dataDatasourceConfig")
-@Api(value = "数据源配置控制器")
-public class DataDatasourceConfigController extends BaseController {
-    private final Logger logger = LoggerFactory.getLogger(DataDatasourceConfigController.class);
+@RequestMapping("/api/{version}/dbDatasourceConfig")
+@Api(value = "数据源配置",description="数据源配置 @author zuoqb123")
+public class DbDatasourceConfigController extends BaseController {
+    private final Logger logger = LoggerFactory.getLogger(DbDatasourceConfigController.class);
 
     @Autowired
-    public IDataDatasourceConfigService iDataDatasourceConfigService;
+    public IDbDatasourceConfigService iDbDatasourceConfigService;
 
-	
-	 /**
-     * @date   2018-09-26
-     * @author zuoqb123
-     * @todo   查询单个数据源配置
-     */
-    @ResponseBody
- 	@AuthPower(avoidVersion = false, avoidPower = true, avoidSign = true, avoidLogin = true, avoidPlatform = true)
-  	@ApiOperation(value = "查询单个数据源配置", notes = "查询单个数据源配置", httpMethod = "GET")
-  	@RequestMapping(value = "/get/{id}", method = {RequestMethod.GET,RequestMethod.POST})
-  	public PublicResult<DataDatasourceConfig> get(HttpServletRequest request,@PathVariable("id") String id) {
-  		DataDatasourceConfig entity=null;
-  		try {
-  			EntityWrapper<DataDatasourceConfig> wrapper = new EntityWrapper<DataDatasourceConfig>();
-  			wrapper.where("del_flag={0}", 0);
-  			wrapper.eq("id", id);
-  			entity=iDataDatasourceConfigService.selectOne(wrapper);
-  			return new PublicResult<>(PublicResultConstant.SUCCESS, entity);
-		} catch (Exception e) {
-			e.printStackTrace();
-			logger.error(e.getMessage());
-			return new PublicResult<>(PublicResultConstant.FAILED,e.getMessage(), null);
-		}
-  	}
-    
     /**
-     * @date   2018年9月25日 下午3:46:31
+     * @date   2018-09-27
      * @author zuoqb123
-     * @todo   保存或者更新数据源配置
+     * @todo   新增数据源配置
      */
     @ResponseBody
  	@AuthPower(avoidVersion = false, avoidPower = true, avoidSign = true, avoidLogin = true, avoidPlatform = true)
-  	@ApiOperation(value = "保存或者更新数据源配置", notes = "保存或者更新数据源配置", httpMethod = "POST")
-	@RequestMapping(value = "/saveOrUpdate", method = { RequestMethod.GET, RequestMethod.POST })
-	public PublicResult<DataDatasourceConfig> add(HttpServletRequest request,DataDatasourceConfig entity) {
+  	@ApiOperation(value = "新增数据源配置", notes = "新增数据源配置", httpMethod = "POST")
+	@RequestMapping(value = "/add", method = RequestMethod.POST)
+	public PublicResult<DbDatasourceConfig> add(HttpServletRequest request,DbDatasourceConfig entity) {
 		try {
-			if(entity!=null&&StringUtils.isNotBlank(entity.getId())){
-				//更新
-				entity.setUpdateDate(new Date());
-				entity.setUpdateBy(getLoginUser(request).getId());
-				iDataDatasourceConfigService.updateById(entity);
-			}else{
+			if(StringUtils.isBlank(entity.getId())){
+				//新增
 				entity.setId(UUIDUtils.getUuid());
 				entity.setCreateDate(new Date());
 				entity.setCreateBy(getLoginUser(request).getId());
-				iDataDatasourceConfigService.insert(entity);
+				if(iDbDatasourceConfigService.insert(entity)){
+					return new PublicResult<>(PublicResultConstant.SUCCESS, entity);
+				}else{
+					return new PublicResult<>(PublicResultConstant.ERROR, null);
+				}
+			}else{
+				return new PublicResult<>(PublicResultConstant.PARAM_ERROR, "新增主键必须为空!",null);
 			}
-			return new PublicResult<>(PublicResultConstant.SUCCESS, entity);
+			
 		} catch (Exception e) {
 			e.printStackTrace();
 			logger.error(e.getMessage());
@@ -96,28 +73,26 @@ public class DataDatasourceConfigController extends BaseController {
 		}
 	}
     
-    
-    
     /**
-     * @date   2018年9月25日 下午3:46:31
+     * @date   2018-09-27
      * @author zuoqb123
      * @todo   删除数据源配置
      */
     @ResponseBody
  	@AuthPower(avoidVersion = false, avoidPower = true, avoidSign = true, avoidLogin = true, avoidPlatform = true)
-  	@ApiOperation(value = "删除数据源配置", notes = "删除数据源配置", httpMethod = "POST")
-    @RequestMapping(value = "/delete/{id}", method = {RequestMethod.GET,RequestMethod.POST})
-	public PublicResult<DataDatasourceConfig> delete(HttpServletRequest request,@PathVariable("id") String id) {
+  	@ApiOperation(value = "删除数据源配置", notes = "删除数据源配置", httpMethod = "DELETE")
+    @RequestMapping(value = "/delete/{id}", method = RequestMethod.DELETE)
+	public PublicResult<DbDatasourceConfig> delete(HttpServletRequest request,@PathVariable("id") String id) {
 		try {
-			DataDatasourceConfig entity=new DataDatasourceConfig();
+			DbDatasourceConfig entity=new DbDatasourceConfig();
 			entity.setId(id);
-			entity.setDelFlag("1");
+			entity.setDelFlag(DEL_FLAG);
 			entity.setUpdateDate(new Date());
 			entity.setUpdateBy(getLoginUser(request).getId());
-			 if(iDataDatasourceConfigService.updateById(entity)){
+			 if(iDbDatasourceConfigService.updateById(entity)){
 				 return new PublicResult<>(PublicResultConstant.SUCCESS, null);
 			 }else{
-				 return new PublicResult<>(PublicResultConstant.FAILED, null);
+				 return new PublicResult<>(PublicResultConstant.ERROR, null);
 			 }
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -125,44 +100,78 @@ public class DataDatasourceConfigController extends BaseController {
 			return new PublicResult<>(PublicResultConstant.FAILED,e.getMessage(), null);
 		}
 	}
-    
-    /**
-     * @date   2018-09-26
+	
+	 /**
+     * @date   2018-09-27
      * @author zuoqb123
-     * @todo   按照条件查询数据源配置
+     * @todo   更新数据源配置
      */
     @ResponseBody
  	@AuthPower(avoidVersion = false, avoidPower = true, avoidSign = true, avoidLogin = true, avoidPlatform = true)
-  	@ApiOperation(value = "按照条件查询数据源配置", notes = "按照条件查询数据源配置", httpMethod = "GET")
-  	@RequestMapping(value = "/list", method = {RequestMethod.GET,RequestMethod.POST})
-    public PublicResult<List<DataDatasourceConfig>> list(HttpServletRequest request,DataDatasourceConfig entity){
-         try {
-        	 EntityWrapper<DataDatasourceConfig> wrapper = searchWrapper(request, entity);
-        	 List<DataDatasourceConfig> list = iDataDatasourceConfigService.selectList(wrapper);
- 			return new PublicResult<>(PublicResultConstant.SUCCESS, list);
- 		} catch (Exception e) {
- 			e.printStackTrace();
- 			logger.error(e.getMessage());
- 			return new PublicResult<>(PublicResultConstant.FAILED,e.getMessage(), null);
- 		}
-    }
+  	@ApiOperation(value = "更新数据源配置", notes = "更新数据源配置", httpMethod = "PUT")
+	@RequestMapping(value = "/update", method = RequestMethod.PUT)
+	public PublicResult<DbDatasourceConfig> update(HttpServletRequest request,DbDatasourceConfig entity) {
+		try {
+			if(entity!=null&&StringUtils.isNotBlank(entity.getId())){
+				//更新
+				entity.setUpdateDate(new Date());
+				entity.setUpdateBy(getLoginUser(request).getId());
+				if(iDbDatasourceConfigService.updateById(entity)){
+					return new PublicResult<>(PublicResultConstant.SUCCESS, entity);
+				}else{
+					return new PublicResult<>(PublicResultConstant.ERROR, null);
+				}
+			}else{
+				return new PublicResult<>(PublicResultConstant.PARAM_ERROR, "修改主键不能为空!",null);
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+			logger.error(e.getMessage());
+			return new PublicResult<>(PublicResultConstant.FAILED,e.getMessage(), null);
+		}
+	}
+    
+    
+    /**
+     * @date   2018-09-27
+     * @author zuoqb123
+     * @todo   查询单个数据源配置
+     */
+    @ResponseBody
+ 	@AuthPower(avoidVersion = false, avoidPower = true, avoidSign = true, avoidLogin = true, avoidPlatform = true)
+  	@ApiOperation(value = "查询单个数据源配置", notes = "查询单个数据源配置", httpMethod = "GET")
+  	@RequestMapping(value = "/get/{id}", method = RequestMethod.GET )
+  	public PublicResult<DbDatasourceConfig> get(HttpServletRequest request,@PathVariable("id") String id) {
+  		DbDatasourceConfig entity=null;
+  		try {
+  			EntityWrapper<DbDatasourceConfig> wrapper = new EntityWrapper<DbDatasourceConfig>();
+  			wrapper.where("del_flag={0}", UN_DEL_FLAG);
+  			wrapper.eq("id", id);
+  			entity=iDbDatasourceConfigService.selectOne(wrapper);
+  			return new PublicResult<>(PublicResultConstant.SUCCESS, entity);
+		} catch (Exception e) {
+			e.printStackTrace();
+			logger.error(e.getMessage());
+			return new PublicResult<>(PublicResultConstant.FAILED,e.getMessage(), null);
+		}
+  	}
 	
     /**
-     * @date   2018-09-26
+     * @date   2018-09-27
      * @author zuoqb123
      * @todo   分页查询数据源配置
      */
     @ResponseBody
  	@AuthPower(avoidVersion = false, avoidPower = true, avoidSign = true, avoidLogin = true, avoidPlatform = true)
   	@ApiOperation(value = "分页查询数据源配置", notes = "分页查询数据源配置", httpMethod = "GET")
-  	@RequestMapping(value = "/queryPage", method = {RequestMethod.GET,RequestMethod.POST})
-    public PublicResult<PageInfo<DataDatasourceConfig>> queryPage(DataDatasourceConfig entity,@RequestParam(value="pageNum",required = false,defaultValue="1") Integer pageNum,
+  	@RequestMapping(value = "/list", method = RequestMethod.GET)
+    public PublicResult<PageInfo<DbDatasourceConfig>> list(DbDatasourceConfig entity,@RequestParam(value="pageNum",required = false,defaultValue="1") Integer pageNum,
 			@RequestParam(value="pageSize",required = false,defaultValue="10") Integer pageSize,HttpServletRequest request) {
 		try {
-			EntityWrapper<DataDatasourceConfig> wrapper = searchWrapper(request, entity);
+			EntityWrapper<DbDatasourceConfig> wrapper = searchWrapper(request, entity);
 			PageHelper.startPage(pageNum, pageSize);
-			List<DataDatasourceConfig> list = iDataDatasourceConfigService.selectList(wrapper);
-			PageInfo<DataDatasourceConfig> page = new PageInfo<DataDatasourceConfig>(list);
+			List<DbDatasourceConfig> list = iDbDatasourceConfigService.selectList(wrapper);
+			PageInfo<DbDatasourceConfig> page = new PageInfo<DbDatasourceConfig>(list);
 			return new PublicResult<>(PublicResultConstant.SUCCESS, page);
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -176,9 +185,9 @@ public class DataDatasourceConfigController extends BaseController {
      * @author zuoqb123
      * @todo   构建查询条件-以后扩展
      */
-    private EntityWrapper<DataDatasourceConfig> searchWrapper(HttpServletRequest request, DataDatasourceConfig entity) {
-		EntityWrapper<DataDatasourceConfig> wrapper = new EntityWrapper<DataDatasourceConfig>();
-		wrapper.where("del_flag={0}", 0);
+    private EntityWrapper<DbDatasourceConfig> searchWrapper(HttpServletRequest request, DbDatasourceConfig entity) {
+		EntityWrapper<DbDatasourceConfig> wrapper = new EntityWrapper<DbDatasourceConfig>();
+		wrapper.where("del_flag={0}", UN_DEL_FLAG);
 		if(getLoginUser(request)!=null&&StringUtils.isNotBlank(getLoginUser(request).getId())){
 			if(!isAdmin(request))
 			 wrapper.and("create_by", getLoginUser(request).getId());
@@ -187,9 +196,9 @@ public class DataDatasourceConfigController extends BaseController {
 		if(entity.getId()!=null&&StringUtils.isNotBlank(String.valueOf(entity.getId()))){
 			wrapper.like("id", String.valueOf(entity.getId()));
 		}
-		//根据创建用户模糊查询
-		if(entity.getUserId()!=null&&StringUtils.isNotBlank(String.valueOf(entity.getUserId()))){
-			wrapper.like("user_id", String.valueOf(entity.getUserId()));
+		//根据归属平台模糊查询
+		if(entity.getSysPlatId()!=null&&StringUtils.isNotBlank(String.valueOf(entity.getSysPlatId()))){
+			wrapper.like("sys_plat_id", String.valueOf(entity.getSysPlatId()));
 		}
 		//根据数据源名称模糊查询
 		if(entity.getName()!=null&&StringUtils.isNotBlank(String.valueOf(entity.getName()))){
@@ -219,21 +228,13 @@ public class DataDatasourceConfigController extends BaseController {
 		if(entity.getDbPassword()!=null&&StringUtils.isNotBlank(String.valueOf(entity.getDbPassword()))){
 			wrapper.like("db_password", String.valueOf(entity.getDbPassword()));
 		}
-		//根据最大连接数模糊查询
-		if(entity.getMaxNum()!=null&&StringUtils.isNotBlank(String.valueOf(entity.getMaxNum()))){
-			wrapper.like("max_num", String.valueOf(entity.getMaxNum()));
-		}
-		//根据是否可用模糊查询
-		if(entity.getUseable()!=null&&StringUtils.isNotBlank(String.valueOf(entity.getUseable()))){
-			wrapper.like("useable", String.valueOf(entity.getUseable()));
-		}
 		//根据数据库版本模糊查询
 		if(entity.getDbVersion()!=null&&StringUtils.isNotBlank(String.valueOf(entity.getDbVersion()))){
 			wrapper.like("db_version", String.valueOf(entity.getDbVersion()));
 		}
-		//根据是否支持事务模糊查询
-		if(entity.getSuportTransaction()!=null&&StringUtils.isNotBlank(String.valueOf(entity.getSuportTransaction()))){
-			wrapper.like("suport_transaction", String.valueOf(entity.getSuportTransaction()));
+		//根据最大连接数模糊查询
+		if(entity.getMaxNum()!=null&&StringUtils.isNotBlank(String.valueOf(entity.getMaxNum()))){
+			wrapper.like("max_num", String.valueOf(entity.getMaxNum()));
 		}
 		if(StringUtils.isNoneBlank(entity.getOrderBy())){
 			wrapper.orderBy(entity.getOrderBy(), entity.isAsc());

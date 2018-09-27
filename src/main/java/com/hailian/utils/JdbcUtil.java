@@ -3,12 +3,17 @@ package com.hailian.utils;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
+import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 import org.springframework.util.StringUtils;
 
-import com.hailian.domain.DbConfig;
+import com.hailian.entity.DbDatasourceConfig;
 
 /**
  * @time   2018年9月13日 上午10:38:25
@@ -17,27 +22,21 @@ import com.hailian.domain.DbConfig;
  */
 public class JdbcUtil {
 	private static Connection conn = null;
-	//测试环境
-	private static String JDBC_DRIVER= "com.mysql.jdbc.Driver";
-	public static String DATASOURCE_URL = "jdbc:mysql://10.130.96.74:3306/lianxin?characterEncoding=utf8";
-	public static String DATASOURCE_USERNAME = "root";
-	public static String DATASOURCE_PASSWORD = "hl123456";
-	
 	/**
 	 * 统一接口jdbc连接配置
 	 */
-	public static Connection getConn(DbConfig config) {
+	public static Connection getConn(DbDatasourceConfig config) {
 		if(config==null){
 			return null;
 		}
-		if(StringUtils.isEmpty(config.getDbUrl())||StringUtils.isEmpty(config.getUserName())
+		if(StringUtils.isEmpty(config.getDbUrl())||StringUtils.isEmpty(config.getDbName())
 				||StringUtils.isEmpty(config.getDbDiver())){
 			return null;
 		}
 		try {
 			Connection conn = null;
 			Class.forName(config.getDbDiver());
-			conn = DriverManager.getConnection(config.getDbUrl(), config.getUserName(), config.getPassword());
+			conn = DriverManager.getConnection(config.getDbUrl(), config.getDbName(), config.getDbPassword());
 			return conn;
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -69,6 +68,33 @@ public class JdbcUtil {
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
+	}
+	
+	 /**
+     * 
+     * @time   2018年9月27日 上午12:17:18
+     * @author zuoqb
+     * @todo   将结果集转成List<Map<String,Object>>
+     */
+	public static List<Map<String, Object>> parseResultSet2List(ResultSet rs) throws SQLException {
+		ResultSetMetaData rsmd = rs.getMetaData();
+		int columnCount = rsmd.getColumnCount();
+		List<Map<String, Object>> list=new ArrayList<Map<String,Object>>();
+		String[] colNames = new String[columnCount];//所有列名
+		for(int bo = 0; bo < colNames.length; ++bo) {
+		    colNames[bo] = rsmd.getColumnLabel(bo + 1);
+		    if(colNames[bo] != null) {
+		        colNames[bo] = colNames[bo];
+		    }
+		}
+		while(rs.next()) {
+		    Map<String, Object> mapOfColValues = new HashMap<String, Object>();
+		    for(int i = 1; i <= columnCount; ++i) {
+		    	mapOfColValues.put(colNames[i - 1], rs.getString(i));
+		    }
+		    list.add(mapOfColValues);
+		}
+		return list;
 	}
 
 }

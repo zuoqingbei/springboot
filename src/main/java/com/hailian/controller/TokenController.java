@@ -1,5 +1,6 @@
 package com.hailian.controller;
 
+import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,11 +18,13 @@ import com.hailian.repository.UserRepository;
 import com.hailian.result.ResultDO;
 
 /**
- * @author Jack
- * @date 2018/1/22
+ * @time   2018年9月26日 下午10:43:32
+ * @author zuoqb
+ * @todo   Token相关
  */
 @RestController
 @RequestMapping("/api/{version}")
+@Api(value = "Token相关",description="Token相关 @author zuoqb")
 public class TokenController extends BaseController{
 
     @Autowired

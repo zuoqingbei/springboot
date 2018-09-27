@@ -22,7 +22,7 @@ public abstract class BaseModel<T extends Model> extends Model<T> {
 	 * 创建时间
 	 */
 	@TableField("create_date")
-	@JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss",timezone = "GMT+8")//去掉时间后面的.0
+	@JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")//去掉时间后面的.0
 	private Date createDate;
 	/**
 	 * 更新者
@@ -33,7 +33,7 @@ public abstract class BaseModel<T extends Model> extends Model<T> {
 	 * 更新时间
 	 */
 	@TableField("update_date")
-	@JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss",timezone = "GMT+8")//去掉时间后面的.0
+	@JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")//去掉时间后面的.0
 	private Date updateDate;
 	/**
 	 * 备注信息

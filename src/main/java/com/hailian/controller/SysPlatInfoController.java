@@ -1,14 +1,7 @@
-package ${package.Controller};
+package com.hailian.controller;
 
-#if(${restControllerStyle})
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
-#else
 import org.springframework.stereotype.Controller;
-#end
-#if(${superControllerClassPackage})
-import ${superControllerClassPackage};
-#end
+import com.hailian.base.BaseController;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,8 +10,8 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import javax.servlet.http.HttpServletRequest;
-import ${package.Service}.${table.serviceName};
-import ${package.Entity}.${entity};
+import com.hailian.service.ISysPlatInfoService;
+import com.hailian.entity.SysPlatInfo;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -35,44 +28,36 @@ import com.baomidou.mybatisplus.plugins.pagination.PageHelper;
 import com.github.pagehelper.PageInfo;
 /**
  *
- * @author ${author}
- * @date ${date}
- * @todo $!{table.comment}路由
+ * @author zuoqb123
+ * @date 2018-09-27
+ * @todo 平台信息路由
  */
-#if(${restControllerStyle})
-@RestController
-#else
 @Controller
-#end
-@RequestMapping("/api/{version}#if(${package.ModuleName})/${package.ModuleName}#end/#if(${controllerMappingHyphenStyle})${controllerMappingHyphen}#else${table.entityPath}#end")
-@Api(value = "$!{table.comment}",description="$!{table.comment} @author ${author}")
-#if(${superControllerClass})
-public class ${table.controllerName} extends ${superControllerClass} {
-#else
-public class ${table.controllerName} extends BaseController{
-#end
-    private final Logger logger = LoggerFactory.getLogger(${table.controllerName}.class);
+@RequestMapping("/api/{version}/sysPlatInfo")
+@Api(value = "平台信息",description="平台信息 @author zuoqb123")
+public class SysPlatInfoController extends BaseController {
+    private final Logger logger = LoggerFactory.getLogger(SysPlatInfoController.class);
 
     @Autowired
-    public ${table.serviceName} i${entity}Service;
+    public ISysPlatInfoService iSysPlatInfoService;
 
     /**
-     * @date   ${date}
-     * @author ${author}
-     * @todo   新增$!{table.comment}
+     * @date   2018-09-27
+     * @author zuoqb123
+     * @todo   新增平台信息
      */
     @ResponseBody
  	@AuthPower(avoidVersion = false, avoidPower = true, avoidSign = true, avoidLogin = true, avoidPlatform = true)
-  	@ApiOperation(value = "新增$!{table.comment}", notes = "新增$!{table.comment}", httpMethod = "POST")
+  	@ApiOperation(value = "新增平台信息", notes = "新增平台信息", httpMethod = "POST")
 	@RequestMapping(value = "/add", method = RequestMethod.POST)
-	public PublicResult<${entity}> add(HttpServletRequest request,${entity} entity) {
+	public PublicResult<SysPlatInfo> add(HttpServletRequest request,SysPlatInfo entity) {
 		try {
 			if(StringUtils.isBlank(entity.getId())){
 				//新增
 				entity.setId(UUIDUtils.getUuid());
 				entity.setCreateDate(new Date());
 				entity.setCreateBy(getLoginUser(request).getId());
-				if(i${entity}Service.insert(entity)){
+				if(iSysPlatInfoService.insert(entity)){
 					return new PublicResult<>(PublicResultConstant.SUCCESS, entity);
 				}else{
 					return new PublicResult<>(PublicResultConstant.ERROR, null);
@@ -89,22 +74,22 @@ public class ${table.controllerName} extends BaseController{
 	}
     
     /**
-     * @date   ${date}
-     * @author ${author}
-     * @todo   删除$!{table.comment}
+     * @date   2018-09-27
+     * @author zuoqb123
+     * @todo   删除平台信息
      */
     @ResponseBody
  	@AuthPower(avoidVersion = false, avoidPower = true, avoidSign = true, avoidLogin = true, avoidPlatform = true)
-  	@ApiOperation(value = "删除$!{table.comment}", notes = "删除$!{table.comment}", httpMethod = "DELETE")
+  	@ApiOperation(value = "删除平台信息", notes = "删除平台信息", httpMethod = "DELETE")
     @RequestMapping(value = "/delete/{id}", method = RequestMethod.DELETE)
-	public PublicResult<${entity}> delete(HttpServletRequest request,@PathVariable("id") String id) {
+	public PublicResult<SysPlatInfo> delete(HttpServletRequest request,@PathVariable("id") String id) {
 		try {
-			${entity} entity=new ${entity}();
+			SysPlatInfo entity=new SysPlatInfo();
 			entity.setId(id);
 			entity.setDelFlag(DEL_FLAG);
 			entity.setUpdateDate(new Date());
 			entity.setUpdateBy(getLoginUser(request).getId());
-			 if(i${entity}Service.updateById(entity)){
+			 if(iSysPlatInfoService.updateById(entity)){
 				 return new PublicResult<>(PublicResultConstant.SUCCESS, null);
 			 }else{
 				 return new PublicResult<>(PublicResultConstant.ERROR, null);
@@ -117,21 +102,21 @@ public class ${table.controllerName} extends BaseController{
 	}
 	
 	 /**
-     * @date   ${date}
-     * @author ${author}
-     * @todo   更新$!{table.comment}
+     * @date   2018-09-27
+     * @author zuoqb123
+     * @todo   更新平台信息
      */
     @ResponseBody
  	@AuthPower(avoidVersion = false, avoidPower = true, avoidSign = true, avoidLogin = true, avoidPlatform = true)
-  	@ApiOperation(value = "更新$!{table.comment}", notes = "更新$!{table.comment}", httpMethod = "PUT")
+  	@ApiOperation(value = "更新平台信息", notes = "更新平台信息", httpMethod = "PUT")
 	@RequestMapping(value = "/update", method = RequestMethod.PUT)
-	public PublicResult<${entity}> update(HttpServletRequest request,${entity} entity) {
+	public PublicResult<SysPlatInfo> update(HttpServletRequest request,SysPlatInfo entity) {
 		try {
 			if(entity!=null&&StringUtils.isNotBlank(entity.getId())){
 				//更新
 				entity.setUpdateDate(new Date());
 				entity.setUpdateBy(getLoginUser(request).getId());
-				if(i${entity}Service.updateById(entity)){
+				if(iSysPlatInfoService.updateById(entity)){
 					return new PublicResult<>(PublicResultConstant.SUCCESS, entity);
 				}else{
 					return new PublicResult<>(PublicResultConstant.ERROR, null);
@@ -148,21 +133,21 @@ public class ${table.controllerName} extends BaseController{
     
     
     /**
-     * @date   ${date}
-     * @author ${author}
-     * @todo   查询单个$!{table.comment}
+     * @date   2018-09-27
+     * @author zuoqb123
+     * @todo   查询单个平台信息
      */
     @ResponseBody
  	@AuthPower(avoidVersion = false, avoidPower = true, avoidSign = true, avoidLogin = true, avoidPlatform = true)
-  	@ApiOperation(value = "查询单个$!{table.comment}", notes = "查询单个$!{table.comment}", httpMethod = "GET")
+  	@ApiOperation(value = "查询单个平台信息", notes = "查询单个平台信息", httpMethod = "GET")
   	@RequestMapping(value = "/get/{id}", method = RequestMethod.GET )
-  	public PublicResult<${entity}> get(HttpServletRequest request,@PathVariable("id") String id) {
-  		${entity} entity=null;
+  	public PublicResult<SysPlatInfo> get(HttpServletRequest request,@PathVariable("id") String id) {
+  		SysPlatInfo entity=null;
   		try {
-  			EntityWrapper<${entity}> wrapper = new EntityWrapper<${entity}>();
+  			EntityWrapper<SysPlatInfo> wrapper = new EntityWrapper<SysPlatInfo>();
   			wrapper.where("del_flag={0}", UN_DEL_FLAG);
   			wrapper.eq("id", id);
-  			entity=i${entity}Service.selectOne(wrapper);
+  			entity=iSysPlatInfoService.selectOne(wrapper);
   			return new PublicResult<>(PublicResultConstant.SUCCESS, entity);
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -172,21 +157,21 @@ public class ${table.controllerName} extends BaseController{
   	}
 	
     /**
-     * @date   ${date}
-     * @author ${author}
-     * @todo   分页查询$!{table.comment}
+     * @date   2018-09-27
+     * @author zuoqb123
+     * @todo   分页查询平台信息
      */
     @ResponseBody
  	@AuthPower(avoidVersion = false, avoidPower = true, avoidSign = true, avoidLogin = true, avoidPlatform = true)
-  	@ApiOperation(value = "分页查询$!{table.comment}", notes = "分页查询$!{table.comment}", httpMethod = "GET")
+  	@ApiOperation(value = "分页查询平台信息", notes = "分页查询平台信息", httpMethod = "GET")
   	@RequestMapping(value = "/list", method = RequestMethod.GET)
-    public PublicResult<PageInfo<${entity}>> list(${entity} entity,@RequestParam(value="pageNum",required = false,defaultValue="1") Integer pageNum,
+    public PublicResult<PageInfo<SysPlatInfo>> list(SysPlatInfo entity,@RequestParam(value="pageNum",required = false,defaultValue="1") Integer pageNum,
 			@RequestParam(value="pageSize",required = false,defaultValue="10") Integer pageSize,HttpServletRequest request) {
 		try {
-			EntityWrapper<${entity}> wrapper = searchWrapper(request, entity);
+			EntityWrapper<SysPlatInfo> wrapper = searchWrapper(request, entity);
 			PageHelper.startPage(pageNum, pageSize);
-			List<${entity}> list = i${entity}Service.selectList(wrapper);
-			PageInfo<${entity}> page = new PageInfo<${entity}>(list);
+			List<SysPlatInfo> list = iSysPlatInfoService.selectList(wrapper);
+			PageInfo<SysPlatInfo> page = new PageInfo<SysPlatInfo>(list);
 			return new PublicResult<>(PublicResultConstant.SUCCESS, page);
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -197,22 +182,48 @@ public class ${table.controllerName} extends BaseController{
 	}
     /**
      * @date   2018年9月25日 下午5:36:10
-     * @author ${author}
+     * @author zuoqb123
      * @todo   构建查询条件-以后扩展
      */
-    private EntityWrapper<${entity}> searchWrapper(HttpServletRequest request, ${entity} entity) {
-		EntityWrapper<${entity}> wrapper = new EntityWrapper<${entity}>();
+    private EntityWrapper<SysPlatInfo> searchWrapper(HttpServletRequest request, SysPlatInfo entity) {
+		EntityWrapper<SysPlatInfo> wrapper = new EntityWrapper<SysPlatInfo>();
 		wrapper.where("del_flag={0}", UN_DEL_FLAG);
 		if(getLoginUser(request)!=null&&StringUtils.isNotBlank(getLoginUser(request).getId())){
 			if(!isAdmin(request))
 			 wrapper.and("create_by", getLoginUser(request).getId());
 		}
-		#foreach($field in ${table.fields})
-		//根据${field.comment}模糊查询
-		if(entity.${getprefix}${field.capitalName}()!=null&&StringUtils.isNotBlank(String.valueOf(entity.${getprefix}${field.capitalName}()))){
-			wrapper.like("${field.name}", String.valueOf(entity.${getprefix}${field.capitalName}()));
+		//根据平台编号模糊查询
+		if(entity.getId()!=null&&StringUtils.isNotBlank(String.valueOf(entity.getId()))){
+			wrapper.like("id", String.valueOf(entity.getId()));
 		}
-		#end
+		//根据平台名称模糊查询
+		if(entity.getName()!=null&&StringUtils.isNotBlank(String.valueOf(entity.getName()))){
+			wrapper.like("name", String.valueOf(entity.getName()));
+		}
+		//根据平台英文名称模糊查询
+		if(entity.getEnname()!=null&&StringUtils.isNotBlank(String.valueOf(entity.getEnname()))){
+			wrapper.like("enname", String.valueOf(entity.getEnname()));
+		}
+		//根据接口版本模糊查询
+		if(entity.getVersions()!=null&&StringUtils.isNotBlank(String.valueOf(entity.getVersions()))){
+			wrapper.like("versions", String.valueOf(entity.getVersions()));
+		}
+		//根据平台秘钥模糊查询
+		if(entity.getSecretKey()!=null&&StringUtils.isNotBlank(String.valueOf(entity.getSecretKey()))){
+			wrapper.like("secret_key", String.valueOf(entity.getSecretKey()));
+		}
+		//根据平台联系人模糊查询
+		if(entity.getContacts()!=null&&StringUtils.isNotBlank(String.valueOf(entity.getContacts()))){
+			wrapper.like("contacts", String.valueOf(entity.getContacts()));
+		}
+		//根据联系人电话模糊查询
+		if(entity.getContactsTel()!=null&&StringUtils.isNotBlank(String.valueOf(entity.getContactsTel()))){
+			wrapper.like("contacts_tel", String.valueOf(entity.getContactsTel()));
+		}
+		//根据联系人邮箱模糊查询
+		if(entity.getContactsMail()!=null&&StringUtils.isNotBlank(String.valueOf(entity.getContactsMail()))){
+			wrapper.like("contacts_mail", String.valueOf(entity.getContactsMail()));
+		}
 		if(StringUtils.isNoneBlank(entity.getOrderBy())){
 			wrapper.orderBy(entity.getOrderBy(), entity.isAsc());
 		}else{

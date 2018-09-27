@@ -1,5 +1,7 @@
 package com.hailian.controller;
 
+import io.swagger.annotations.Api;
+
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -15,16 +17,13 @@ import com.hailian.domain.User;
 import com.hailian.result.ResultDO;
 
 /**
- * Package: com.hailian.controller.StreamController
- * Description: 描述
- * Copyright: Copyright (c) 2017
- *
- * @author lv bin
- * Date: 2018/1/19 14:00
- * Version: V1.0.0
+ * @time   2018年9月26日 下午10:43:18
+ * @author zuoqb
+ * @todo   权限相关测试
  */
 @RestController
 @RequestMapping("/api/stream/{version}")
+@Api(value = "权限相关测试",description="权限相关测试 @author zuoqb")
 public class StreamController extends BaseController{
 
     /**

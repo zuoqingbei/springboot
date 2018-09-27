@@ -3,16 +3,17 @@ package com.hailian.entity;
 import java.io.Serializable;
 
 import com.baomidou.mybatisplus.annotations.TableField;
+import com.baomidou.mybatisplus.activerecord.Model;
 import com.baomidou.mybatisplus.annotations.TableName;
 import com.hailian.base.BaseModel;
 
 /**
  * 数据源配置
  * @author zuoqb123
- * @date 2018-09-26
+ * @date 2018-09-27
  */
-@TableName("data_datasource_config")
-public class DataDatasourceConfig extends BaseModel<DataDatasourceConfig> {
+@TableName("db_datasource_config")
+public class DbDatasourceConfig extends BaseModel<DbDatasourceConfig> {
 
     private static final long serialVersionUID = 1L;
 
@@ -21,10 +22,10 @@ public class DataDatasourceConfig extends BaseModel<DataDatasourceConfig> {
      */
    private String id;
     /**
-     * 创建用户
+     * 归属平台
      */
-   @TableField("user_id")
-   private String userId;
+   @TableField("sys_plat_id")
+   private String sysPlatId;
     /**
      * 数据源名称
      */
@@ -59,24 +60,15 @@ public class DataDatasourceConfig extends BaseModel<DataDatasourceConfig> {
    @TableField("db_password")
    private String dbPassword;
     /**
-     * 最大连接数
-     */
-   @TableField("max_num")
-   private Integer maxNum;
-    /**
-     * 是否可用
-     */
-   private String useable;
-    /**
      * 数据库版本
      */
    @TableField("db_version")
    private String dbVersion;
     /**
-     * 是否支持事务
+     * 最大连接数
      */
-   @TableField("suport_transaction")
-   private String suportTransaction;
+   @TableField("max_num")
+   private Integer maxNum;
 
 
    public String getId() {
@@ -87,12 +79,12 @@ public class DataDatasourceConfig extends BaseModel<DataDatasourceConfig> {
       this.id = id;
    }
 
-   public String getUserId() {
-      return userId;
+   public String getSysPlatId() {
+      return sysPlatId;
    }
 
-   public void setUserId(String userId) {
-      this.userId = userId;
+   public void setSysPlatId(String sysPlatId) {
+      this.sysPlatId = sysPlatId;
    }
 
    public String getName() {
@@ -151,22 +143,6 @@ public class DataDatasourceConfig extends BaseModel<DataDatasourceConfig> {
       this.dbPassword = dbPassword;
    }
 
-   public Integer getMaxNum() {
-      return maxNum;
-   }
-
-   public void setMaxNum(Integer maxNum) {
-      this.maxNum = maxNum;
-   }
-
-   public String getUseable() {
-      return useable;
-   }
-
-   public void setUseable(String useable) {
-      this.useable = useable;
-   }
-
    public String getDbVersion() {
       return dbVersion;
    }
@@ -175,12 +151,12 @@ public class DataDatasourceConfig extends BaseModel<DataDatasourceConfig> {
       this.dbVersion = dbVersion;
    }
 
-   public String getSuportTransaction() {
-      return suportTransaction;
+   public Integer getMaxNum() {
+      return maxNum;
    }
 
-   public void setSuportTransaction(String suportTransaction) {
-      this.suportTransaction = suportTransaction;
+   public void setMaxNum(Integer maxNum) {
+      this.maxNum = maxNum;
    }
 
    @Override
@@ -190,9 +166,9 @@ public class DataDatasourceConfig extends BaseModel<DataDatasourceConfig> {
 
    @Override
    public String toString() {
-      return "DataDatasourceConfig{" +
+      return "DbDatasourceConfig{" +
          ", id=" + id +
-         ", userId=" + userId +
+         ", sysPlatId=" + sysPlatId +
          ", name=" + name +
          ", enname=" + enname +
          ", dbType=" + dbType +
@@ -200,10 +176,8 @@ public class DataDatasourceConfig extends BaseModel<DataDatasourceConfig> {
          ", dbUrl=" + dbUrl +
          ", dbName=" + dbName +
          ", dbPassword=" + dbPassword +
-         ", maxNum=" + maxNum +
-         ", useable=" + useable +
          ", dbVersion=" + dbVersion +
-         ", suportTransaction=" + suportTransaction +
+         ", maxNum=" + maxNum +
          "}";
    }
 }
