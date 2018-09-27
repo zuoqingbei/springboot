@@ -5,6 +5,9 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.web.context.request.async.DeferredResult;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
+
+import com.hailian.interceptors.AppInterceptors;
+
 import springfox.documentation.builders.ApiInfoBuilder;
 import springfox.documentation.builders.ParameterBuilder;
 import springfox.documentation.builders.RequestHandlerSelectors;
@@ -72,12 +75,12 @@ public class SwaggerConfig extends WebMvcConfigurerAdapter {
 
         ParameterBuilder tokenParams = new ParameterBuilder();
         ParameterBuilder platformParams = new ParameterBuilder();
-        platformParams.name("X-Platform").description("平台").modelRef(new ModelRef("string")).parameterType("header").required(false).build();
-        tokenParams.name("X-Token").description("令牌").modelRef(new ModelRef("string")).parameterType("header").required(false).build();
+        platformParams.name(AppInterceptors.DEFAULT_PLATFORM).description("平台").modelRef(new ModelRef("string")).parameterType("header").required(false).build();
+        tokenParams.name(AppInterceptors.DEFAULT_TOKEN_NAME).description("登陆令牌").modelRef(new ModelRef("string")).parameterType("header").required(false).build();
       /*  ParameterBuilder TimeParams = new ParameterBuilder();
         TimeParams.name("X-Timestamp").description("时间戳").modelRef(new ModelRef("string")).parameterType("header").required(false).build();*/
         ParameterBuilder signParams = new ParameterBuilder();
-        signParams.name("X-Sign").description("签名").modelRef(new ModelRef("string")).parameterType("header").required(false).build();
+        signParams.name(AppInterceptors.DEFAULT_AUTH_NAME).description("加密签名").modelRef(new ModelRef("string")).parameterType("header").required(false).build();
         
         //添加公用参数
         ParameterBuilder versionParams = new ParameterBuilder();

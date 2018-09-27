@@ -3,6 +3,7 @@ package com.hailian.controller;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 
+import java.lang.reflect.Method;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -10,6 +11,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+import javax.servlet.http.HttpServletRequest;
 
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
@@ -29,6 +32,7 @@ import com.hailian.entity.CommonInterfaceExc;
 import com.hailian.entity.DbDatasourceConfig;
 import com.hailian.entity.SysPlatInfo;
 import com.hailian.enums.PublicResultConstant;
+import com.hailian.interceptors.AppInterceptors;
 import com.hailian.service.ICommonInterfaceExcService;
 import com.hailian.service.IDbDatasourceConfigService;
 import com.hailian.service.ISysPlatInfoService;
@@ -63,10 +67,11 @@ public class CommonInterfaceController extends BaseController {
 	@AuthPower(avoidVersion = false, avoidPower = true, avoidSign = true, avoidLogin = true, avoidPlatform = true)
 	@ApiOperation(value = "根据数据源与SQL查询数据", notes = "根据数据源与SQL查询数据", httpMethod = "GET")
 	@RequestMapping(value = "/getBySql", method = RequestMethod.GET)
-	public PublicResult<List<Map<String, Object>>> getByDbAndSql(
+	public PublicResult<List<Map<String, Object>>> getBySql(
 			@RequestParam(value="sql",required = true) String sql,
 			@RequestParam(value="dataSourceId",required = false) String dataSourceId,
-			@RequestParam(value="params",required = false) String params) {
+			@RequestParam(value="params",required = false) String params,
+			HttpServletRequest request) {
 		/**
     	 * 开始处理SQL
     	 */
@@ -85,7 +90,7 @@ public class CommonInterfaceController extends BaseController {
     	/**
     	 * 处理SQL结束
     	 */
-    	return execeSql(sql, dataSourceId, matcher, dealParamsResult);
+    	return execeSql(sql, dataSourceId, matcher, dealParamsResult,request,"getBySql");
 	}
 
 	/**
@@ -94,14 +99,16 @@ public class CommonInterfaceController extends BaseController {
 	 * @todo   统一接口查询数据
 	 * 平台-数据源-接口
 	 * @param dataType-接口类型  params-动态参数 格式 time::20180731;;cbkCode::BD1011001,,startIndex::1;;pageSize::10
+	 * header需要添加平台签名X-Sign 如果是当前库 签名为Constant.Default_X_SIGN 否则为数据库里面配置
 	 */
     @ResponseBody
-   	@AuthPower(avoidVersion = false, avoidPower = true, avoidSign = true, avoidLogin = true, avoidPlatform = true)
+   	@AuthPower(avoidVersion = false, avoidPower = true, avoidSign = false, avoidLogin = true, avoidPlatform = true)
    	@ApiOperation(value = "统一接口查询数据", notes = "统一接口查询数据", httpMethod = "GET")
    	@RequestMapping(value = "/getByDataType", method = RequestMethod.GET)
    	public PublicResult<Map<String,List<Map<String, Object>>>>  getByDataType(
    			@RequestParam(value="dataType",required = true) String dataType,
-   			@RequestParam(value="params",required = false) String params) {
+   			@RequestParam(value="params",required = false) String params,
+   			HttpServletRequest request) {
     	if(StringUtils.isBlank(dataType)){
 			return new PublicResult<>(PublicResultConstant.INVALID_PARAM_EMPTY,"dataType参数不能为空!", null);
 		}
@@ -133,10 +140,13 @@ public class CommonInterfaceController extends BaseController {
     	 * 处理SQL结束
     	 */
     	String dataSourceId=entity.getDbDatasourceId();
-    	PublicResult<List<Map<String, Object>>> execeResult=execeSql(sql, dataSourceId, matcher, dealParamsResult);
+    	PublicResult<List<Map<String, Object>>> execeResult=execeSql(sql, dataSourceId, matcher, dealParamsResult,request,"getByDataType");
+    	if(!PublicResultConstant.SUCCESS.msg.equals(execeResult.getMsg())){
+    		return new PublicResult<>(PublicResultConstant.PARAM_ERROR,execeResult.getErrorMsg(), null);
+    	}
     	Map<String,List<Map<String, Object>>> result=new HashMap<String, List<Map<String,Object>>>();
-		result.put(entity.getDataSpace(), execeResult.getData());
-		return new PublicResult<>(PublicResultConstant.SUCCESS, result);
+    	result.put(entity.getDataSpace(), execeResult.getData());
+    	return new PublicResult<>(PublicResultConstant.SUCCESS, result);
    	}
     
     /**
@@ -146,7 +156,20 @@ public class CommonInterfaceController extends BaseController {
      * @todo   执行SQL返回执行结果
      */
     public PublicResult<List<Map<String, Object>>> execeSql(String sql, String dataSourceId, List<String> matcher,
-			PublicResult<Map<String, String>> dealParamsResult) {
+			PublicResult<Map<String, String>> dealParamsResult,HttpServletRequest request,String methodName) {
+	    	AuthPower authPower =null;
+		try {
+			Method[] methods=CommonInterfaceController.class.getMethods();
+			for(Method method:methods){
+				if(method.getName().equals(methodName)){
+					authPower = method.getAnnotation(AuthPower.class);
+					break;
+				}
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+			return new PublicResult<>(PublicResultConstant.ERROR,e.getMessage(), null);
+		}
 		if(StringUtils.isNotBlank(dataSourceId)){
     		EntityWrapper<DbDatasourceConfig> dataSourceWrapper = new EntityWrapper<DbDatasourceConfig>();
     		dataSourceWrapper.where("del_flag={0}", UN_DEL_FLAG);
@@ -166,7 +189,15 @@ public class CommonInterfaceController extends BaseController {
         	/**
         	 * 验证平台秘钥 需要以后扩展
         	 */
-        	
+        	if(authPower!=null&&!authPower.avoidSign()){
+				//不免签名认证
+        		String signAuth = request.getHeader(AppInterceptors.DEFAULT_AUTH_NAME);//签名
+        		if(StringUtils.isNotBlank(signAuth)){
+        			if(!signAuth.equals(sysPlatInfo.getSecretKey())){
+        				return new PublicResult<>(PublicResultConstant.PARAM_ERROR,"平台签名"+signAuth+"无效，请联系管理员！", null);
+        			}
+        		}
+			}
     		Connection conn = JdbcUtil.getConn(config);
     		PreparedStatement pstmt = null;
     		ResultSet rs = null;
@@ -204,6 +235,18 @@ public class CommonInterfaceController extends BaseController {
     	}else{
     		try {
     			//数据源为空 默认当前数据库
+    			/**
+            	 * 验证平台秘钥 需要以后扩展
+            	 */
+    			if(authPower!=null&&!authPower.avoidSign()){
+    				//不免签名认证
+    				String signAuth = request.getHeader(AppInterceptors.DEFAULT_AUTH_NAME);//签名
+    				if(StringUtils.isNotBlank(signAuth)){
+    					if(!signAuth.equals(Default_X_SIGN)){
+    						return new PublicResult<>(PublicResultConstant.PARAM_ERROR,"平台签名"+signAuth+"无效，请联系管理员！", null);
+    					}
+    				}
+    			}
         		List<Map<String, Object>> list = new ArrayList<Map<String,Object>>();
         		if(dealParamsResult.getData()!=null&&dealParamsResult.getData().size()>0){
         			Object[] values=new Object[matcher.size()];//这边必须为Object[]

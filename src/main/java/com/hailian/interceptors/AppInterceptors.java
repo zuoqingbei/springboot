@@ -42,14 +42,14 @@ public class AppInterceptors extends WebMvcConfigurerAdapter{
     /**
      * 默认请求request header 头部存放 token 名称
      */
-    public String DEFAULT_TOKEN_NAME = "X-Token";
+    public static String DEFAULT_TOKEN_NAME = "X-Token";
 
     /**
      * 参数加密值
      */
-    public String DEFAULT_AUTH_NAME = "X-Auth";
+    public static String DEFAULT_AUTH_NAME = "X-Sign";
 
-    public String DEFAULT_PLATFORM = "X-Platform";
+    public static String DEFAULT_PLATFORM = "X-Platform";
     public static String REQUEST_TIME = "http_request_time";
 
     @Override
