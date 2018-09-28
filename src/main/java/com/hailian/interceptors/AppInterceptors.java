@@ -77,7 +77,7 @@ public class AppInterceptors extends WebMvcConfigurerAdapter{
 
             boolean avoidVersion = false;
 
-            boolean avoidLogin = false;
+            boolean avoidLogin = true;
 
             boolean avoidPower = true;
 

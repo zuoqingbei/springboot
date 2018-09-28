@@ -2,8 +2,11 @@ package com.hailian.conf;
 
 import org.springframework.stereotype.Component;
 
+import com.hailian.interceptors.AppInterceptors;
+
 import javax.servlet.*;
 import javax.servlet.http.HttpServletResponse;
+
 import java.io.IOException;
 
 /**
@@ -26,8 +29,8 @@ public class CorsFilter implements Filter {
     		res.setHeader("Access-Control-Allow-Origin", "*");  
     		  
     		res.setHeader("Access-Control-Allow-Methods", "POST, GET, PUT, DELETE, OPTIONS");  
-    		  
-    		res.setHeader("Access-Control-Allow-Headers", "Content-Type, Authorization, Accept,X-Requested-With");  
+    		//设置允许跨域请求headers
+    		res.setHeader("Access-Control-Allow-Headers", "Content-Type, Authorization, Accept,X-Requested-With,"+AppInterceptors.DEFAULT_AUTH_NAME+","+AppInterceptors.DEFAULT_PLATFORM+","+AppInterceptors.DEFAULT_TOKEN_NAME+"");  
     		  
     		//res.setHeader("Access-Control-Allow-Credentials","false");  
     		  
