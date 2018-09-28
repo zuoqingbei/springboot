@@ -71,7 +71,7 @@ public class MpGenerator {
 		// strategy.setCapitalMode(true);// 全局大写命名 ORACLE 注意
 		strategy.setTablePrefix(new String[] { "" });// 此处可以修改为您的表前缀
 		strategy.setNaming(NamingStrategy.underline_to_camel);// 表名生成策略
-		strategy.setInclude(new String[] { "common_interface_exc","db_datasource_config","sys_plat_info" }); // 需要生成的表
+		strategy.setInclude(new String[] { "sys_operation_log" }); // 需要生成的表
 		// strategy.setExclude(new String[]{"test"}); // 排除生成的表
 
 		// 自定义实体父类

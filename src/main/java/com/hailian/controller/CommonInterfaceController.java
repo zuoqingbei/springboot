@@ -29,6 +29,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.baomidou.mybatisplus.mapper.EntityWrapper;
 import com.hailian.annotation.AuthPower;
+import com.hailian.annotation.Log;
 import com.hailian.base.BaseController;
 import com.hailian.common.PublicResult;
 import com.hailian.entity.CommonInterfaceExc;
@@ -118,7 +119,8 @@ public class CommonInterfaceController extends BaseController {
     @ApiImplicitParams({
     	@ApiImplicitParam(name="dataType",value="查询指标标识",dataType="String",paramType="query",required = true),
     	@ApiImplicitParam(name="params",value="动态参数 格式 time::20180731;;cbkCode::BD1011001",dataType="String",paramType="query",required = false)})
-   	public PublicResult<?>  getByDataType(@RequestParam(value="dataType",required = true) String dataType,@RequestParam(value="params",required = false) String params,HttpServletRequest request) {
+    @Log(description = "API接口:/searchIndexUseHistory/data/addOrUpdate")
+    public PublicResult<?>  getByDataType(@RequestParam(value="dataType",required = true) String dataType,@RequestParam(value="params",required = false) String params,HttpServletRequest request) {
     	if(StringUtils.isBlank(dataType)){
 			return new PublicResult<>(PublicResultConstant.INVALID_PARAM_EMPTY,"dataType参数不能为空!", null);
 		}
