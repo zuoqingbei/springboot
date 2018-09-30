@@ -5,13 +5,18 @@ import com.auth0.jwt.JWTVerifier;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.exceptions.JWTDecodeException;
 import com.auth0.jwt.interfaces.DecodedJWT;
+import com.hailian.common.TokenConstants;
 
 import java.io.UnsupportedEncodingException;
 import java.util.Date;
-
+import javax.crypto.Mac;
+import javax.crypto.spec.SecretKeySpec;
+import org.apache.commons.codec.binary.Base64;
 /**
+ * 
+ * @time   2018年9月28日 下午8:45:46
  * @author zuoqb
- * @since 2018-05-07
+ * @todo   Token信息
  */
 public class JWTUtil {
 
@@ -24,11 +29,11 @@ public class JWTUtil {
      * @param secret 用户的密码
      * @return 是否正确
      */
-    public static boolean verify(String token, String username, String secret) {
+    public static boolean verify(String token, String userId, String secret) {
         try {
             Algorithm algorithm = Algorithm.HMAC256(secret);
             JWTVerifier verifier = JWT.require(algorithm)
-                    .withClaim("username", username)
+                    .withClaim(TokenConstants.JWT_KEY, userId)
                     .build();
             DecodedJWT jwt = verifier.verify(token);
             return true;
@@ -41,10 +46,10 @@ public class JWTUtil {
      * 获得token中的信息无需secret解密也能获得
      * @return token中包含的用户名
      */
-    public static String getUsername(String token) {
+    public static String getUserId(String token) {
         try {
             DecodedJWT jwt = JWT.decode(token);
-            return jwt.getClaim("username").asString();
+            return jwt.getClaim(TokenConstants.JWT_KEY).asString();
         } catch (JWTDecodeException e) {
             return null;
         }
@@ -56,17 +61,36 @@ public class JWTUtil {
      * @param secret 用户的密码
      * @return 加密的token
      */
-    public static String sign(String username, String secret) {
+    public static String createToken(String userId, String secret) {
         try {
             Date date = new Date(System.currentTimeMillis()+EXPIRE_TIME);
             Algorithm algorithm = Algorithm.HMAC256(secret);
-            // 附带username信息
+            // 附带user编码信息
             return JWT.create()
-                    .withClaim("username", username)
+                    .withClaim(TokenConstants.JWT_KEY, userId)
                     .withExpiresAt(date)
                     .sign(algorithm);
         } catch (UnsupportedEncodingException e) {
             return null;
         }
     }
+    public static String returnSign(String message) {
+    	String hash = "";
+    	//别人篡改数据，但是签名的密匙是在服务器存储，密匙不同，生成的sign也不同。
+    	//所以根据sign的不同就可以知道是否篡改了数据。
+    	String secret = "mystar";//密匙
+    	try {
+    		Mac sha256_HMAC = Mac.getInstance("HmacSHA256");
+    		SecretKeySpec secret_key = new SecretKeySpec(secret.getBytes(),"HmacSHA256");
+    		sha256_HMAC.init(secret_key);
+    		hash = Base64.encodeBase64String(sha256_HMAC.doFinal(message.getBytes()));
+    		System.out.println(message+"#####"+hash);
+    	} catch (Exception e) {
+    		System.out.println("Error");
+    	}
+    		return hash;
+    	}
+    public static void main(String[] args) {
+    	System.out.println(returnSign("message"));
+	}
 }

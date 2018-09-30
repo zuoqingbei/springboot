@@ -37,4 +37,6 @@ public class TokenConstants {
      * 当前登录用户
      */
     public static final String CURRENT_LOGIN_TOKEN = "CURRENT_LOGIN_TOKEN";
+    
+    public static final String JWT_KEY="USER_ID";
 }

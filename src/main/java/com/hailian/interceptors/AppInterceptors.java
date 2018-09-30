@@ -132,8 +132,8 @@ public class AppInterceptors extends WebMvcConfigurerAdapter{
 
             String signAuth = request.getHeader(DEFAULT_AUTH_NAME);
             if(!avoidSign&&StringUtils.isEmpty(signAuth)){
-                // 判断是否需要校验参数规则  是否验签名
-                throw new AppWebException("非法签名 !");
+                // 判断是否需要校验参数规则  
+                throw new AppWebException("非法参数加密值 !");
 
             }
 

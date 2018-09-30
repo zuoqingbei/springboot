@@ -72,7 +72,7 @@ public class RecordLog implements AspectApi {
         String authorization = request.getHeader("Authorization");
         SysOperationLog operationLog = new SysOperationLog();
         if(!ComUtil.isEmpty(authorization)){
-            String username = JWTUtil.getUsername(authorization);
+            String username = JWTUtil.getUserId(authorization);
             operationLog.setUserName(username);
         }
         operationLog.setId(UUIDUtils.getUuid());
