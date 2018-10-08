@@ -20,6 +20,7 @@ import com.hailian.common.TokenConstants;
 import com.hailian.enums.PlatformType;
 import com.hailian.exception.AppWebException;
 import com.hailian.redis.RedisUtils;
+import com.hailian.utils.JWTUtil;
 
 /**
  * Package: com.hailian.interceptor.AppInterceptors
@@ -116,13 +117,14 @@ public class AppInterceptors extends WebMvcConfigurerAdapter{
                     throw new AppWebException("X-Token不能为空！");
                 }
 
-                Long userId = (Long)RedisUtils.get(TokenConstants.CURRENT_LOGIN_TOKEN, tokenAuth);
+                String userId = JWTUtil.getUserId(tokenAuth);
                 if(userId == null){
                     throw new AppWebException("登陆超时，请重新登陆！");
                 }
 
                 // 延长token时间
-                RedisUtils.put(TokenConstants.CURRENT_LOGIN_TOKEN, tokenAuth, String.valueOf(userId), TokenConstants.TOKEN_EXPIRES_TIME);
+                
+                //RedisUtils.put(TokenConstants.CURRENT_LOGIN_TOKEN, tokenAuth, String.valueOf(userId), TokenConstants.TOKEN_EXPIRES_TIME);
             }
 
             if(!avoidPower){

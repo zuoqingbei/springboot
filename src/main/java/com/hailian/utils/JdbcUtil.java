@@ -11,8 +11,12 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.springframework.util.StringUtils;
 
+
+
+import org.apache.commons.lang3.StringUtils;
+
+import com.alibaba.druid.util.JdbcConstants;
 import com.hailian.entity.DbDatasourceConfig;
 
 /**
@@ -22,6 +26,11 @@ import com.hailian.entity.DbDatasourceConfig;
  */
 public class JdbcUtil {
 	private static Connection conn = null;
+	/*static String HIVE_JDBC_DRIVER = "org.apache.hive.jdbc.HiveDriver";
+	static String MYSQL_JDBC_DRIVER = "com.mysql.jdbc.Driver";
+	static String ORACLE_JDBC_DRIVER = "oracle.jdbc.OracleDriver";
+	static String IMPALA_JDBC_DRIVER = "com.cloudera.impala.jdbc41.Driver";
+	static String POSTGRESQL_JDBC_DRIVER="org.postgresql.Driver";*/
 	/**
 	 * 统一接口jdbc连接配置
 	 */
@@ -30,13 +39,27 @@ public class JdbcUtil {
 			return null;
 		}
 		if(StringUtils.isEmpty(config.getDbUrl())||StringUtils.isEmpty(config.getDbName())
-				||StringUtils.isEmpty(config.getDbDiver())){
+				||StringUtils.isEmpty(config.getDbDiver())||StringUtils.isEmpty(config.getDbType())){
 			return null;
 		}
 		try {
+			String dbType = config.getDbType().toLowerCase();
+			String connectionUrl = config.getDbUrl();
+			switch (dbType) {
+			case JdbcConstants.MYSQL:
+				connectionUrl=connectionUrl.split("\\?")[0];
+				connectionUrl+="?useUnicode=true&characterEncoding=utf8&useSSL=false";
+				break;
+			/*case "impala":
+				connectionUrl+=";auth=noSasl";
+				break;*/
+			default:
+				break;
+			}
+			System.out.println(connectionUrl);
 			Connection conn = null;
 			Class.forName(config.getDbDiver());
-			conn = DriverManager.getConnection(config.getDbUrl(), config.getDbName(), config.getDbPassword());
+			conn = DriverManager.getConnection(connectionUrl, config.getDbName(), config.getDbPassword());
 			return conn;
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -51,8 +74,7 @@ public class JdbcUtil {
 	 * @author zuoqb
 	 * @todo   关闭
 	 */
-	public static void close(Connection conn
-			,Statement stat,ResultSet rs){
+	public static void close(Connection conn,Statement stat,ResultSet rs){
 		 try {
 			 if (rs!=null) {
 				rs.close();
@@ -60,9 +82,9 @@ public class JdbcUtil {
 			 if (stat!=null) {
 				stat.close();
 			 }
-			 if (conn!=null) {
+			 if (conn!=null&&!conn.isClosed()) {
 				 //保证从池当中拿出的连接都是自动提交的
-				conn.setAutoCommit(true);
+				//conn.setAutoCommit(true);
 				conn.close();
 			 }
 		} catch (SQLException e) {

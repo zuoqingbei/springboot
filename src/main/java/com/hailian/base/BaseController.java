@@ -8,6 +8,7 @@ import org.springframework.jdbc.core.JdbcTemplate;
 
 import com.hailian.conf.Constant;
 import com.hailian.domain.User;
+import com.hailian.entity.SysUser;
 
 public class BaseController implements Constant{
 	@Autowired
@@ -57,6 +58,14 @@ public class BaseController implements Constant{
 		if(!"1".equals(user.getUserType()))
 			return false;
 		return true;
+	}
+	/**
+	 * @time   2018年9月30日 下午5:09:34
+	 * @author zuoqb
+	 * @todo  设置session
+	 */
+	public void setSessionUser(HttpServletRequest request,HttpServletResponse response,SysUser user){
+		setSession(request, response, USER_INFO, user);
 	}
 	
 }

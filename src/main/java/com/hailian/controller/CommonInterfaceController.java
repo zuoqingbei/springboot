@@ -14,6 +14,8 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -110,7 +112,7 @@ public class CommonInterfaceController extends BaseController {
 	 * @todo   统一接口查询数据
 	 * 平台-数据源-接口
 	 * @param dataType-接口类型  params-动态参数 格式 time::20180731;;cbkCode::BD1011001,,startIndex::1;;pageSize::10
-	 * header需要添加平台签名X-Sign 如果是当前库 签名为Constant.Default_X_SIGN 否则为数据库里面配置
+	 * SQL中不要带“;” 否则会报错
 	 */
     @ResponseBody
    	@AuthPower(avoidVersion = false, avoidPower = true, avoidSign = true, avoidLogin = true, avoidPlatform = true)
@@ -165,7 +167,7 @@ public class CommonInterfaceController extends BaseController {
      * 
      * @time   2018年9月27日 下午2:38:39
      * @author zuoqb
-     * @todo   执行SQL返回执行垂直格式数据结果[{},{},{}]
+     * @todo   执行SQL返回执行垂直格式数据结果[{},{},{}]  
      */
     public PublicResult<?> execeSqlVertical(String sql, String dataSourceId, List<String> matcher,
 			PublicResult<Map<String, String>> dealParamsResult,HttpServletRequest request,String methodName,String entity) {
@@ -211,9 +213,20 @@ public class CommonInterfaceController extends BaseController {
         		}
 			}
     		Connection conn = JdbcUtil.getConn(config);
+    		if(conn==null){
+    			return new PublicResult<>(PublicResultConstant.FAILED,"数据库连接失败！",null);
+    		}
     		PreparedStatement pstmt = null;
     		ResultSet rs = null;
     		try {
+    			//将where后面的‘与’替换
+    			Pattern p=Pattern.compile("where",Pattern.CASE_INSENSITIVE);
+    			Matcher m=p.matcher(sql);
+    			while(m.find()){
+    	            String whereStr=m.group();
+    	            String[] splits=sql.split(whereStr);
+    	            sql=splits[0]+whereStr+splits[1].replaceAll("‘", "'").replaceAll("’", "'");
+    	        }
     			pstmt = conn.prepareStatement(sql);
     			//设置参数 外层循环
     			for(int index=0;index<matcher.size();index++){
