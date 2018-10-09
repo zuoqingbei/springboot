@@ -77,21 +77,18 @@ public class SwaggerConfig extends WebMvcConfigurerAdapter {
         ParameterBuilder platformParams = new ParameterBuilder();
         platformParams.name(AppInterceptors.DEFAULT_PLATFORM).description("平台(PC/ANDROID/IOS)").modelRef(new ModelRef("string")).parameterType("header").required(false).build();
         tokenParams.name(AppInterceptors.DEFAULT_TOKEN_NAME).description("登陆令牌").modelRef(new ModelRef("string")).parameterType("header").required(false).build();
-      /*  ParameterBuilder TimeParams = new ParameterBuilder();
-        TimeParams.name("X-Timestamp").description("时间戳").modelRef(new ModelRef("string")).parameterType("header").required(false).build();*/
         ParameterBuilder signParams = new ParameterBuilder();
         signParams.name(AppInterceptors.DEFAULT_AUTH_NAME).description("加密签名").modelRef(new ModelRef("string")).parameterType("header").required(false).build();
         
         //添加公用参数
-        ParameterBuilder versionParams = new ParameterBuilder();
+       /* ParameterBuilder versionParams = new ParameterBuilder();
         versionParams.name("version").description("版本，例如v1").modelRef(new ModelRef("string")).parameterType("path").required(true).build();
-        
+        */
         List<Parameter> headerParams = new ArrayList<Parameter>();
         headerParams.add(tokenParams.build());
-        //headerParams.add(TimeParams.build());
         headerParams.add(signParams.build());
         headerParams.add(platformParams.build());
-        headerParams.add(versionParams.build());
+        //headerParams.add(versionParams.build());
         return new Docket(DocumentationType.SWAGGER_2)
                 .apiInfo(apiInfo())
                 .groupName("api")

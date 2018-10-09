@@ -73,7 +73,7 @@ public class CommonInterfaceController extends BaseController {
     @ResponseBody
 	@AuthPower(avoidVersion = false, avoidPower = true, avoidSign = true, avoidLogin = true, avoidPlatform = true)
 	@ApiOperation(value = "根据数据源与SQL查询数据", notes = "根据数据源与SQL查询数据", httpMethod = "GET")
-	@RequestMapping(value = "/getBySql", method = RequestMethod.GET)
+	@RequestMapping(value = "/api/{version}/common/interface/getBySql", method = RequestMethod.GET)
     @ApiImplicitParams({
     	@ApiImplicitParam(name="sql",value="执行的SQL语句",dataType="String",paramType="query",required = true),
     	@ApiImplicitParam(name="dataSourceId",value="SQL要查询的数据库编码，默认为当前库",dataType="String",paramType="query",required = false),
@@ -121,7 +121,7 @@ public class CommonInterfaceController extends BaseController {
     @ApiImplicitParams({
     	@ApiImplicitParam(name="dataType",value="查询指标标识",dataType="String",paramType="query",required = true),
     	@ApiImplicitParam(name="params",value="动态参数 格式 time::20180731;;cbkCode::BD1011001",dataType="String",paramType="query",required = false)})
-    @Log(description = "API接口:/searchIndexUseHistory/data/addOrUpdate")
+    @Log(description = "API接口:/api/{version}/common/interface/getByDataType")
     public PublicResult<?>  getByDataType(@RequestParam(value="dataType",required = true) String dataType,@RequestParam(value="params",required = false) String params,HttpServletRequest request) {
     	if(StringUtils.isBlank(dataType)){
 			return new PublicResult<>(PublicResultConstant.INVALID_PARAM_EMPTY,"dataType参数不能为空!", null);
@@ -130,36 +130,40 @@ public class CommonInterfaceController extends BaseController {
     	EntityWrapper<CommonInterfaceExc> inteWrapper = new EntityWrapper<CommonInterfaceExc>();
     	inteWrapper.where("del_flag={0}", UN_DEL_FLAG);
     	inteWrapper.eq("data_type", dataType);
-		CommonInterfaceExc entity=iCommonInterfaceExcService.selectOne(inteWrapper);
-    	if(entity==null){
-    		return new PublicResult<>(PublicResultConstant.PARAM_ERROR,dataType+"无效，请配置接口信息！", null);
-    	}
-    	/**
-    	 * 开始处理SQL
-    	 */
-    	String sql=entity.getDataSql();
-    	//解析SQL中的${}与#{}
-    	//匹配所有${}与匹配所有#{}正则表达式
-    	String rexg="\\#\\{([^\\}]+)\\}|\\$\\{([^\\}]+)\\}";
-    	//按照顺序查找出所有# $ 比如  [#{time}, #{cbkCode}, ${startIndex}, ${pageSize}]
-    	List<String> matcher=RexUtils.getString(sql, rexg);
-    	PublicResult<Map<String,String>> dealParamsResult=dealParams(params);
-    	PublicResult<Map<String, List<Map<String, Object>>>> formatSqlResult= formatSql(sql, matcher, dealParamsResult);
-    	if(!PublicResultConstant.SUCCESS.msg.equals(formatSqlResult.getMsg())){
-    		return formatSqlResult;
-    	}
-    	//将SQL中所有${}与所有#{}替换为？
-    	sql=RexUtils.getReplace(sql, rexg,"?");
-    	/**
-    	 * 处理SQL结束
-    	 */
-    	String dataSourceId=entity.getDbDatasourceId();
-    	PublicResult<?> execeResult=execeSqlVertical(sql, dataSourceId, matcher, dealParamsResult,request,"getByDataType",entity.getTransformData());
-    	if(!PublicResultConstant.SUCCESS.msg.equals(execeResult.getMsg())){
-    		return new PublicResult<>(PublicResultConstant.PARAM_ERROR,execeResult.getErrorMsg(), null);
-    	}
     	Map<String,Object> result=new HashMap<String,Object>();
-    	result.put(entity.getDataSpace(), execeResult.getData());
+    	List<CommonInterfaceExc> excList=iCommonInterfaceExcService.selectList(inteWrapper);
+    	for(CommonInterfaceExc entity:excList){
+    		/*CommonInterfaceExc entity=iCommonInterfaceExcService.selectOne(inteWrapper);
+    		if(entity==null){
+    			return new PublicResult<>(PublicResultConstant.PARAM_ERROR,dataType+"无效，请配置接口信息！", null);
+    		}*/
+    		/**
+        	 * 开始处理SQL
+        	 */
+        	String sql=entity.getDataSql();
+        	//解析SQL中的${}与#{}
+        	//匹配所有${}与匹配所有#{}正则表达式
+        	String rexg="\\#\\{([^\\}]+)\\}|\\$\\{([^\\}]+)\\}";
+        	//按照顺序查找出所有# $ 比如  [#{time}, #{cbkCode}, ${startIndex}, ${pageSize}]
+        	List<String> matcher=RexUtils.getString(sql, rexg);
+        	PublicResult<Map<String,String>> dealParamsResult=dealParams(params);
+        	PublicResult<Map<String, List<Map<String, Object>>>> formatSqlResult= formatSql(sql, matcher, dealParamsResult);
+        	if(!PublicResultConstant.SUCCESS.msg.equals(formatSqlResult.getMsg())){
+        		return formatSqlResult;
+        	}
+        	//将SQL中所有${}与所有#{}替换为？
+        	sql=RexUtils.getReplace(sql, rexg,"?");
+        	/**
+        	 * 处理SQL结束
+        	 */
+        	String dataSourceId=entity.getDbDatasourceId();
+        	PublicResult<?> execeResult=execeSqlVertical(sql, dataSourceId, matcher, dealParamsResult,request,"getByDataType",entity.getTransformData());
+        	if(!PublicResultConstant.SUCCESS.msg.equals(execeResult.getMsg())){
+        		return new PublicResult<>(PublicResultConstant.PARAM_ERROR,execeResult.getErrorMsg(), null);
+        	}
+        	result.put(entity.getDataSpace(), execeResult.getData());
+    	}
+    	
     	return new PublicResult<>(PublicResultConstant.SUCCESS, result);
    	}
     
@@ -185,18 +189,12 @@ public class CommonInterfaceController extends BaseController {
 			return new PublicResult<>(PublicResultConstant.ERROR,e.getMessage(), null);
 		}
 		if(StringUtils.isNotBlank(dataSourceId)){
-    		EntityWrapper<DbDatasourceConfig> dataSourceWrapper = new EntityWrapper<DbDatasourceConfig>();
-    		dataSourceWrapper.where("del_flag={0}", UN_DEL_FLAG);
-    		dataSourceWrapper.eq("id", dataSourceId);
-    		DbDatasourceConfig config =iDbDatasourceConfigService.selectOne(dataSourceWrapper);
+    		DbDatasourceConfig config =iDbDatasourceConfigService.getById(dataSourceId);
     		if(config==null){
     			return new PublicResult<>(PublicResultConstant.PARAM_ERROR,"数据源无效，请配置数据源！", null);
     		}
     		//查询平台信息 校验平台合法性
-        	EntityWrapper<SysPlatInfo> platWrapper = new EntityWrapper<SysPlatInfo>();
-        	platWrapper.where("del_flag={0}", UN_DEL_FLAG);
-        	platWrapper.eq("id", config.getSysPlatId());
-        	SysPlatInfo sysPlatInfo=iSysPlatInfoService.selectOne(platWrapper);
+        	SysPlatInfo sysPlatInfo=iSysPlatInfoService.getById(config.getSysPlatId());
         	if(sysPlatInfo==null){
     			return new PublicResult<>(PublicResultConstant.PARAM_ERROR,"平台无效，请联系管理员！", null);
     		}

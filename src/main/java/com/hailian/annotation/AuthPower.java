@@ -38,7 +38,7 @@ public @interface AuthPower {
     boolean avoidPower() default true;
 
     /**
-     * 免参数加密校验  eg: SHA-1算法  X-Auth
+     * 免参数加密校验  eg: SHA-1算法  X-Auth  对应平台秘钥
      * @return
      */
     boolean avoidSign() default true;
