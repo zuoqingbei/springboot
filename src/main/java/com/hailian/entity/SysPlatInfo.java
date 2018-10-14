@@ -1,16 +1,16 @@
 package com.hailian.entity;
 
+import io.swagger.annotations.ApiModelProperty;
+
 import java.io.Serializable;
 
 import com.baomidou.mybatisplus.annotations.TableField;
-import com.baomidou.mybatisplus.activerecord.Model;
 import com.baomidou.mybatisplus.annotations.TableName;
 import com.hailian.base.BaseModel;
-
 /**
  * 平台信息
  * @author zuoqb123
- * @date 2018-09-27
+ * @date 2018-10-14
  */
 @TableName("sys_plat_info")
 public class SysPlatInfo extends BaseModel<SysPlatInfo> {
@@ -20,36 +20,44 @@ public class SysPlatInfo extends BaseModel<SysPlatInfo> {
     /**
      * 平台编号
      */
+   @ApiModelProperty(name="平台编号",value="id",dataType="String")
    private String id;
     /**
      * 平台名称
      */
+   @ApiModelProperty(name="平台名称",value="name",dataType="String")
    private String name;
     /**
      * 平台英文名称
      */
+   @ApiModelProperty(name="平台英文名称",value="enname",dataType="String")
    private String enname;
     /**
      * 接口版本
      */
+   @ApiModelProperty(name="接口版本",value="versions",dataType="String")
    private String versions;
     /**
-     * 平台秘钥
+     * 平台秘钥 X-Sign
      */
+   @ApiModelProperty(name="平台秘钥 X-Sign",value="secretKey",dataType="String")
    @TableField("secret_key")
    private String secretKey;
     /**
      * 平台联系人
      */
+   @ApiModelProperty(name="平台联系人",value="contacts",dataType="String")
    private String contacts;
     /**
      * 联系人电话
      */
+   @ApiModelProperty(name="联系人电话",value="contactsTel",dataType="String")
    @TableField("contacts_tel")
    private String contactsTel;
     /**
      * 联系人邮箱
      */
+   @ApiModelProperty(name="联系人邮箱",value="contactsMail",dataType="String")
    @TableField("contacts_mail")
    private String contactsMail;
 

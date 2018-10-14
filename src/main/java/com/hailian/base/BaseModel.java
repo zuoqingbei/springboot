@@ -1,5 +1,7 @@
 package com.hailian.base;
 
+import io.swagger.annotations.ApiModelProperty;
+
 import java.util.Date;
 
 import com.baomidou.mybatisplus.activerecord.Model;
@@ -16,53 +18,63 @@ public abstract class BaseModel<T extends Model> extends Model<T> {
 	/**
 	* 创建者
 	*/
+	@ApiModelProperty(value="创建者",name="createBy",dataType="String")
 	@TableField("create_by")
 	private String createBy;
 	/**
 	 * 创建时间
 	 */
+	@ApiModelProperty(value="创建时间",name="createDate",dataType="Date")
 	@TableField("create_date")
 	@JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")//去掉时间后面的.0
 	private Date createDate;
 	/**
 	 * 更新者
 	 */
+	@ApiModelProperty(value="更新者",name="updateBy",dataType="String")
 	@TableField("update_by")
 	private String updateBy;
 	/**
 	 * 更新时间
 	 */
+	@ApiModelProperty(value="更新时间",name="updateDate",dataType="Date")
 	@TableField("update_date")
 	@JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")//去掉时间后面的.0
 	private Date updateDate;
 	/**
 	 * 备注信息
 	 */
+	@ApiModelProperty(value="备注",name="remarks",dataType="String")
 	private String remarks;
 	/**
 	 * 删除标记
 	 */
+	@ApiModelProperty(value="删除标记",name="delFlag",dataType="String")
 	@TableField("del_flag")
 	private String delFlag;
 	/**
 	 * 排序字段 值必须对照表中字段
 	 */
+	@ApiModelProperty(value="排序字段 值必须对照表中字段",name="orderBy",dataType="String")
 	@TableField(exist = false)
 	private String orderBy;
 	/**
 	 * 排序方式  默认升序排列
 	 */
+	@ApiModelProperty(value="是否为升序",name="asc",dataType="boolean")
 	@TableField(exist = false)
 	private boolean asc=true   ;//是否为升序;
 	@TableField(exist = false)
 	/**
 	 * 开始时间（用于检索创建时间）
 	 */
+	@ApiModelProperty(value="检索开始时间",name="startDate",dataType="Date")
 	private Date startDate;
 	@TableField(exist = false)
 	/**
 	 * 结束时间（用于检索创建时间）
 	 */
+	@ApiModelProperty(value="检索结束时间",name="endDate",dataType="Date")
 	private Date endDate;
 
 	public String getCreateBy() {

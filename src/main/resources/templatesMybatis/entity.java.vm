@@ -14,7 +14,7 @@ import com.baomidou.mybatisplus.annotations.Version;
 import lombok.Data;
 import lombok.experimental.Accessors;
 #end
-
+import io.swagger.annotations.ApiModelProperty;
 /**
  * $!{table.comment}
  * @author ${author}
@@ -47,12 +47,13 @@ public class ${entity} implements Serializable {
      * ${field.comment}
      */
 #end
+   @ApiModelProperty(name="${field.comment}",value="${field.propertyName}",dataType="${field.propertyType}")
 #if(${field.keyFlag})
 ## 主键
 #if(${field.keyIdentityFlag})
    @TableId(value="${field.name}", type= IdType.AUTO)
 #elseif(${field.convert})
-    @TableId("${field.name}")
+   @TableId("${field.name}")
 #end
 ## 普通字段
 #elseif(${field.fill})
@@ -71,7 +72,7 @@ public class ${entity} implements Serializable {
 #end
 ## 逻辑删除注解
 #if(${logicDeleteFieldName}==${field.name})
-    @TableLogic
+   @TableLogic
 #end
    private ${field.propertyType} ${field.propertyName};
 #end
