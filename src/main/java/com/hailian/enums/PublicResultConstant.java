@@ -68,7 +68,11 @@ public enum PublicResultConstant {
     /**
      * 没有权限
      */
-    USER_NO_PERMITION("10000007", "当前用户无该接口权限")
+    USER_NO_PERMITION("10000007", "当前用户无该接口权限"),
+    /**
+     * 没有数据
+     */
+    NO_DATA("10000011", "暂无数据!")
 
     ;
 

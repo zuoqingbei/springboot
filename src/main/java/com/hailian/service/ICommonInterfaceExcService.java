@@ -1,10 +1,15 @@
 package com.hailian.service;
 
-import com.hailian.entity.CommonInterfaceExc;
-import com.hailian.base.BaseService;
+import java.util.List;
+import java.util.Map;
+
+import javax.servlet.http.HttpServletRequest;
+
 import com.baomidou.mybatisplus.plugins.Page;
 import com.hailian.base.BaseController;
-import javax.servlet.http.HttpServletRequest;
+import com.hailian.base.BaseService;
+import com.hailian.common.PublicResult;
+import com.hailian.entity.CommonInterfaceExc;
 
 
 /**
@@ -37,4 +42,12 @@ public interface ICommonInterfaceExcService extends BaseService<CommonInterfaceE
      * @todo   统一接口分页查询
      */
 	Page<CommonInterfaceExc> pageList(BaseController c,HttpServletRequest request,CommonInterfaceExc entity,Integer pageNum,Integer pageSize);
+	/**
+	 * @time   2018年10月11日 下午9:11:18
+	 * @author zuoqb
+	 * @todo   根据dataType、dataSpace查询内容
+	 */
+	List<CommonInterfaceExc> getInterfaceByDataTypeAndDataSpace(String dataType,String dataSpace);
+	PublicResult<?> execeSqlVertical(String sql, String dataSourceId, List<String> matcher,
+			PublicResult<Map<String, String>> dealParamsResult,HttpServletRequest request,String methodName,String tranType);
 }

@@ -1,7 +1,9 @@
 package com.hailian.controller;
 
 import org.springframework.stereotype.Controller;
+
 import com.hailian.base.BaseController;
+
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,13 +12,17 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import javax.servlet.http.HttpServletRequest;
+
 import com.hailian.service.ICommonInterfaceExcService;
 import com.hailian.entity.CommonInterfaceExc;
+
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+
 import com.hailian.annotation.AuthPower;
 import com.hailian.common.PublicResult;
 import com.hailian.enums.PublicResultConstant;

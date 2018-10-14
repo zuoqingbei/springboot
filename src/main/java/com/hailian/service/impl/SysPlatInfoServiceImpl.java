@@ -4,16 +4,21 @@ import com.hailian.entity.SysPlatInfo;
 import com.hailian.mapper.SysPlatInfoMapper;
 import com.hailian.service.ISysPlatInfoService;
 import com.hailian.base.BaseServiceImpl;
+
 import org.springframework.stereotype.Service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
+
 import javax.servlet.http.HttpServletRequest;
+
 import com.hailian.common.UUIDUtils;
 import com.hailian.conf.Constant;
 import com.baomidou.mybatisplus.mapper.EntityWrapper;
 import com.baomidou.mybatisplus.plugins.Page;
 import com.hailian.base.BaseController;
+
 import java.util.Date;
+
 import org.apache.commons.lang3.StringUtils;
 /**
  * @date 2018-10-09
@@ -90,7 +95,7 @@ public class SysPlatInfoServiceImpl extends BaseServiceImpl<SysPlatInfoMapper, S
     private EntityWrapper<SysPlatInfo> searchWrapper(BaseController c,HttpServletRequest request, SysPlatInfo entity) {
 		EntityWrapper<SysPlatInfo> wrapper = new EntityWrapper<SysPlatInfo>();
 		wrapper.where("del_flag={0}", UN_DEL_FLAG);
-		if(c.getLoginUser(request)!=null&&StringUtils.isNotBlank(c.getLoginUser(request).getId())){
+		if(c!=null&&request!=null&&c.getLoginUser(request)!=null&&StringUtils.isNotBlank(c.getLoginUser(request).getId())){
 			if(!c.isAdmin(request))
 			 wrapper.and("create_by", c.getLoginUser(request).getId());
 		}
@@ -126,18 +131,18 @@ public class SysPlatInfoServiceImpl extends BaseServiceImpl<SysPlatInfoMapper, S
 		if(entity.getContactsMail()!=null&&StringUtils.isNotBlank(String.valueOf(entity.getContactsMail()))){
 			wrapper.like("contacts_mail", String.valueOf(entity.getContactsMail()));
 		}
-		if(StringUtils.isNoneBlank(entity.getOrderBy())){
-			wrapper.orderBy(entity.getOrderBy(), entity.isAsc());
-		}else{
-			wrapper.orderBy("create_date", true);
-		}
 		if(entity.getStartDate()!=null){
 			wrapper.ge("create_date", entity.getStartDate());
 		}
 		if(entity.getEndDate()!=null){
 			wrapper.le("create_date", entity.getEndDate());
 		}
-		System.out.println(wrapper.originalSql());
+		if(StringUtils.isNoneBlank(entity.getOrderBy())){
+			wrapper.orderBy(entity.getOrderBy(), entity.isAsc());
+		}else{
+			wrapper.orderBy("create_date", true);
+		}
+		//System.out.println(wrapper.originalSql());
 		return wrapper;
 	}
    
