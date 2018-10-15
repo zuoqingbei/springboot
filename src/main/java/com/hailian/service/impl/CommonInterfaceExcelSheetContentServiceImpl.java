@@ -39,6 +39,7 @@ public class CommonInterfaceExcelSheetContentServiceImpl extends BaseServiceImpl
      * @todo   Excel导出sheet详情配置新增或者修改
      */
 	@Override
+	@Transactional(rollbackFor = Exception.class)
 	public boolean saveOrUpdate(CommonInterfaceExcelSheetContent entity) {
 		if(StringUtils.isBlank(entity.getId())){
 			//新增
@@ -56,6 +57,7 @@ public class CommonInterfaceExcelSheetContentServiceImpl extends BaseServiceImpl
      * @todo   Excel导出sheet详情配置逻辑删除
      */
 	@Override
+	@Transactional(rollbackFor = Exception.class)
 	public boolean deleteLogic(String id) {
 		CommonInterfaceExcelSheetContent entity=new CommonInterfaceExcelSheetContent();
 		entity.setId(id);
@@ -105,12 +107,12 @@ public class CommonInterfaceExcelSheetContentServiceImpl extends BaseServiceImpl
 			wrapper.like("id", String.valueOf(entity.getId()));
 		}
 		//根据行位置模糊查询
-		if(entity.getxIp()!=null&&StringUtils.isNotBlank(String.valueOf(entity.getxIp()))){
-			wrapper.like("x_ip", String.valueOf(entity.getxIp()));
+		if(entity.getXIp()!=null&&StringUtils.isNotBlank(String.valueOf(entity.getXIp()))){
+			wrapper.like("x_ip", String.valueOf(entity.getXIp()));
 		}
 		//根据列位置模糊查询
-		if(entity.getyIp()!=null&&StringUtils.isNotBlank(String.valueOf(entity.getyIp()))){
-			wrapper.like("y_ip", String.valueOf(entity.getyIp()));
+		if(entity.getYIp()!=null&&StringUtils.isNotBlank(String.valueOf(entity.getYIp()))){
+			wrapper.like("y_ip", String.valueOf(entity.getYIp()));
 		}
 		//根据对应sheet表ID模糊查询
 		if(entity.getSheetId()!=null&&StringUtils.isNotBlank(String.valueOf(entity.getSheetId()))){

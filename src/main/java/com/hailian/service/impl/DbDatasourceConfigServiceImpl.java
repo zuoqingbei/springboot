@@ -38,6 +38,7 @@ public class DbDatasourceConfigServiceImpl extends BaseServiceImpl<DbDatasourceC
      * @todo   数据源配置新增或者修改
      */
 	@Override
+	@Transactional(rollbackFor = Exception.class)
 	public boolean saveOrUpdate(DbDatasourceConfig entity) {
 		if(StringUtils.isBlank(entity.getId())){
 			//新增
@@ -55,6 +56,7 @@ public class DbDatasourceConfigServiceImpl extends BaseServiceImpl<DbDatasourceC
      * @todo   数据源配置逻辑删除
      */
 	@Override
+	@Transactional(rollbackFor = Exception.class)
 	public boolean deleteLogic(String id) {
 		DbDatasourceConfig entity=new DbDatasourceConfig();
 		entity.setId(id);

@@ -14,6 +14,7 @@ import com.baomidou.mybatisplus.generator.config.po.TableInfo;
 import com.baomidou.mybatisplus.generator.config.rules.DbColumnType;
 import com.baomidou.mybatisplus.generator.config.rules.DbType;
 import com.baomidou.mybatisplus.generator.config.rules.NamingStrategy;
+import com.hailian.entity.SysUser;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -87,6 +88,8 @@ public class MpGenerator {
 		strategy.setSuperServiceImplClass("com.hailian.base.BaseServiceImpl");
 		// 自定义 controller 父类
 		strategy.setSuperControllerClass("com.hailian.base.BaseController");
+		strategy.setEntityLombokModel(true);//设置Lombok
+		//strategy.setRestControllerStyle(true);//设置RestController
 		// 【实体】是否生成字段常量（默认 false）
 		// public static final String ID = "test_id";
 		// strategy.setEntityColumnConstant(true);

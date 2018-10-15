@@ -38,6 +38,7 @@ public class SysOperationLogServiceImpl extends BaseServiceImpl<SysOperationLogM
      * @todo   操作日志新增或者修改
      */
 	@Override
+	@Transactional(rollbackFor = Exception.class)
 	public boolean saveOrUpdate(SysOperationLog entity) {
 		if(StringUtils.isBlank(entity.getId())){
 			//新增
@@ -55,6 +56,7 @@ public class SysOperationLogServiceImpl extends BaseServiceImpl<SysOperationLogM
      * @todo   操作日志逻辑删除
      */
 	@Override
+	@Transactional(rollbackFor = Exception.class)
 	public boolean deleteLogic(String id) {
 		SysOperationLog entity=new SysOperationLog();
 		entity.setId(id);

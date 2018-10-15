@@ -4,24 +4,19 @@ import com.hailian.entity.SysUser;
 import com.hailian.mapper.SysUserMapper;
 import com.hailian.service.ISysUserService;
 import com.hailian.base.BaseServiceImpl;
-
 import org.springframework.stereotype.Service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
-
 import javax.servlet.http.HttpServletRequest;
-
 import com.hailian.common.UUIDUtils;
 import com.hailian.conf.Constant;
 import com.baomidou.mybatisplus.mapper.EntityWrapper;
 import com.baomidou.mybatisplus.plugins.Page;
 import com.hailian.base.BaseController;
-
 import java.util.Date;
-
 import org.apache.commons.lang3.StringUtils;
 /**
- * @date 2018-10-09
+ * @date 2018-10-15
  * @author zuoqb123
  * 用户表服务实现类
  */
@@ -33,11 +28,12 @@ public class SysUserServiceImpl extends BaseServiceImpl<SysUserMapper, SysUser> 
     private SysUserMapper sysUserMapper;
     
      /**
-     * @date 2018-10-09
+     * @date 2018-10-15
      * @author zuoqb123
      * @todo   用户表新增或者修改
      */
 	@Override
+    @Transactional(rollbackFor = Exception.class)
 	public boolean saveOrUpdate(SysUser entity) {
 		if(StringUtils.isBlank(entity.getId())){
 			//新增
@@ -50,11 +46,12 @@ public class SysUserServiceImpl extends BaseServiceImpl<SysUserMapper, SysUser> 
 		}
 	}
 	/**
-     * @date 2018-10-09
+     * @date 2018-10-15
      * @author zuoqb123
      * @todo   用户表逻辑删除
      */
 	@Override
+    @Transactional(rollbackFor = Exception.class)
 	public boolean deleteLogic(String id) {
 		SysUser entity=new SysUser();
 		entity.setId(id);
@@ -63,7 +60,7 @@ public class SysUserServiceImpl extends BaseServiceImpl<SysUserMapper, SysUser> 
 		return sysUserMapper.updateById(entity)>0;
 	}
 	/**
-     * @date 2018-10-09
+     * @date 2018-10-15
      * @author zuoqb123
      * @todo   用户表单条数据查询
      */
@@ -75,7 +72,7 @@ public class SysUserServiceImpl extends BaseServiceImpl<SysUserMapper, SysUser> 
 		return selectOne(wrapper);
 	}
 	/**
-     * @date   @date 2018-10-09
+     * @date   @date 2018-10-15
      * @author zuoqb123
      * @todo   用户表分页查询
      */
@@ -88,7 +85,7 @@ public class SysUserServiceImpl extends BaseServiceImpl<SysUserMapper, SysUser> 
 	}
 	
 	 /**
-     * @date 2018-10-09
+     * @date 2018-10-15
      * @author zuoqb123
      * @todo   用户表构建查询条件-以后扩展
      */

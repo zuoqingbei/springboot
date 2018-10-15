@@ -2,7 +2,11 @@ package com.hailian.base;
 
 import io.swagger.annotations.ApiModelProperty;
 
+import java.io.Serializable;
 import java.util.Date;
+
+import lombok.Data;
+import lombok.experimental.Accessors;
 
 import com.baomidou.mybatisplus.activerecord.Model;
 import com.baomidou.mybatisplus.annotations.TableField;
@@ -14,6 +18,8 @@ import com.fasterxml.jackson.annotation.JsonFormat;
  * @todo   通用实体类，包含公共属性
  */
 @SuppressWarnings({ "serial", "rawtypes" })
+@Data
+@Accessors(chain = true)
 public abstract class BaseModel<T extends Model> extends Model<T> {
 	/**
 	* 创建者
@@ -77,85 +83,4 @@ public abstract class BaseModel<T extends Model> extends Model<T> {
 	@ApiModelProperty(value="检索结束时间",name="endDate",dataType="Date")
 	private Date endDate;
 
-	public String getCreateBy() {
-		return createBy;
-	}
-
-	public void setCreateBy(String createBy) {
-		this.createBy = createBy;
-	}
-
-	public Date getCreateDate() {
-		return createDate;
-	}
-
-	public void setCreateDate(Date createDate) {
-		this.createDate = createDate;
-	}
-
-	public Date getUpdateDate() {
-		return updateDate;
-	}
-
-	public void setUpdateDate(Date updateDate) {
-		this.updateDate = updateDate;
-	}
-
-	public String getUpdateBy() {
-		return updateBy;
-	}
-
-	public void setUpdateBy(String updateBy) {
-		this.updateBy = updateBy;
-	}
-
-	public String getRemarks() {
-		return remarks;
-	}
-
-	public void setRemarks(String remarks) {
-		this.remarks = remarks;
-	}
-
-	public String getDelFlag() {
-		return delFlag;
-	}
-
-	public void setDelFlag(String delFlag) {
-		this.delFlag = delFlag;
-	}
-
-	public String getOrderBy() {
-		return orderBy;
-	}
-
-	public void setOrderBy(String orderBy) {
-		this.orderBy = orderBy;
-	}
-
-	
-
-	public boolean isAsc() {
-		return asc;
-	}
-
-	public void setAsc(boolean asc) {
-		this.asc = asc;
-	}
-
-	public Date getStartDate() {
-		return startDate;
-	}
-
-	public void setStartDate(Date startDate) {
-		this.startDate = startDate;
-	}
-
-	public Date getEndDate() {
-		return endDate;
-	}
-
-	public void setEndDate(Date endDate) {
-		this.endDate = endDate;
-	}
 }

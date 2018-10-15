@@ -63,6 +63,7 @@ public class CommonInterfaceExcServiceImpl extends BaseServiceImpl<CommonInterfa
      * @todo   统一接口新增或者修改
      */
 	@Override
+	@Transactional(rollbackFor = Exception.class)
 	public boolean saveOrUpdate(CommonInterfaceExc entity) {
 		if(StringUtils.isBlank(entity.getId())){
 			//新增
@@ -80,6 +81,7 @@ public class CommonInterfaceExcServiceImpl extends BaseServiceImpl<CommonInterfa
      * @todo   统一接口逻辑删除
      */
 	@Override
+	@Transactional(rollbackFor = Exception.class)
 	public boolean deleteLogic(String id) {
 		CommonInterfaceExc entity=new CommonInterfaceExc();
 		entity.setId(id);

@@ -60,6 +60,7 @@ public class CommonInterfaceExcelTableServiceImpl extends BaseServiceImpl<Common
      * @todo   excel导出模板配置表新增或者修改
      */
 	@Override
+	@Transactional(rollbackFor = Exception.class)
 	public boolean saveOrUpdate(CommonInterfaceExcelTable entity) {
 		if(StringUtils.isBlank(entity.getId())){
 			//新增
@@ -77,6 +78,7 @@ public class CommonInterfaceExcelTableServiceImpl extends BaseServiceImpl<Common
      * @todo   excel导出模板配置表逻辑删除
      */
 	@Override
+	@Transactional(rollbackFor = Exception.class)
 	public boolean deleteLogic(String id) {
 		CommonInterfaceExcelTable entity=new CommonInterfaceExcelTable();
 		entity.setId(id);
@@ -260,13 +262,13 @@ public class CommonInterfaceExcelTableServiceImpl extends BaseServiceImpl<Common
 					List<Object> vals = horizontalData.get(contents.get(c).getColumnName());
 					for(int v =0; v<vals.size(); v++){    //放值
 						//填写内容的坐标
-						row = sheet.getRow(content.getyIp() + v);
+						row = sheet.getRow(content.getYIp() + v);
 						if(row == null){
-							row = sheet.createRow(content.getyIp() + v);
+							row = sheet.createRow(content.getYIp() + v);
 						}
-						cell = row.getCell(content.getxIp());
+						cell = row.getCell(content.getXIp());
 						if(cell == null){
-							cell = row.createCell(content.getxIp());
+							cell = row.createCell(content.getXIp());
 						}
 						cell.setCellValue(String.valueOf(vals.get(v)));
 					}

@@ -41,6 +41,7 @@ public class CommonInterfaceExcelSheetServiceImpl extends BaseServiceImpl<Common
      * @todo   Excel导出sheet也配置表新增或者修改
      */
 	@Override
+	@Transactional(rollbackFor = Exception.class)
 	public boolean saveOrUpdate(CommonInterfaceExcelSheet entity) {
 		if(StringUtils.isBlank(entity.getId())){
 			//新增
@@ -58,6 +59,7 @@ public class CommonInterfaceExcelSheetServiceImpl extends BaseServiceImpl<Common
      * @todo   Excel导出sheet也配置表逻辑删除
      */
 	@Override
+	@Transactional(rollbackFor = Exception.class)
 	public boolean deleteLogic(String id) {
 		CommonInterfaceExcelSheet entity=new CommonInterfaceExcelSheet();
 		entity.setId(id);

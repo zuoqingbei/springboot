@@ -33,6 +33,7 @@ public class ${table.serviceImplName} extends ${superServiceImplClass}<${table.m
      * @todo   $!{table.comment}新增或者修改
      */
 	@Override
+    @Transactional(rollbackFor = Exception.class)
 	public boolean saveOrUpdate(${entity} entity) {
 		if(StringUtils.isBlank(entity.getId())){
 			//新增
@@ -50,6 +51,7 @@ public class ${table.serviceImplName} extends ${superServiceImplClass}<${table.m
      * @todo   $!{table.comment}逻辑删除
      */
 	@Override
+    @Transactional(rollbackFor = Exception.class)
 	public boolean deleteLogic(String id) {
 		${entity} entity=new ${entity}();
 		entity.setId(id);
@@ -95,6 +97,11 @@ public class ${table.serviceImplName} extends ${superServiceImplClass}<${table.m
 			 wrapper.and("create_by", c.getLoginUser(request).getId());
 		}
 		#foreach($field in ${table.fields})
+		#if(${field.propertyType.equals("boolean")})
+		#set($getprefix="is")
+		#else
+		#set($getprefix="get")
+		#end
 		//根据${field.comment}模糊查询
 		if(entity.${getprefix}${field.capitalName}()!=null&&StringUtils.isNotBlank(String.valueOf(entity.${getprefix}${field.capitalName}()))){
 			wrapper.like("${field.name}", String.valueOf(entity.${getprefix}${field.capitalName}()));

@@ -38,6 +38,7 @@ public class SysPlatInfoServiceImpl extends BaseServiceImpl<SysPlatInfoMapper, S
      * @todo   平台信息新增或者修改
      */
 	@Override
+	@Transactional(rollbackFor = Exception.class)
 	public boolean saveOrUpdate(SysPlatInfo entity) {
 		if(StringUtils.isBlank(entity.getId())){
 			//新增
@@ -55,6 +56,7 @@ public class SysPlatInfoServiceImpl extends BaseServiceImpl<SysPlatInfoMapper, S
      * @todo   平台信息逻辑删除
      */
 	@Override
+	@Transactional(rollbackFor = Exception.class)
 	public boolean deleteLogic(String id) {
 		SysPlatInfo entity=new SysPlatInfo();
 		entity.setId(id);
