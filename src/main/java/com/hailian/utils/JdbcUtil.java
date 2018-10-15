@@ -200,10 +200,10 @@ public class JdbcUtil implements Constant{
      * @todo   校验传递的参数与SQL中需要的参数是否匹配
      */
 	public static boolean canMatchSqlParams(List<String> matcher, PublicResult<Map<String, String>> dealParamsResult) {
-		if(matcher.size()>dealParamsResult.getData().size()){
+		/*if(matcher.size()>dealParamsResult.getData().size()){
 			//传递的参数个数小于SQL中需要的参数数量
 			return false;
-		}
+		}*/
 		//判断SQL中需要的参数必须都传递
 		for(String sqlParam:matcher){
 			String variableName=replaceSymbol(sqlParam);
