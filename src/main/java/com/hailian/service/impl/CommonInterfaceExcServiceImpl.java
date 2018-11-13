@@ -113,7 +113,6 @@ public class CommonInterfaceExcServiceImpl extends BaseServiceImpl<CommonInterfa
 		page=selectPage(page,wrapper);
 		return page;
 	}
-	
 	 /**
      * @date 2018-10-09
      * @author zuoqb123
@@ -237,7 +236,12 @@ public class CommonInterfaceExcServiceImpl extends BaseServiceImpl<CommonInterfa
     			while(m.find()){
     	            String whereStr=m.group();
     	            String[] splits=sql.split(whereStr);
-    	            sql=splits[0]+whereStr+splits[1].replaceAll("‘", "'").replaceAll("’", "'");
+    	            sql=splits[0];
+    	            for(int x=0;x<splits.length;x++){
+    	            	if(x>0){
+    	            		sql+=whereStr+splits[x].replaceAll("‘", "'").replaceAll("’", "'");
+    	            	}
+    	            }
     	        }
     			pstmt = conn.prepareStatement(sql);
     			//设置参数 外层循环
@@ -320,5 +324,6 @@ public class CommonInterfaceExcServiceImpl extends BaseServiceImpl<CommonInterfa
 			}
     	}
 	}
+    
    
 }

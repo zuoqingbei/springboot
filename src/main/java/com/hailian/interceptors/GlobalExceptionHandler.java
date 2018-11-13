@@ -1,8 +1,11 @@
 package com.hailian.interceptors;
 
 import com.fasterxml.jackson.databind.JsonMappingException;
+import com.hailian.base.Codes;
+import com.hailian.base.ResponseResult;
 import com.hailian.exception.AppWebException;
 import com.hailian.exception.ErrorConstant;
+import com.hailian.exception.OperationException;
 import com.hailian.result.ResultDO;
 
 import org.slf4j.Logger;
@@ -17,6 +20,7 @@ import org.springframework.web.bind.MissingServletRequestParameterException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.servlet.NoHandlerFoundException;
 
 import javax.servlet.ServletException;
 
@@ -143,7 +147,11 @@ public class GlobalExceptionHandler {
     public ResultDO<String> jsonMappingException(JsonMappingException jsonMappingException) {
         return result(ErrorConstant.ERROR_FORMAT_PARAMETER.getCode(), ErrorConstant.ERROR_FORMAT_PARAMETER.getMsg(), jsonMappingException);
     }
-
+    @ExceptionHandler(value = OperationException.class)
+    @ResponseBody
+    public ResultDO<String> operationExceptionHandler(OperationException oe){
+        return  result(oe.getCode(), oe.getMsg(),oe);
+    }
 
     /**
      * 结果集

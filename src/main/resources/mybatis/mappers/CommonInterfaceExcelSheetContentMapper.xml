@@ -28,7 +28,7 @@
       x_ip,
       y_ip,
       sheet_id,
-      column_name,
+      column_name
 </sql>
 
 </mapper>

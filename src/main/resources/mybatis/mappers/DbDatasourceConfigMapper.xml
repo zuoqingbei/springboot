@@ -40,7 +40,7 @@
       db_name,
       db_password,
       db_version,
-      max_num,
+      max_num
 </sql>
 
 </mapper>

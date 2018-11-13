@@ -38,7 +38,7 @@
       ip,
       create_time,
       succeed,
-      message,
+      message
 </sql>
 
 </mapper>

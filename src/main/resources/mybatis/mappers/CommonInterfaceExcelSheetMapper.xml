@@ -28,7 +28,7 @@
       name,
       table_id,
       data_space,
-      order_no,
+      order_no
 </sql>
 
 </mapper>

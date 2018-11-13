@@ -159,7 +159,8 @@ public class JdbcUtil implements Constant{
 		if(StringUtils.isBlank(sql)){
     		return new PublicResult<>(PublicResultConstant.PARAM_ERROR,"SQL语句为空！", null);
     	}
-    	if(!sql.trim().toUpperCase().startsWith("SELECT")){
+    	if(!sql.trim().toUpperCase().startsWith("SELECT")&&
+    			!sql.trim().toUpperCase().startsWith("WITH")){
 			return new PublicResult<>(PublicResultConstant.PARAM_ERROR,"SQL语句错误，只能执行查询语句！", null);
 		}
 		if(!PublicResultConstant.SUCCESS.msg.equals(dealParamsResult.getMsg())){

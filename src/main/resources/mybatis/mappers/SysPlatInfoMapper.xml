@@ -34,7 +34,7 @@
       secret_key,
       contacts,
       contacts_tel,
-      contacts_mail,
+      contacts_mail
 </sql>
 
 </mapper>
