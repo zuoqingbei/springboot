@@ -1,26 +1,25 @@
 package com.hailian.service.impl;
 
-import com.hailian.entity.CommonInterfaceExcelSheetContent;
-import com.hailian.mapper.CommonInterfaceExcelSheetContentMapper;
-import com.hailian.service.ICommonInterfaceExcelSheetContentService;
-import com.hailian.base.BaseServiceImpl;
-
-import org.springframework.stereotype.Service;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.transaction.annotation.Transactional;
-
-import javax.servlet.http.HttpServletRequest;
-
-import com.hailian.common.UUIDUtils;
-import com.hailian.conf.Constant;
-import com.baomidou.mybatisplus.mapper.EntityWrapper;
-import com.baomidou.mybatisplus.plugins.Page;
-import com.hailian.base.BaseController;
-
 import java.util.Date;
 import java.util.List;
 
+import javax.servlet.http.HttpServletRequest;
+
 import org.apache.commons.lang3.StringUtils;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import com.baomidou.mybatisplus.mapper.EntityWrapper;
+import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
+import com.hailian.base.BaseController;
+import com.hailian.base.BaseServiceImpl;
+import com.hailian.common.UUIDUtils;
+import com.hailian.conf.Constant;
+import com.hailian.entity.CommonInterfaceExcelSheetContent;
+import com.hailian.mapper.CommonInterfaceExcelSheetContentMapper;
+import com.hailian.service.ICommonInterfaceExcelSheetContentService;
 /**
  * @date 2018-10-11
  * @author zuoqb123
@@ -83,10 +82,11 @@ public class CommonInterfaceExcelSheetContentServiceImpl extends BaseServiceImpl
      * @todo   Excel导出sheet详情配置分页查询
      */
 	@Override
-	public Page<CommonInterfaceExcelSheetContent> pageList(BaseController c, HttpServletRequest request, CommonInterfaceExcelSheetContent entity,Integer pageNum,Integer pageSize) {
+	public PageInfo<CommonInterfaceExcelSheetContent> pageList(BaseController c, HttpServletRequest request, CommonInterfaceExcelSheetContent entity,Integer pageNum,Integer pageSize) {
+		PageHelper.startPage(pageNum, pageSize);
 		EntityWrapper<CommonInterfaceExcelSheetContent> wrapper = searchWrapper(c,request, entity);
-		Page<CommonInterfaceExcelSheetContent> page=new Page<CommonInterfaceExcelSheetContent>(pageNum, pageSize);
-		page=selectPage(page,wrapper);
+		List<CommonInterfaceExcelSheetContent> list = commonInterfaceExcelSheetContentMapper.selectList(wrapper);
+		PageInfo<CommonInterfaceExcelSheetContent> page = new PageInfo<CommonInterfaceExcelSheetContent>(list);
 		return page;
 	}
 	
@@ -131,7 +131,7 @@ public class CommonInterfaceExcelSheetContentServiceImpl extends BaseServiceImpl
 		if(StringUtils.isNoneBlank(entity.getOrderBy())){
 			wrapper.orderBy(entity.getOrderBy(), entity.isAsc());
 		}else{
-			wrapper.orderBy("create_date", true);
+			wrapper.orderBy("create_date", false);
 		}
 		//System.out.println(wrapper.originalSql());
 		return wrapper;

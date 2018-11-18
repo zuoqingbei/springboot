@@ -27,7 +27,7 @@ import io.swagger.annotations.ApiOperation;
 import com.hailian.annotation.AuthPower;
 import com.hailian.common.PublicResult;
 import com.hailian.enums.PublicResultConstant;
-import com.baomidou.mybatisplus.plugins.Page;
+import com.github.pagehelper.PageInfo;
 /**
  *
  * @date ${date}
@@ -58,7 +58,7 @@ public class ${table.controllerName} extends BaseController{
     @ResponseBody
  	@AuthPower(avoidVersion = false, avoidPower = true, avoidSign = true, avoidLogin = true, avoidPlatform = true)
   	@ApiOperation(value = "新增$!{table.comment}", notes = "新增$!{table.comment}", httpMethod = "POST")
-	@RequestMapping(value = "/api/v1#if(${package.ModuleName})/${package.ModuleName}#end/#if(${controllerMappingHyphenStyle})${controllerMappingHyphen}#else${table.entityPath}#end/add", method = RequestMethod.POST)
+	@RequestMapping(value = "/api/v1#if(${package.ModuleName})/${package.ModuleName}#end/#if(${controllerMappingHyphenStyle})${controllerMappingHyphen}#else${table.entityPath}#end/add", method = RequestMethod.POST,produces = { "application/json;charset=UTF-8" })
 	public PublicResult<${entity}> add(HttpServletRequest request,${entity} entity) {
 		try {
 			if(StringUtils.isBlank(entity.getId())){
@@ -88,7 +88,7 @@ public class ${table.controllerName} extends BaseController{
     @ResponseBody
  	@AuthPower(avoidVersion = false, avoidPower = true, avoidSign = true, avoidLogin = true, avoidPlatform = true)
   	@ApiOperation(value = "删除$!{table.comment}", notes = "删除$!{table.comment}", httpMethod = "DELETE")
-    @RequestMapping(value = "/api/v1#if(${package.ModuleName})/${package.ModuleName}#end/#if(${controllerMappingHyphenStyle})${controllerMappingHyphen}#else${table.entityPath}#end/delete/{id}", method = RequestMethod.DELETE)
+    @RequestMapping(value = "/api/v1#if(${package.ModuleName})/${package.ModuleName}#end/#if(${controllerMappingHyphenStyle})${controllerMappingHyphen}#else${table.entityPath}#end/delete/{id}", method = RequestMethod.DELETE,produces = { "application/json;charset=UTF-8" })
 	public PublicResult<${entity}> delete(HttpServletRequest request,@PathVariable("id") String id) {
 		try {
 			 if(i${entity}Service.deleteLogic(id)){
@@ -111,7 +111,7 @@ public class ${table.controllerName} extends BaseController{
     @ResponseBody
  	@AuthPower(avoidVersion = false, avoidPower = true, avoidSign = true, avoidLogin = true, avoidPlatform = true)
   	@ApiOperation(value = "更新$!{table.comment}", notes = "更新$!{table.comment}", httpMethod = "PUT")
-	@RequestMapping(value = "/api/v1#if(${package.ModuleName})/${package.ModuleName}#end/#if(${controllerMappingHyphenStyle})${controllerMappingHyphen}#else${table.entityPath}#end/update", method = RequestMethod.PUT)
+	@RequestMapping(value = "/api/v1#if(${package.ModuleName})/${package.ModuleName}#end/#if(${controllerMappingHyphenStyle})${controllerMappingHyphen}#else${table.entityPath}#end/update", method = RequestMethod.PUT,produces = { "application/json;charset=UTF-8" })
 	public PublicResult<${entity}> update(HttpServletRequest request,${entity} entity) {
 		try {
 			if(entity!=null&&StringUtils.isNotBlank(entity.getId())){
@@ -141,7 +141,7 @@ public class ${table.controllerName} extends BaseController{
     @ResponseBody
  	@AuthPower(avoidVersion = false, avoidPower = true, avoidSign = true, avoidLogin = true, avoidPlatform = true)
   	@ApiOperation(value = "查询单个$!{table.comment}", notes = "查询单个$!{table.comment}", httpMethod = "GET")
-  	@RequestMapping(value = "/api/v1#if(${package.ModuleName})/${package.ModuleName}#end/#if(${controllerMappingHyphenStyle})${controllerMappingHyphen}#else${table.entityPath}#end/get/{id}", method = RequestMethod.GET )
+  	@RequestMapping(value = "/api/v1#if(${package.ModuleName})/${package.ModuleName}#end/#if(${controllerMappingHyphenStyle})${controllerMappingHyphen}#else${table.entityPath}#end/get/{id}", method = RequestMethod.GET,produces = { "application/json;charset=UTF-8" } )
   	public PublicResult<${entity}> get(HttpServletRequest request,@PathVariable("id") String id) {
   		try {
   			return new PublicResult<>(PublicResultConstant.SUCCESS, i${entity}Service.getById(id));
@@ -161,11 +161,11 @@ public class ${table.controllerName} extends BaseController{
     @ResponseBody
  	@AuthPower(avoidVersion = false, avoidPower = true, avoidSign = true, avoidLogin = true, avoidPlatform = true)
   	@ApiOperation(value = "分页查询$!{table.comment}", notes = "分页查询$!{table.comment}", httpMethod = "GET")
-  	@RequestMapping(value = "/api/v1#if(${package.ModuleName})/${package.ModuleName}#end/#if(${controllerMappingHyphenStyle})${controllerMappingHyphen}#else${table.entityPath}#end/list", method = RequestMethod.GET)
-    public PublicResult<Page<${entity}>> list(${entity} entity,@RequestParam(value="pageNum",required = false,defaultValue="1") Integer pageNum,
+  	@RequestMapping(value = "/api/v1#if(${package.ModuleName})/${package.ModuleName}#end/#if(${controllerMappingHyphenStyle})${controllerMappingHyphen}#else${table.entityPath}#end/list", method = RequestMethod.GET,produces = { "application/json;charset=UTF-8" })
+    public PublicResult<PageInfo<${entity}>> list(${entity} entity,@RequestParam(value="pageNum",required = false,defaultValue="1") Integer pageNum,
 			@RequestParam(value="pageSize",required = false,defaultValue="10") Integer pageSize,HttpServletRequest request) {
 		try {
-			Page<${entity}> page=i${entity}Service.pageList(this, request, entity, pageNum, pageSize);
+			PageInfo<${entity}> page=i${entity}Service.pageList(this, request, entity, pageNum, pageSize);
 			return new PublicResult<>(PublicResultConstant.SUCCESS, page);
 		} catch (Exception e) {
 			e.printStackTrace();

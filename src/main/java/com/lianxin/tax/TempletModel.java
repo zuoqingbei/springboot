@@ -46,11 +46,18 @@ public class TempletModel {
 	private String title2;//第二行标题 格式2017.1-12
 	private String title3;//第三行标题 格式2017.1-9
 	private String title4;//第四行标题 格式2018.1-9
+	private String allName;//文件全名称 带xls、xlsx
 	public String getExcelName() {
 		return excelName;
 	}
 	public void setExcelName(String excelName) {
 		this.excelName = excelName;
+	}
+	public String getAllName() {
+		return allName;
+	}
+	public void setAllName(String allName) {
+		this.allName = allName;
 	}
 	public Map<String, List<TaxFilesModel>> getMapTax() {
 		return mapTax;

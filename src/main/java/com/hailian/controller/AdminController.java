@@ -43,7 +43,7 @@ public class AdminController {
 
 	@RequestMapping(value ={"","/index"}, method = RequestMethod.GET)
 	public String index(){
-		return "admin/index";
+		return "admin/index_etax";
 	}
 
 	/**

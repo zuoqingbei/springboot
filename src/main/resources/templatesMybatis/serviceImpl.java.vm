@@ -11,9 +11,11 @@ import javax.servlet.http.HttpServletRequest;
 import com.hailian.common.UUIDUtils;
 import com.hailian.conf.Constant;
 import com.baomidou.mybatisplus.mapper.EntityWrapper;
-import com.baomidou.mybatisplus.plugins.Page;
+import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
 import com.hailian.base.BaseController;
 import java.util.Date;
+import java.util.List;
 import org.apache.commons.lang3.StringUtils;
 /**
  * @date ${date}
@@ -77,10 +79,11 @@ public class ${table.serviceImplName} extends ${superServiceImplClass}<${table.m
      * @todo   $!{table.comment}分页查询
      */
 	@Override
-	public Page<${entity}> pageList(BaseController c, HttpServletRequest request, ${entity} entity,Integer pageNum,Integer pageSize) {
+	public PageInfo<${entity}> pageList(BaseController c, HttpServletRequest request, ${entity} entity,Integer pageNum,Integer pageSize) {
+		PageHelper.startPage(pageNum, pageSize);
 		EntityWrapper<${entity}> wrapper = searchWrapper(c,request, entity);
-		Page<${entity}> page=new Page<${entity}>(pageNum, pageSize);
-		page=selectPage(page,wrapper);
+		List<${entity}> list = ${table.entityPath}Mapper.selectList(wrapper);
+		PageInfo<${entity}> page = new PageInfo<${entity}>(list);
 		return page;
 	}
 	
@@ -116,7 +119,7 @@ public class ${table.serviceImplName} extends ${superServiceImplClass}<${table.m
 		if(StringUtils.isNoneBlank(entity.getOrderBy())){
 			wrapper.orderBy(entity.getOrderBy(), entity.isAsc());
 		}else{
-			wrapper.orderBy("create_date", true);
+			wrapper.orderBy("create_date", false);
 		}
 		//System.out.println(wrapper.originalSql());
 		return wrapper;

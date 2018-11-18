@@ -1,9 +1,11 @@
 package com.hailian.service;
 
+import com.github.pagehelper.PageInfo;
 import com.hailian.entity.SysOperationLog;
 import com.hailian.base.BaseService;
 import com.baomidou.mybatisplus.plugins.Page;
 import com.hailian.base.BaseController;
+
 import javax.servlet.http.HttpServletRequest;
 
 
@@ -36,5 +38,5 @@ public interface ISysOperationLogService extends BaseService<SysOperationLog> {
      * @author zuoqb123
      * @todo   操作日志分页查询
      */
-	Page<SysOperationLog> pageList(BaseController c,HttpServletRequest request,SysOperationLog entity,Integer pageNum,Integer pageSize);
+	PageInfo<SysOperationLog> pageList(BaseController c,HttpServletRequest request,SysOperationLog entity,Integer pageNum,Integer pageSize);
 }

@@ -4,6 +4,8 @@ import javax.servlet.http.HttpServletRequest;
 
 import com.baomidou.mybatisplus.plugins.Page;
 import com.baomidou.mybatisplus.service.IService;
+import com.github.pagehelper.PageInfo;
+import com.hailian.entity.EtaxExcelFile;
 
 /**
  * @time   2018年9月26日 下午5:34:21
@@ -34,5 +36,5 @@ public interface BaseService<T> extends IService<T> {
      * @author zuoqb123
      * @todo   分页查询
      */
-	Page<T> pageList(BaseController c,HttpServletRequest request,T entity,Integer pageNum,Integer pageSize);
+	PageInfo<T> pageList(BaseController c,HttpServletRequest request,T entity,Integer pageNum,Integer pageSize);
 }

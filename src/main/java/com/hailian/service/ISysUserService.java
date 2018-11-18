@@ -1,10 +1,11 @@
 package com.hailian.service;
 
-import com.hailian.entity.SysUser;
-import com.hailian.base.BaseService;
-import com.baomidou.mybatisplus.plugins.Page;
-import com.hailian.base.BaseController;
 import javax.servlet.http.HttpServletRequest;
+
+import com.github.pagehelper.PageInfo;
+import com.hailian.base.BaseController;
+import com.hailian.base.BaseService;
+import com.hailian.entity.SysUser;
 
 
 /**
@@ -36,5 +37,5 @@ public interface ISysUserService extends BaseService<SysUser> {
      * @author zuoqb123
      * @todo   用户表分页查询
      */
-	Page<SysUser> pageList(BaseController c,HttpServletRequest request,SysUser entity,Integer pageNum,Integer pageSize);
+	PageInfo<SysUser> pageList(BaseController c,HttpServletRequest request,SysUser entity,Integer pageNum,Integer pageSize);
 }

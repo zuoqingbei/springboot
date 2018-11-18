@@ -52,7 +52,7 @@ public class MyRealm extends AuthorizingRealm {
 	@Override
 	protected AuthorizationInfo doGetAuthorizationInfo(
 			PrincipalCollection principals) {
-		User user = (User) principals.getPrimaryPrincipal();
+		SysUser user = (SysUser) principals.getPrimaryPrincipal();
 		SimpleAuthorizationInfo authorizationInfo = new SimpleAuthorizationInfo();
 		/*User dbUser = userService.findUserByName(user.getLoginName());
 		List<Role> roleList = roleService.getListByUserId(user.getId());

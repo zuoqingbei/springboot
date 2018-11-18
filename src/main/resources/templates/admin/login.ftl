@@ -26,10 +26,10 @@
 							<div class="center">
 								<h1>
 									<i class="icon-leaf green"></i>
-									<span class="red">Bjjoy</span>
+									<span class="red">联信</span>
 									<span class="white">运营后台管理</span>
 								</h1>
-								<h4 class="blue">&copy; Bjjoy demo</h4>
+								<h4 class="blue">&copy; HlSofttech</h4>
 							</div>
 
 							<div class="space-6"></div>
@@ -62,10 +62,6 @@
 													</label>
 													<div class="space"></div>
 													<div class="clearfix">
-														<label class="inline">
-															<input type="checkbox" class="ace" />
-															<span class="lbl"> 记住</span>
-														</label>
 														<button type="submit" class="width-35 pull-right btn btn-sm btn-primary">
 															<i class="icon-key"></i>
 															登录
@@ -76,21 +72,7 @@
 											</form>
 										</div><!-- /widget-main -->
 
-										<div class="toolbar clearfix">
-											<div>
-												<a href="#" onclick="show_box('forgot-box'); return false;" class="forgot-password-link">
-													<i class="icon-arrow-left"></i>
-													忘记密码
-												</a>
-											</div>
-
-											<div>
-												<a href="#" onclick="show_box('signup-box'); return false;" class="user-signup-link">
-													注册
-													<i class="icon-arrow-right"></i>
-												</a>
-											</div>
-										</div>
+									
 									</div><!-- /widget-body -->
 								</div><!-- /login-box -->
 

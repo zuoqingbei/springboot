@@ -1,25 +1,25 @@
 package com.hailian.service.impl;
 
-import com.hailian.entity.SysPlatInfo;
-import com.hailian.mapper.SysPlatInfoMapper;
-import com.hailian.service.ISysPlatInfoService;
-import com.hailian.base.BaseServiceImpl;
-
-import org.springframework.stereotype.Service;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.transaction.annotation.Transactional;
+import java.util.Date;
+import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 
+import org.apache.commons.lang3.StringUtils;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import com.baomidou.mybatisplus.mapper.EntityWrapper;
+import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
+import com.hailian.base.BaseController;
+import com.hailian.base.BaseServiceImpl;
 import com.hailian.common.UUIDUtils;
 import com.hailian.conf.Constant;
-import com.baomidou.mybatisplus.mapper.EntityWrapper;
-import com.baomidou.mybatisplus.plugins.Page;
-import com.hailian.base.BaseController;
-
-import java.util.Date;
-
-import org.apache.commons.lang3.StringUtils;
+import com.hailian.entity.SysPlatInfo;
+import com.hailian.mapper.SysPlatInfoMapper;
+import com.hailian.service.ISysPlatInfoService;
 /**
  * @date 2018-10-09
  * @author zuoqb123
@@ -82,10 +82,11 @@ public class SysPlatInfoServiceImpl extends BaseServiceImpl<SysPlatInfoMapper, S
      * @todo   平台信息分页查询
      */
 	@Override
-	public Page<SysPlatInfo> pageList(BaseController c, HttpServletRequest request, SysPlatInfo entity,Integer pageNum,Integer pageSize) {
+	public PageInfo<SysPlatInfo> pageList(BaseController c, HttpServletRequest request, SysPlatInfo entity,Integer pageNum,Integer pageSize) {
+		PageHelper.startPage(pageNum, pageSize);
 		EntityWrapper<SysPlatInfo> wrapper = searchWrapper(c,request, entity);
-		Page<SysPlatInfo> page=new Page<SysPlatInfo>(pageNum, pageSize);
-		page=selectPage(page,wrapper);
+		List<SysPlatInfo> list = sysPlatInfoMapper.selectList(wrapper);
+		PageInfo<SysPlatInfo> page = new PageInfo<SysPlatInfo>(list);
 		return page;
 	}
 	
@@ -142,7 +143,7 @@ public class SysPlatInfoServiceImpl extends BaseServiceImpl<SysPlatInfoMapper, S
 		if(StringUtils.isNoneBlank(entity.getOrderBy())){
 			wrapper.orderBy(entity.getOrderBy(), entity.isAsc());
 		}else{
-			wrapper.orderBy("create_date", true);
+			wrapper.orderBy("create_date", false);
 		}
 		//System.out.println(wrapper.originalSql());
 		return wrapper;

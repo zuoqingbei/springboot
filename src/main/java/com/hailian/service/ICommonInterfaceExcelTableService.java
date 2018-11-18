@@ -1,13 +1,13 @@
 package com.hailian.service;
 
-import com.hailian.entity.CommonInterfaceExcelTable;
-import com.hailian.base.BaseService;
-import com.baomidou.mybatisplus.plugins.Page;
-import com.hailian.base.BaseController;
-import com.hailian.common.PublicResult;
-
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+
+import com.github.pagehelper.PageInfo;
+import com.hailian.base.BaseController;
+import com.hailian.base.BaseService;
+import com.hailian.common.PublicResult;
+import com.hailian.entity.CommonInterfaceExcelTable;
 
 
 /**
@@ -39,7 +39,7 @@ public interface ICommonInterfaceExcelTableService extends BaseService<CommonInt
      * @author zuoqb123
      * @todo   excel导出模板配置表分页查询
      */
-	Page<CommonInterfaceExcelTable> pageList(BaseController c,HttpServletRequest request,CommonInterfaceExcelTable entity,Integer pageNum,Integer pageSize);
+	PageInfo<CommonInterfaceExcelTable> pageList(BaseController c,HttpServletRequest request,CommonInterfaceExcelTable entity,Integer pageNum,Integer pageSize);
 	/**
 	 * 
 	 * @time   2018年10月12日 下午3:53:36

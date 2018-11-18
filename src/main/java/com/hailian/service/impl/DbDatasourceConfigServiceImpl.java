@@ -1,25 +1,25 @@
 package com.hailian.service.impl;
 
-import com.hailian.entity.DbDatasourceConfig;
-import com.hailian.mapper.DbDatasourceConfigMapper;
-import com.hailian.service.IDbDatasourceConfigService;
-import com.hailian.base.BaseServiceImpl;
-
-import org.springframework.stereotype.Service;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.transaction.annotation.Transactional;
+import java.util.Date;
+import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 
+import org.apache.commons.lang3.StringUtils;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import com.baomidou.mybatisplus.mapper.EntityWrapper;
+import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
+import com.hailian.base.BaseController;
+import com.hailian.base.BaseServiceImpl;
 import com.hailian.common.UUIDUtils;
 import com.hailian.conf.Constant;
-import com.baomidou.mybatisplus.mapper.EntityWrapper;
-import com.baomidou.mybatisplus.plugins.Page;
-import com.hailian.base.BaseController;
-
-import java.util.Date;
-
-import org.apache.commons.lang3.StringUtils;
+import com.hailian.entity.DbDatasourceConfig;
+import com.hailian.mapper.DbDatasourceConfigMapper;
+import com.hailian.service.IDbDatasourceConfigService;
 /**
  * @date 2018-10-09
  * @author zuoqb123
@@ -82,10 +82,11 @@ public class DbDatasourceConfigServiceImpl extends BaseServiceImpl<DbDatasourceC
      * @todo   数据源配置分页查询
      */
 	@Override
-	public Page<DbDatasourceConfig> pageList(BaseController c, HttpServletRequest request, DbDatasourceConfig entity,Integer pageNum,Integer pageSize) {
+	public PageInfo<DbDatasourceConfig> pageList(BaseController c, HttpServletRequest request, DbDatasourceConfig entity,Integer pageNum,Integer pageSize) {
+		PageHelper.startPage(pageNum, pageSize);
 		EntityWrapper<DbDatasourceConfig> wrapper = searchWrapper(c,request, entity);
-		Page<DbDatasourceConfig> page=new Page<DbDatasourceConfig>(pageNum, pageSize);
-		page=selectPage(page,wrapper);
+		List<DbDatasourceConfig> list = dbDatasourceConfigMapper.selectList(wrapper);
+		PageInfo<DbDatasourceConfig> page = new PageInfo<DbDatasourceConfig>(list);
 		return page;
 	}
 	
@@ -154,7 +155,7 @@ public class DbDatasourceConfigServiceImpl extends BaseServiceImpl<DbDatasourceC
 		if(StringUtils.isNoneBlank(entity.getOrderBy())){
 			wrapper.orderBy(entity.getOrderBy(), entity.isAsc());
 		}else{
-			wrapper.orderBy("create_date", true);
+			wrapper.orderBy("create_date", false);
 		}
 		//System.out.println(wrapper.originalSql());
 		return wrapper;

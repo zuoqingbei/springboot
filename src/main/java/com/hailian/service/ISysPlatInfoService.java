@@ -1,10 +1,11 @@
 package com.hailian.service;
 
-import com.hailian.entity.SysPlatInfo;
-import com.hailian.base.BaseService;
-import com.baomidou.mybatisplus.plugins.Page;
-import com.hailian.base.BaseController;
 import javax.servlet.http.HttpServletRequest;
+
+import com.github.pagehelper.PageInfo;
+import com.hailian.base.BaseController;
+import com.hailian.base.BaseService;
+import com.hailian.entity.SysPlatInfo;
 
 
 /**
@@ -36,5 +37,5 @@ public interface ISysPlatInfoService extends BaseService<SysPlatInfo> {
      * @author zuoqb123
      * @todo   平台信息分页查询
      */
-	Page<SysPlatInfo> pageList(BaseController c,HttpServletRequest request,SysPlatInfo entity,Integer pageNum,Integer pageSize);
+	PageInfo<SysPlatInfo> pageList(BaseController c,HttpServletRequest request,SysPlatInfo entity,Integer pageNum,Integer pageSize);
 }

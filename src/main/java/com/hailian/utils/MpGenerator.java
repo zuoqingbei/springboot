@@ -72,7 +72,7 @@ public class MpGenerator {
 		// strategy.setCapitalMode(true);// 全局大写命名 ORACLE 注意
 		strategy.setTablePrefix(new String[] { "" });// 此处可以修改为您的表前缀
 		strategy.setNaming(NamingStrategy.underline_to_camel);// 表名生成策略
-		strategy.setInclude(new String[] {"sys_user" }); // 需要生成的表
+		strategy.setInclude(new String[] {"etax_excel_file" }); // 需要生成的表
 		// strategy.setExclude(new String[]{"test"}); // 排除生成的表
 
 		// 自定义实体父类
@@ -88,7 +88,7 @@ public class MpGenerator {
 		strategy.setSuperServiceImplClass("com.hailian.base.BaseServiceImpl");
 		// 自定义 controller 父类
 		strategy.setSuperControllerClass("com.hailian.base.BaseController");
-		strategy.setEntityLombokModel(true);//设置Lombok
+		strategy.setEntityLombokModel(false);//设置Lombok 设置了之后swagger接口不能传参数
 		//strategy.setRestControllerStyle(true);//设置RestController
 		// 【实体】是否生成字段常量（默认 false）
 		// public static final String ID = "test_id";

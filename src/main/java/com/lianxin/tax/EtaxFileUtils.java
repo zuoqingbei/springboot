@@ -24,7 +24,7 @@ import com.hailian.utils.ExcleUtils;
 import com.hailian.utils.FileUtil;
 
 public class EtaxFileUtils {
-	public static boolean isDev=true;
+	public static boolean isDev=false;
 	public static void main(String[] args) {
 		String path="C://Users//Administrator//Desktop//lianxin//upload";
 		Map<String, Object> data=dealFiles(path+"//orgFiles"+ File.separator+Constant.DEFAULT_ETAX_TEMP_NAME+"//2081118");//FileUtil.ETAX_FILE_UPLOAD
@@ -34,9 +34,7 @@ public class EtaxFileUtils {
 			@SuppressWarnings("unchecked")
 			List<TaxFilesModel> orgTaxs=(List<TaxFilesModel>) data.get("taxFiles");
 			if(orgTaxs!=null&&orgTaxs.size()>0){
-				
 				TempletModel templetModel=getTempletModelByTaxs(orgTaxs);
-				
 				//生成excel
 				createExcel(templetModel, path+"//targetFiles"+File.separator+"//"+Constant.DEFAULT_ETAX_TEMP_NAME);//FileUtil.CREATE_ETAX_PATH
 			}
@@ -235,26 +233,29 @@ public class EtaxFileUtils {
 	 */
 	public static void createExcel(TempletModel templetModel,String targetPath){
 		InputStream is =null;
+		OutputStream out=null;
 		Workbook workbook=null;
-		String fileName="zuoe.xlsx";
+		String fileName="etax.xlsx";
 		if(templetModel!=null){
 			fileName=templetModel.getExcelName()+".xlsx";
 		}
+		templetModel.setAllName(fileName);
 		String filePath=null;
         try {
         	if(!isDev){
-        		ClassPathResource resource = new ClassPathResource("/etax/etax_templet.xlsx");
+        		ClassPathResource resource = new ClassPathResource("/etax/Etax_VAT.xlsx");
         		//读取模板 并转成workbook
         		is = resource.getInputStream();//获取原模板文件输入流
-        		filePath=FileUtil.savePic(is,targetPath, fileName);
+        		filePath=FileUtil.saveEtaxNoDate(is,targetPath, fileName);
         	    workbook = WorkbookFactory.create(resource.getInputStream());   
         	}else{
         		String templetePath="C://Users//Administrator//Desktop//lianxin//Etax_VAT data.xlsx";
         		is=new FileInputStream(new File(templetePath));
-        		filePath=FileUtil.savePic(is,targetPath, fileName);
+        		filePath=FileUtil.saveEtaxNoDate(is,targetPath, fileName);
         	    workbook = WorkbookFactory.create(new FileInputStream(new File(templetePath))); 
         	}
-        	
+        	//设置sheet名称
+        	workbook.setSheetName(0,templetModel.getExcelName());
         	/**写入第一块数据 -年化销售额比较START **/
         	//写入标题
         	setExcelCellValue(workbook, 0, 6, 1, templetModel.getTitle1());
@@ -292,7 +293,7 @@ public class EtaxFileUtils {
         	/**写入第三块数据 -开票汇总表销售额END **/
         	
         	//重新生成文件
-        	OutputStream out = new FileOutputStream(filePath+File.separator+fileName);
+        	out = new FileOutputStream(filePath+File.separator+fileName);
         	workbook.write(out);
         } catch (Exception e) {
             e.printStackTrace();
@@ -301,6 +302,9 @@ public class EtaxFileUtils {
             	//关闭输入流等（略）
             	if(is!=null){
             		is.close();
+            	}
+            	if(out!=null){
+            		out.close();
             	}
             } catch (Exception e) {
                 e.printStackTrace();

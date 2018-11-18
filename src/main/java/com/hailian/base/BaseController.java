@@ -34,6 +34,15 @@ public class BaseController implements Constant{
 		return request.getSession().getAttribute(key);
 	}
 	/**
+	 * 带参重定向
+	 *
+	 * @param path
+	 * @return
+	 */
+	public String redirect(String path) {
+		return "redirect:" + path;
+	}
+	/**
 	 * 获取当前登录人
 	 * @param request
 	 * @param response

@@ -1,32 +1,28 @@
 package com.hailian.controller;
 
-import org.springframework.stereotype.Controller;
-
-import com.hailian.base.BaseController;
-
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.bind.annotation.RequestParam;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 
 import javax.servlet.http.HttpServletRequest;
-
-import com.hailian.service.ISysPlatInfoService;
-import com.hailian.entity.SysPlatInfo;
 
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiOperation;
-
+import com.github.pagehelper.PageInfo;
 import com.hailian.annotation.AuthPower;
+import com.hailian.base.BaseController;
 import com.hailian.common.PublicResult;
+import com.hailian.entity.SysPlatInfo;
 import com.hailian.enums.PublicResultConstant;
-import com.baomidou.mybatisplus.plugins.Page;
+import com.hailian.service.ISysPlatInfoService;
 /**
  *
  * @date 2018-10-09
@@ -153,10 +149,10 @@ public class SysPlatInfoController extends BaseController {
  	@AuthPower(avoidVersion = false, avoidPower = true, avoidSign = true, avoidLogin = true, avoidPlatform = true)
   	@ApiOperation(value = "分页查询平台信息", notes = "分页查询平台信息", httpMethod = "GET")
   	@RequestMapping(value = "/api/v1/sysPlatInfo/list", method = RequestMethod.GET)
-    public PublicResult<Page<SysPlatInfo>> list(SysPlatInfo entity,@RequestParam(value="pageNum",required = false,defaultValue="1") Integer pageNum,
+    public PublicResult<PageInfo<SysPlatInfo>> list(SysPlatInfo entity,@RequestParam(value="pageNum",required = false,defaultValue="1") Integer pageNum,
 			@RequestParam(value="pageSize",required = false,defaultValue="10") Integer pageSize,HttpServletRequest request) {
 		try {
-			Page<SysPlatInfo> page=iSysPlatInfoService.pageList(this, request, entity, pageNum, pageSize);
+			PageInfo<SysPlatInfo> page=iSysPlatInfoService.pageList(this, request, entity, pageNum, pageSize);
 			return new PublicResult<>(PublicResultConstant.SUCCESS, page);
 		} catch (Exception e) {
 			e.printStackTrace();

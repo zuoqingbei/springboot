@@ -1,38 +1,34 @@
 package com.hailian.controller;
 
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
+
 import java.io.OutputStream;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Map;
 
-import org.springframework.stereotype.Controller;
-
-import com.hailian.base.BaseController;
-
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.bind.annotation.RequestParam;
-
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-
-import com.hailian.service.ICommonInterfaceExcelTableService;
-import com.hailian.entity.CommonInterfaceExcelTable;
 
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiOperation;
-
+import com.github.pagehelper.PageInfo;
 import com.hailian.annotation.AuthPower;
+import com.hailian.base.BaseController;
 import com.hailian.common.PublicResult;
+import com.hailian.entity.CommonInterfaceExcelTable;
 import com.hailian.enums.PublicResultConstant;
-import com.baomidou.mybatisplus.plugins.Page;
+import com.hailian.service.ICommonInterfaceExcelTableService;
 /**
  *
  * @date 2018-10-11
@@ -159,10 +155,10 @@ public class CommonInterfaceExcelTableController extends BaseController {
  	@AuthPower(avoidVersion = false, avoidPower = true, avoidSign = true, avoidLogin = true, avoidPlatform = true)
   	@ApiOperation(value = "分页查询excel导出模板配置表", notes = "分页查询excel导出模板配置表", httpMethod = "GET")
   	@RequestMapping(value = "/api/v1/commonInterfaceExcelTable/list", method = RequestMethod.GET)
-    public PublicResult<Page<CommonInterfaceExcelTable>> list(CommonInterfaceExcelTable entity,@RequestParam(value="pageNum",required = false,defaultValue="1") Integer pageNum,
+    public PublicResult<PageInfo<CommonInterfaceExcelTable>> list(CommonInterfaceExcelTable entity,@RequestParam(value="pageNum",required = false,defaultValue="1") Integer pageNum,
 			@RequestParam(value="pageSize",required = false,defaultValue="10") Integer pageSize,HttpServletRequest request) {
 		try {
-			Page<CommonInterfaceExcelTable> page=iCommonInterfaceExcelTableService.pageList(this, request, entity, pageNum, pageSize);
+			PageInfo<CommonInterfaceExcelTable> page=iCommonInterfaceExcelTableService.pageList(this, request, entity, pageNum, pageSize);
 			return new PublicResult<>(PublicResultConstant.SUCCESS, page);
 		} catch (Exception e) {
 			e.printStackTrace();

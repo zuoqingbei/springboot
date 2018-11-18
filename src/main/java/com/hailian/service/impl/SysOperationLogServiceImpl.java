@@ -1,5 +1,8 @@
 package com.hailian.service.impl;
 
+import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
+import com.hailian.entity.EtaxExcelFile;
 import com.hailian.entity.SysOperationLog;
 import com.hailian.mapper.SysOperationLogMapper;
 import com.hailian.service.ISysOperationLogService;
@@ -18,6 +21,7 @@ import com.baomidou.mybatisplus.plugins.Page;
 import com.hailian.base.BaseController;
 
 import java.util.Date;
+import java.util.List;
 
 import org.apache.commons.lang3.StringUtils;
 /**
@@ -82,10 +86,11 @@ public class SysOperationLogServiceImpl extends BaseServiceImpl<SysOperationLogM
      * @todo   操作日志分页查询
      */
 	@Override
-	public Page<SysOperationLog> pageList(BaseController c, HttpServletRequest request, SysOperationLog entity,Integer pageNum,Integer pageSize) {
+	public PageInfo<SysOperationLog> pageList(BaseController c, HttpServletRequest request, SysOperationLog entity,Integer pageNum,Integer pageSize) {
+		PageHelper.startPage(pageNum, pageSize);
 		EntityWrapper<SysOperationLog> wrapper = searchWrapper(c,request, entity);
-		Page<SysOperationLog> page=new Page<SysOperationLog>(pageNum, pageSize);
-		page=selectPage(page,wrapper);
+		List<SysOperationLog> list = sysOperationLogMapper.selectList(wrapper);
+		PageInfo<SysOperationLog> page = new PageInfo<SysOperationLog>(list);
 		return page;
 	}
 	
@@ -150,7 +155,7 @@ public class SysOperationLogServiceImpl extends BaseServiceImpl<SysOperationLogM
 		if(StringUtils.isNoneBlank(entity.getOrderBy())){
 			wrapper.orderBy(entity.getOrderBy(), entity.isAsc());
 		}else{
-			wrapper.orderBy("create_date", true);
+			wrapper.orderBy("create_date", false);
 		}
 		//System.out.println(wrapper.originalSql());
 		return wrapper;

@@ -21,7 +21,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.baomidou.mybatisplus.mapper.EntityWrapper;
-import com.baomidou.mybatisplus.plugins.Page;
+import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
 import com.hailian.annotation.AuthPower;
 import com.hailian.base.BaseController;
 import com.hailian.base.BaseServiceImpl;
@@ -107,10 +108,11 @@ public class CommonInterfaceExcServiceImpl extends BaseServiceImpl<CommonInterfa
      * @todo   统一接口分页查询
      */
 	@Override
-	public Page<CommonInterfaceExc> pageList(BaseController c, HttpServletRequest request, CommonInterfaceExc entity,Integer pageNum,Integer pageSize) {
+	public PageInfo<CommonInterfaceExc> pageList(BaseController c, HttpServletRequest request, CommonInterfaceExc entity,Integer pageNum,Integer pageSize) {
+		PageHelper.startPage(pageNum, pageSize);
 		EntityWrapper<CommonInterfaceExc> wrapper = searchWrapper(c,request, entity);
-		Page<CommonInterfaceExc> page=new Page<CommonInterfaceExc>(pageNum, pageSize);
-		page=selectPage(page,wrapper);
+		List<CommonInterfaceExc> list = commonInterfaceExcMapper.selectList(wrapper);
+		PageInfo<CommonInterfaceExc> page = new PageInfo<CommonInterfaceExc>(list);
 		return page;
 	}
 	 /**
@@ -158,7 +160,7 @@ public class CommonInterfaceExcServiceImpl extends BaseServiceImpl<CommonInterfa
 		if(StringUtils.isNoneBlank(entity.getOrderBy())){
 			wrapper.orderBy(entity.getOrderBy(), entity.isAsc());
 		}else{
-			wrapper.orderBy("create_date", true);
+			wrapper.orderBy("create_date", false);
 		}
 		//System.out.println(wrapper.originalSql());
 		return wrapper;

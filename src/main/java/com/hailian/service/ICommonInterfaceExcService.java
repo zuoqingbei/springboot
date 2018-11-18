@@ -5,7 +5,7 @@ import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 
-import com.baomidou.mybatisplus.plugins.Page;
+import com.github.pagehelper.PageInfo;
 import com.hailian.base.BaseController;
 import com.hailian.base.BaseService;
 import com.hailian.common.PublicResult;
@@ -41,7 +41,7 @@ public interface ICommonInterfaceExcService extends BaseService<CommonInterfaceE
      * @author zuoqb123
      * @todo   统一接口分页查询
      */
-	Page<CommonInterfaceExc> pageList(BaseController c,HttpServletRequest request,CommonInterfaceExc entity,Integer pageNum,Integer pageSize);
+	PageInfo<CommonInterfaceExc> pageList(BaseController c,HttpServletRequest request,CommonInterfaceExc entity,Integer pageNum,Integer pageSize);
 	/**
 	 * @time   2018年10月11日 下午9:11:18
 	 * @author zuoqb

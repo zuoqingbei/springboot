@@ -45,28 +45,29 @@ public class FileUtil {
 	public static String springProfilesActive=ResourceBundle.getBundle("application").getString("spring.profiles.active");
 	private static SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMddHHmmss");
     public static ResourceBundle bundle = ResourceBundle.getBundle("application-"+springProfilesActive);
-    public static String ETAX_FILE_UPLOAD =bundle.getString("etax-file-upload-dir");//保税文件上传路径
-    public static final String CREATE_ETAX_PATH=bundle.getString("etax-file-create-dir");//保税处理后生成的文件目录
-    public static final String FILE_ENCODE=bundle.getString("etax-file-upload-encode");//将文件转html时字符编码
-    public static final String VIEW_IMAGE_DOMAIN=bundle.getString("etax-file-view-url");//浏览图片地址
-    public static final String CREATE_IMAGE_PATH=bundle.getString("file-upload-image-dir");
+    public static String FILE_UPLOAD_ORG_PATH =bundle.getString("file-upload-org-dir");//文件上传原始数据路径
+    public static final String FILE_UPLOAD_TARGET_PATH=bundle.getString("file-upload-target-dir");//文件上传后生成的文件目录
+    public static final String FILE_ENCODE=bundle.getString("file-upload-encode");//将文件转html时字符编码
+    public static final String VIEW_IMAGE_DOMAIN=bundle.getString("file-view-url");//浏览图片地址
+    public static final String FILE_UPLOAD_IMAGE_PATH=bundle.getString("file-upload-image-dir");//图片路径
     
 
-    /**
-     * 判断当前文件是否是zip文件
-     *
-     * @param fileName
-     *            文件名
-     * @return true 是
-     */
-    public static boolean isZip(String fileName) {
-        return fileName.toLowerCase().endsWith(Constant.FilePostFix.ZIP_FILE);
-    }
-    
     public static boolean isPdf(String fileName) {
         return fileName.toLowerCase().endsWith(Constant.FilePostFix.PDF_FILE);
     }
-
+    /**
+     * 
+     * @time   2018年11月18日 下午1:37:55
+     * @author zuoqb
+     * @todo   判断是否是压缩文件
+     * @return_type   boolean
+     */
+    public static boolean isCompress(String fileName) {
+    	if(getFileType(fileName)==2){
+    		return true;
+    	};
+        return false;
+    }
     /**
 	 * 
 	 * @time   2017年12月29日 下午3:59:57
@@ -236,7 +237,82 @@ public class FileUtil {
 
     }
 
-
+    /**
+     * 保存文件到临时目录
+     * @param inputStream 文件输入流
+     * @param fileName 文件名
+     */
+    public static String saveEtaxZip(InputStream inputStream,String targetPath, String fileName, String dateStr) {
+        OutputStream os = null;
+        String filePath="";
+        try {
+            // 保存到临时文件
+            // 1K的数据缓冲
+            byte[] bs = new byte[1024];
+            // 读取到的数据长度
+            int len;
+            // 输出的文件流保存到本地文件
+            File tempFile = new File(targetPath+ File.separator +dateStr);
+            if (!tempFile.exists()) {
+                tempFile.mkdirs();
+            }
+            filePath=tempFile.getPath();
+            os = new FileOutputStream(tempFile.getPath() + File.separator+ fileName);
+            // 开始读取
+            while ((len = inputStream.read(bs)) != -1) {
+                os.write(bs, 0, len);
+            }
+        }catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            // 完毕，关闭所有链接
+            try {
+                os.close();
+                inputStream.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+        return filePath;
+    }
+    /**
+     * 保存文件到临时目录-不用根据时间创建目录
+     * @param inputStream 文件输入流
+     * @param fileName 文件名
+     */
+    public static String saveEtaxNoDate(InputStream inputStream,String targetPath, String fileName) {
+        OutputStream os = null;
+        String filePath="";
+        try {
+            // 保存到临时文件
+            // 1K的数据缓冲
+            byte[] bs = new byte[1024];
+            // 读取到的数据长度
+            int len;
+            // 输出的文件流保存到本地文件
+            File tempFile = new File(targetPath);
+            if (!tempFile.exists()) {
+                tempFile.mkdirs();
+            }
+            filePath=tempFile.getPath();
+            os = new FileOutputStream(tempFile.getPath() + File.separator+ fileName);
+            // 开始读取
+            while ((len = inputStream.read(bs)) != -1) {
+                os.write(bs, 0, len);
+            }
+        }catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            // 完毕，关闭所有链接
+            try {
+                os.close();
+                inputStream.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+        return filePath;
+    }
     /**
      * 保存文件到临时目录
      * @param inputStream 文件输入流
@@ -340,7 +416,7 @@ public class FileUtil {
     }
 
     public static File getNewFile(String fileName) throws IOException {
-        String filePath = ETAX_FILE_UPLOAD + fileName;
+        String filePath = FILE_UPLOAD_ORG_PATH + fileName;
         File newFile = new File(filePath);
         File fileParent = newFile.getParentFile();
         if(!fileParent.exists()){
@@ -501,7 +577,7 @@ public class FileUtil {
     }
 
     public static boolean deleteUploadedFile(String fileName) {
-        String filePath = FileUtil.ETAX_FILE_UPLOAD + fileName;
+        String filePath = FileUtil.FILE_UPLOAD_ORG_PATH + fileName;
         File file =  new File(filePath);
         if(file.exists()){
             if(file.isFile()) {
@@ -516,7 +592,7 @@ public class FileUtil {
     }
 
     public static int getFileType(String originalFilename) {
-        String postFix = originalFilename.split("//.")[originalFilename.split("//.").length-1];
+        String postFix = getFileExt(originalFilename);
         if(Arrays.asList(Constant.FilePostFix.IMAGES).contains(postFix)){
             return Constant.FileType.FILE_IMG;
         }
@@ -891,6 +967,23 @@ public class FileUtil {
             return "";
         }
     }
+    /**
+     * 
+     * @time   2018年11月18日 下午1:48:56
+     * @author zuoqb
+     * @todo   文件名字 不包括类型
+     * @return_type   String
+     */
+    public static String getFileName(String filePathName) {
+        int pos = 0;
+        pos = filePathName.lastIndexOf('.');
+        if (pos != -1) {
+            return filePathName.substring(0, pos);
+        }
+        else {
+            return "";
+        }
+    }
 
     /**
      * 去掉文件扩展名
@@ -1101,13 +1194,6 @@ public class FileUtil {
         BASE64Decoder decoder = new BASE64Decoder();
         return decoder.decodeBuffer(base64String);
     }
-
-  /*  public static void main(String[] args) throws Exception {
-        //System.out.println(Jsoup.parse(new File("D:\\result.htm"),"GBK").outerHtml());
-        //System.out.println(readFileContent(new File("D:\\result.htm"),Charset.forName("GBK")));
-        //System.out.println(image2Base64String(new FileInputStream(new File("D://123.png"))));
-        System.out.println("data:image/png;base64,".replaceAll("data:image/(jpg|png|jpeg);base64,",""));
-    }*/
     /**
      * 创建文件路径(文件夹)
      * @param fileName
@@ -1118,4 +1204,54 @@ public class FileUtil {
             fileTotal.mkdirs();
         }
     }
+    
+    /**
+	 * 
+	 * @time   2018年1月2日 上午9:26:33
+	 * @author zuoqb
+	 * @todo   处理某个目录下面全部压缩文件
+	 * @param  @param path
+	 * @return_type   void
+	 */
+	public static String dealCompressFile(String path,String targetPath) {
+		String finalPath="";
+		File file = new File(path);// 里面输入特定目录
+		if (!file.exists()) {//判断文件夹是否创建，没有创建则创建新文件夹
+			file.mkdirs();
+		}
+		File temp = null;
+		File[] filelist = file.listFiles();
+		for (int i = 0; i < filelist.length; i++) {
+			temp = filelist[i];
+			// 获得文件名，如果后缀为“zip、rar”，就删除文件
+			finalPath=dealCompressFile(temp, targetPath);
+		}
+		return finalPath;
+	}
+	/**
+	 * 
+	 * @time   2018年11月18日 下午1:41:28
+	 * @author zuoqb
+	 * @todo   解压单个压缩包
+	 * @return_type   boolean
+	 */
+	public static String dealCompressFile(File file,String targetPath) {
+		// 获得文件名，如果后缀为“zip、rar”，就删除文件
+		if (isCompress(file.getName())) {
+			try {
+				//解压文件
+				UnCompressFile.unzip(file.getPath(), targetPath+File.separator+getFileName(file.getName()));
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
+		return targetPath+File.separator+getFileName(file.getName());
+	}
+	
+	public static void main(String[] args) {
+		/*dealCompressFile("C://Users//Administrator//Desktop//lianxin//690//zip//", 
+				"C://Users//Administrator//Desktop//lianxin//690//un");*/
+		File file=new File("C://Users//Administrator//Desktop//lianxin//690//zip//690-孵化小微.zip");
+		dealCompressFile(file, "C://Users//Administrator//Desktop//lianxin//690//un");
+	}
 }

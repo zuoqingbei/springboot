@@ -18,7 +18,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import com.baomidou.mybatisplus.plugins.Page;
+import com.github.pagehelper.PageInfo;
 import com.hailian.annotation.AuthPower;
 import com.hailian.base.BaseController;
 import com.hailian.common.PublicResult;
@@ -151,10 +151,10 @@ public class CommonInterfaceExcelSheetController extends BaseController {
  	@AuthPower(avoidVersion = false, avoidPower = true, avoidSign = true, avoidLogin = true, avoidPlatform = true)
   	@ApiOperation(value = "分页查询Excel导出sheet也配置表", notes = "分页查询Excel导出sheet也配置表", httpMethod = "GET")
   	@RequestMapping(value = "/api/v1/commonInterfaceExcelSheet/list", method = RequestMethod.GET)
-    public PublicResult<Page<CommonInterfaceExcelSheet>> list(CommonInterfaceExcelSheet entity,@RequestParam(value="pageNum",required = false,defaultValue="1") Integer pageNum,
+    public PublicResult<PageInfo<CommonInterfaceExcelSheet>> list(CommonInterfaceExcelSheet entity,@RequestParam(value="pageNum",required = false,defaultValue="1") Integer pageNum,
 			@RequestParam(value="pageSize",required = false,defaultValue="10") Integer pageSize,HttpServletRequest request) {
 		try {
-			Page<CommonInterfaceExcelSheet> page=iCommonInterfaceExcelSheetService.pageList(this, request, entity, pageNum, pageSize);
+			PageInfo<CommonInterfaceExcelSheet> page=iCommonInterfaceExcelSheetService.pageList(this, request, entity, pageNum, pageSize);
 			return new PublicResult<>(PublicResultConstant.SUCCESS, page);
 		} catch (Exception e) {
 			e.printStackTrace();

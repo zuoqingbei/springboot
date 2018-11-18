@@ -2,10 +2,9 @@ package ${package.Service};
 
 import ${package.Entity}.${entity};
 import ${superServiceClassPackage};
-import com.baomidou.mybatisplus.plugins.Page;
 import com.hailian.base.BaseController;
 import javax.servlet.http.HttpServletRequest;
-
+import com.github.pagehelper.PageInfo;
 
 /**
  * @date ${date}
@@ -36,5 +35,5 @@ public interface ${table.serviceName} extends ${superServiceClass}<${entity}> {
      * @author ${author}
      * @todo   $!{table.comment}分页查询
      */
-	Page<${entity}> pageList(BaseController c,HttpServletRequest request,${entity} entity,Integer pageNum,Integer pageSize);
+	PageInfo<${entity}> pageList(BaseController c,HttpServletRequest request,${entity} entity,Integer pageNum,Integer pageSize);
 }

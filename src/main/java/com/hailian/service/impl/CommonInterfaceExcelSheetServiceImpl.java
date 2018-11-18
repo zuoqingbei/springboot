@@ -11,7 +11,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.baomidou.mybatisplus.mapper.EntityWrapper;
-import com.baomidou.mybatisplus.plugins.Page;
+import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
 import com.hailian.base.BaseController;
 import com.hailian.base.BaseServiceImpl;
 import com.hailian.common.UUIDUtils;
@@ -90,10 +91,11 @@ public class CommonInterfaceExcelSheetServiceImpl extends BaseServiceImpl<Common
      * @todo   Excel导出sheet也配置表分页查询
      */
 	@Override
-	public Page<CommonInterfaceExcelSheet> pageList(BaseController c, HttpServletRequest request, CommonInterfaceExcelSheet entity,Integer pageNum,Integer pageSize) {
+	public PageInfo<CommonInterfaceExcelSheet> pageList(BaseController c, HttpServletRequest request, CommonInterfaceExcelSheet entity,Integer pageNum,Integer pageSize) {
+		PageHelper.startPage(pageNum, pageSize);
 		EntityWrapper<CommonInterfaceExcelSheet> wrapper = searchWrapper(c,request, entity);
-		Page<CommonInterfaceExcelSheet> page=new Page<CommonInterfaceExcelSheet>(pageNum, pageSize);
-		page=selectPage(page,wrapper);
+		List<CommonInterfaceExcelSheet> list = commonInterfaceExcelSheetMapper.selectList(wrapper);
+		PageInfo<CommonInterfaceExcelSheet> page = new PageInfo<CommonInterfaceExcelSheet>(list);
 		return page;
 	}
 	
@@ -138,7 +140,7 @@ public class CommonInterfaceExcelSheetServiceImpl extends BaseServiceImpl<Common
 		if(StringUtils.isNoneBlank(entity.getOrderBy())){
 			wrapper.orderBy(entity.getOrderBy(), entity.isAsc());
 		}else{
-			wrapper.orderBy("create_date", true);
+			wrapper.orderBy("create_date", false);
 		}
 		//System.out.println(wrapper.originalSql());
 		return wrapper;

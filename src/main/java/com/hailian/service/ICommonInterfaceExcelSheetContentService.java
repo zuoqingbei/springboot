@@ -4,7 +4,7 @@ import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 
-import com.baomidou.mybatisplus.plugins.Page;
+import com.github.pagehelper.PageInfo;
 import com.hailian.base.BaseController;
 import com.hailian.base.BaseService;
 import com.hailian.entity.CommonInterfaceExcelSheetContent;
@@ -39,7 +39,7 @@ public interface ICommonInterfaceExcelSheetContentService extends BaseService<Co
      * @author zuoqb123
      * @todo   Excel导出sheet详情配置分页查询
      */
-	Page<CommonInterfaceExcelSheetContent> pageList(BaseController c,HttpServletRequest request,CommonInterfaceExcelSheetContent entity,Integer pageNum,Integer pageSize);
+	PageInfo<CommonInterfaceExcelSheetContent> pageList(BaseController c,HttpServletRequest request,CommonInterfaceExcelSheetContent entity,Integer pageNum,Integer pageSize);
 	
 	/**
 	 * @time   2018年10月11日 下午9:11:18

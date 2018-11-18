@@ -1,20 +1,25 @@
 package com.hailian.service.impl;
 
+import java.util.Date;
+import java.util.List;
+
+import javax.servlet.http.HttpServletRequest;
+
+import org.apache.commons.lang3.StringUtils;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import com.baomidou.mybatisplus.mapper.EntityWrapper;
+import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
+import com.hailian.base.BaseController;
+import com.hailian.base.BaseServiceImpl;
+import com.hailian.common.UUIDUtils;
+import com.hailian.conf.Constant;
 import com.hailian.entity.SysUser;
 import com.hailian.mapper.SysUserMapper;
 import com.hailian.service.ISysUserService;
-import com.hailian.base.BaseServiceImpl;
-import org.springframework.stereotype.Service;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.transaction.annotation.Transactional;
-import javax.servlet.http.HttpServletRequest;
-import com.hailian.common.UUIDUtils;
-import com.hailian.conf.Constant;
-import com.baomidou.mybatisplus.mapper.EntityWrapper;
-import com.baomidou.mybatisplus.plugins.Page;
-import com.hailian.base.BaseController;
-import java.util.Date;
-import org.apache.commons.lang3.StringUtils;
 /**
  * @date 2018-10-15
  * @author zuoqb123
@@ -77,10 +82,11 @@ public class SysUserServiceImpl extends BaseServiceImpl<SysUserMapper, SysUser> 
      * @todo   用户表分页查询
      */
 	@Override
-	public Page<SysUser> pageList(BaseController c, HttpServletRequest request, SysUser entity,Integer pageNum,Integer pageSize) {
+	public PageInfo<SysUser> pageList(BaseController c, HttpServletRequest request, SysUser entity,Integer pageNum,Integer pageSize) {
+		PageHelper.startPage(pageNum, pageSize);
 		EntityWrapper<SysUser> wrapper = searchWrapper(c,request, entity);
-		Page<SysUser> page=new Page<SysUser>(pageNum, pageSize);
-		page=selectPage(page,wrapper);
+		List<SysUser> list = sysUserMapper.selectList(wrapper);
+		PageInfo<SysUser> page = new PageInfo<SysUser>(list);
 		return page;
 	}
 	
@@ -157,7 +163,7 @@ public class SysUserServiceImpl extends BaseServiceImpl<SysUserMapper, SysUser> 
 		if(StringUtils.isNoneBlank(entity.getOrderBy())){
 			wrapper.orderBy(entity.getOrderBy(), entity.isAsc());
 		}else{
-			wrapper.orderBy("create_date", true);
+			wrapper.orderBy("create_date", false);
 		}
 		//System.out.println(wrapper.originalSql());
 		return wrapper;
