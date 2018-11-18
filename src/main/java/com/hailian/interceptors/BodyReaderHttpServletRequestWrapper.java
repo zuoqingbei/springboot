@@ -1,4 +1,4 @@
-package com.hailian.interceptors;
+/*package com.hailian.interceptors;
 
 import jodd.JoddDefault;
 import jodd.io.StreamUtil;
@@ -12,13 +12,13 @@ import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
 
-/**
+*//**
  * @Description: BodyReaderHttpServletRequestWrapper
  * @Copyright: Copyright (c) 2016
  * @author jon
  * @date 2017/3/31 11:30
  * version V1.0.0
- */
+ *//*
 public class BodyReaderHttpServletRequestWrapper extends HttpServletRequestWrapper {
 
     private byte[] body;
@@ -59,4 +59,4 @@ public class BodyReaderHttpServletRequestWrapper extends HttpServletRequestWrapp
             }
         };
     }
-}
+}*/

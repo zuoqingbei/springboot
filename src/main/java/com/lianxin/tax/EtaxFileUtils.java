@@ -19,14 +19,15 @@ import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.ss.usermodel.WorkbookFactory;
 import org.springframework.core.io.ClassPathResource;
 
+import com.hailian.conf.Constant;
 import com.hailian.utils.ExcleUtils;
 import com.hailian.utils.FileUtil;
 
 public class EtaxFileUtils {
 	public static boolean isDev=true;
 	public static void main(String[] args) {
-		String path="C://Users//Administrator//Desktop//报税//etax";
-		Map<String, Object> data=dealFiles(path+"//upload");//FileUtil.ETAX_FILE_UPLOAD
+		String path="C://Users//Administrator//Desktop//lianxin//upload";
+		Map<String, Object> data=dealFiles(path+"//orgFiles"+ File.separator+Constant.DEFAULT_ETAX_TEMP_NAME+"//2081118");//FileUtil.ETAX_FILE_UPLOAD
 		if(data!=null&&data.get("success")!=null&&
 				"true".equals(data.get("success").toString())){
 			//将上一步处理结果再次处理，加工为最终模板数据结构
@@ -37,7 +38,7 @@ public class EtaxFileUtils {
 				TempletModel templetModel=getTempletModelByTaxs(orgTaxs);
 				
 				//生成excel
-				createExcel(templetModel, path+"//templet");//FileUtil.CREATE_ETAX_PATH
+				createExcel(templetModel, path+"//targetFiles"+File.separator+"//"+Constant.DEFAULT_ETAX_TEMP_NAME);//FileUtil.CREATE_ETAX_PATH
 			}
 		}
 	}
@@ -248,7 +249,7 @@ public class EtaxFileUtils {
         		filePath=FileUtil.savePic(is,targetPath, fileName);
         	    workbook = WorkbookFactory.create(resource.getInputStream());   
         	}else{
-        		String templetePath="C://Users//Administrator//Desktop//报税//Etax_VAT data.xlsx";
+        		String templetePath="C://Users//Administrator//Desktop//lianxin//Etax_VAT data.xlsx";
         		is=new FileInputStream(new File(templetePath));
         		filePath=FileUtil.savePic(is,targetPath, fileName);
         	    workbook = WorkbookFactory.create(new FileInputStream(new File(templetePath))); 
@@ -380,10 +381,13 @@ public class EtaxFileUtils {
 			} else {
 				try {
 					 for(File file:sourceFiles){
-						 TaxFilesModel tax=fielToTaxFiles(file);
-						 if(tax.isApply()){
-							 //只处理主表
-							 taxFiles.add(tax);
+						 if(ExcleUtils.validateExcel(file.getName())||FileUtil.isPdf(file.getName())){
+							 //只处理excel  pdf
+							 TaxFilesModel tax=fielToTaxFiles(file);
+							 if(tax.isApply()){
+								 //只处理主表
+								 taxFiles.add(tax);
+							 }
 						 }
 	            	 }
 					 result.put("success", true);
@@ -483,7 +487,7 @@ public class EtaxFileUtils {
 	public static TaxFilesModel setCommonPropertities(File file,TaxFilesModel taxFiles){
 		if(ExcleUtils.validateExcel(file.getPath())){
 			taxFiles.setPdf(false);
-			if(file.getPath().matches("^.+\\.(?i)(xls)$")){
+			if(ExcleUtils.isExcel2003(file.getPath())){
 				taxFiles.setFileType("xls");
 				taxFiles.setExcel2007(false);
 			}else{

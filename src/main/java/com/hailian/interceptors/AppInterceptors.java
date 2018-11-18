@@ -1,7 +1,5 @@
 package com.hailian.interceptors;
 
-import java.io.BufferedReader;
-import java.util.Date;
 import java.util.regex.Pattern;
 
 import javax.servlet.http.HttpServletRequest;
@@ -19,7 +17,6 @@ import com.hailian.annotation.AuthPower;
 import com.hailian.common.TokenConstants;
 import com.hailian.enums.PlatformType;
 import com.hailian.exception.AppWebException;
-import com.hailian.redis.RedisUtils;
 import com.hailian.utils.JWTUtil;
 
 /**
@@ -139,7 +136,7 @@ public class AppInterceptors extends WebMvcConfigurerAdapter{
 
             }
 
-            if(request instanceof BodyReaderHttpServletRequestWrapper){
+          /*  if(request instanceof BodyReaderHttpServletRequestWrapper){
 
                 BodyReaderHttpServletRequestWrapper requestWrapper = (BodyReaderHttpServletRequestWrapper) request;
 
@@ -152,7 +149,7 @@ public class AppInterceptors extends WebMvcConfigurerAdapter{
                 }
 
                 System.out.println("--------------------------" + sb.toString());
-            }
+            }*/
 
 
             return super.preHandle(request, response, handler);

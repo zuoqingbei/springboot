@@ -49,7 +49,7 @@ public class FileUtil {
     public static final String CREATE_ETAX_PATH=bundle.getString("etax-file-create-dir");//保税处理后生成的文件目录
     public static final String FILE_ENCODE=bundle.getString("etax-file-upload-encode");//将文件转html时字符编码
     public static final String VIEW_IMAGE_DOMAIN=bundle.getString("etax-file-view-url");//浏览图片地址
-    
+    public static final String CREATE_IMAGE_PATH=bundle.getString("file-upload-image-dir");
     
 
     /**
@@ -61,6 +61,10 @@ public class FileUtil {
      */
     public static boolean isZip(String fileName) {
         return fileName.toLowerCase().endsWith(Constant.FilePostFix.ZIP_FILE);
+    }
+    
+    public static boolean isPdf(String fileName) {
+        return fileName.toLowerCase().endsWith(Constant.FilePostFix.PDF_FILE);
     }
 
     /**

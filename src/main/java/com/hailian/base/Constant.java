@@ -29,6 +29,7 @@ public class Constant {
 
     public static class FilePostFix{
         public static final String ZIP_FILE =".zip";
+        public static final String PDF_FILE =".pdf";
 
         public static final String [] IMAGES ={"jpg", "jpeg", "JPG", "JPEG", "gif", "GIF", "bmp", "BMP", "png"};
         public static final String [] ZIP ={"ZIP","zip","rar","RAR"};

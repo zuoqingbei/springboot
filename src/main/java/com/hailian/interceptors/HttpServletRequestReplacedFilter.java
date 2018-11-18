@@ -1,11 +1,11 @@
-package com.hailian.interceptors;
+/*package com.hailian.interceptors;
 
 import javax.servlet.*;
 import javax.servlet.annotation.WebFilter;
 import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
 
-/**
+*//**
  * Package: com.hailian.interceptor.HttpServletRequestReplacedFilter
  * Description: 描述
  * Copyright: Copyright (c) 2017
@@ -13,14 +13,14 @@ import java.io.IOException;
  * @author lv bin
  * Date: 2018/1/19 15:29
  * Version: V1.0.0
- */
+ *//*
 @WebFilter(urlPatterns = "/*")
 public class HttpServletRequestReplacedFilter implements Filter {
     @Override
     public void init(FilterConfig filterConfig) throws ServletException {
-        /**
+        *//**
          * do something before
-         */
+         *//*
     }
 
     @Override
@@ -42,8 +42,9 @@ public class HttpServletRequestReplacedFilter implements Filter {
 
     @Override
     public void destroy() {
-        /**
+        *//**
          * do something after
-         */
+         *//*
     }
 }
+*/
