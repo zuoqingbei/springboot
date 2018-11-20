@@ -7,6 +7,8 @@ import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -15,8 +17,12 @@ import jxl.write.WritableWorkbook;
 
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.text.PDFTextStripper;
-
-public class PDFtoTXT {
+/**
+ * @time   2018年11月20日 上午9:46:59
+ * @author zuoqb
+ * @todo   处理PDF转成报税实体
+ */
+public class PDFToEtax {
 	//初始化excel
     public static WritableWorkbook wwb = null;
     public static WritableSheet ws;
@@ -25,7 +31,7 @@ public class PDFtoTXT {
     	String path="C:/Users/Administrator/Desktop/lianxin/upload/testpdf/";
     	String name="报税09";
         File f = new File(path+name+".pdf"); //获得当前路径
-        PDFtoTXT(path,f);
+        Map<String,Object> map=getPdfContent(path,f);
         File txt = new File(path+name+".txt"); //获得当前路径
         TXTtoEXCEL(path,txt);
        /* try {
@@ -40,38 +46,59 @@ public class PDFtoTXT {
         }*/
 
     }
-	//将pdf文件输出为txt
-    public static void PDFtoTXT(String path,File pdf) {
-        PDDocument document;
-        BufferedWriter wr;
+	/**
+	 * @time   2018年11月20日 上午9:57:04
+	 * @author zuoqb
+	 * @todo   读取pdf文件内容
+	 */
+    public static Map<String,Object> getPdfContent(String path,File pdf) {
+    	Map<String,Object> map=new HashMap<String,Object>();
+        PDDocument document=null;
+        String content = null;
+        BufferedWriter wr=null;
+        String textName=null;
         try {
             File input = pdf; 
-            File output = new File(pdf.getName().split("\\.")[0] + ".txt");
+            textName=pdf.getName().split("\\.")[0] + ".txt";
+            File output = new File(textName);
             document = PDDocument.load(input);
             PDFTextStripper pdfTextStripper = new PDFTextStripper();
             pdfTextStripper.setStartPage(1);
 			pdfTextStripper.setEndPage(1);//只读取第一页
-			/*String text = null;
-			try {
-				text = pdfTextStripper.getText(document);
-				System.out.println(text);
-			} catch (IOException e) {
-				e.printStackTrace();
-			}*/
-            
-            
+			content = pdfTextStripper.getText(document);
+			System.out.println(content);
+			//生成text只是为了数据核对
             wr = new BufferedWriter(new OutputStreamWriter(
                     new FileOutputStream(path+output)));
             pdfTextStripper.writeText(document, wr);
+            map.put("textName", textName);
+            map.put("path", path);
+            map.put("content", content);
+            map.put("success", true);
+            map.put("msg", "操作成功！");
             if (document != null) {
             	document.close();
             }
-            wr.close();
-            
-            
+            if(wr!=null){
+            	wr.close();
+            }
         } catch (Exception e) {
+        	map.put("content", "");
+        	map.put("success", false);
+        	map.put("msg", e.getMessage());
             e.printStackTrace();
+        }finally{
+        	try {
+        		if (document != null) {
+                	document.close();
+                }
+                if(wr!=null){
+                	wr.close();
+                }
+			} catch (Exception e2) {
+			}
         }
+        return map;
     }
     //爬取目录下的txt文件中关键字并输出到excel文件中
     public static String project = null;

@@ -1,8 +1,12 @@
 package com.hailian;
 
+import java.util.Properties;
+
 import javax.servlet.Filter;
 import javax.servlet.MultipartConfigElement;
 
+import org.apache.ibatis.plugin.Interceptor;
+import org.mybatis.spring.SqlSessionFactoryBean;
 import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -15,6 +19,8 @@ import org.springframework.http.converter.ByteArrayHttpMessageConverter;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 import org.springframework.web.context.request.RequestContextListener;
 import org.springframework.web.filter.CharacterEncodingFilter;
+
+import com.github.pagehelper.PageHelper;
 
 
 @SpringBootApplication
@@ -60,7 +66,21 @@ public class SpringbootApplication{
 	public RequestContextListener requestContextListener() {
 		return new RequestContextListener();
 	}
+	@Bean
+	PageHelper pageHelper() {
+		// 分页插件
+		PageHelper pageHelper = new PageHelper();
+		Properties properties = new Properties();
+		properties.setProperty("reasonable", "true");
+		properties.setProperty("supportMethodsArguments", "true");
+		properties.setProperty("returnPageInfo", "check");
+		properties.setProperty("params", "count=countSql");
+		pageHelper.setProperties(properties);
 
+		// 添加插件
+		new SqlSessionFactoryBean().setPlugins(new Interceptor[] { pageHelper });
+		return pageHelper;
+	}
 	 /**
      * 跨域过滤器
      * @return

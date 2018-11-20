@@ -1,12 +1,10 @@
-package com.enterise.web.htmlgen.pdf;
 /*package com.enterise.web.htmlgen.pdf;
 
 import java.io.BufferedReader;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.Reader;
-import java.io.StringReader;
+import java.io.InputStreamReader;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -15,10 +13,10 @@ import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.pdmodel.PDPage;
 import org.apache.pdfbox.pdmodel.PDResources;
 import org.apache.pdfbox.pdmodel.graphics.xobject.PDXObjectImage;
-import org.apache.pdfbox.util.PDFTextStripper;
+import org.apache.pdfbox.text.PDFTextStripper;
 
 import com.enterise.web.htmlgen.HtmlGenerator;
-import com.haier.datamart.config.Constant;
+import com.hailian.utils.FileUtil;
 *//**
  * 
  * @time   2017年12月29日 上午11:23:48
@@ -48,7 +46,7 @@ public class PdfToHtml implements HtmlGenerator {
 	public String generate() throws Exception{
 		
 		int numberOfPages = document.getNumberOfPages();
-		List pages = document.getDocumentCatalog().getAllPages();
+		//List pages = document.getDocumentCatalog().getAllPages();
 		
 		PDFTextStripper pdfTextStripper = null;
 		pdfTextStripper = new PDFTextStripper();
@@ -72,9 +70,8 @@ public class PdfToHtml implements HtmlGenerator {
 				page.addTextLine(textLine);
 			}
 			InputStreamReader bufferedReader = new InputStreamReader(
-	                new FileInputStream(text),FileUtil.FILE_ENCODE);//考虑到编码格式
+	                new FileInputStream(text),"utf-8");//考虑到编码格式
 			 BufferedReader reader = new BufferedReader(bufferedReader);
-			//BufferedReader bufferedReader = new BufferedReader(reader);
 			String textLine = null;
 			while ((textLine = reader.readLine()) != null) {
 				page.addTextLine(textLine);

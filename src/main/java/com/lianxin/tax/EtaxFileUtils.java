@@ -2,6 +2,7 @@ package com.lianxin.tax;
 
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -26,18 +27,22 @@ import com.hailian.utils.FileUtil;
 public class EtaxFileUtils {
 	public static boolean isDev=false;
 	public static void main(String[] args) {
-		String path="C://Users//Administrator//Desktop//lianxin//upload";
-		Map<String, Object> data=dealFiles(path+"//orgFiles"+ File.separator+Constant.DEFAULT_ETAX_TEMP_NAME+"//2081118");//FileUtil.ETAX_FILE_UPLOAD
-		if(data!=null&&data.get("success")!=null&&
-				"true".equals(data.get("success").toString())){
-			//将上一步处理结果再次处理，加工为最终模板数据结构
-			@SuppressWarnings("unchecked")
-			List<TaxFilesModel> orgTaxs=(List<TaxFilesModel>) data.get("taxFiles");
-			if(orgTaxs!=null&&orgTaxs.size()>0){
-				TempletModel templetModel=getTempletModelByTaxs(orgTaxs);
-				//生成excel
-				createExcel(templetModel, path+"//targetFiles"+File.separator+"//"+Constant.DEFAULT_ETAX_TEMP_NAME);//FileUtil.CREATE_ETAX_PATH
+		try {
+			String path="C://Users//Administrator//Desktop//lianxin//upload";
+			Map<String, Object> data=dealFiles(path+"//orgFiles"+ File.separator+Constant.DEFAULT_ETAX_TEMP_NAME+"//2081118");//FileUtil.ETAX_FILE_UPLOAD
+			if(data!=null&&data.get("success")!=null&&
+					"true".equals(data.get("success").toString())){
+				//将上一步处理结果再次处理，加工为最终模板数据结构
+				@SuppressWarnings("unchecked")
+				List<TaxFilesModel> orgTaxs=(List<TaxFilesModel>) data.get("taxFiles");
+				if(orgTaxs!=null&&orgTaxs.size()>0){
+					TempletModel templetModel=getTempletModelByTaxs(orgTaxs);
+					//生成excel
+					createExcel(templetModel, path+"//targetFiles"+File.separator+"//"+Constant.DEFAULT_ETAX_TEMP_NAME);//FileUtil.CREATE_ETAX_PATH
+				}
 			}
+		} catch (Exception e) {
+			e.printStackTrace();
 		}
 	}
 	/**
@@ -90,6 +95,9 @@ public class EtaxFileUtils {
 		//排序
 		for(String year:years){
 			List<TaxFilesModel> monthDateList=mapTax.get(year);
+			if(monthDateList==null){
+				monthDateList=new ArrayList<TaxFilesModel>();
+			}
 			//按照月份从小到大排序
 			monthDateList.sort(new Comparator<TaxFilesModel>() {
 				@Override
@@ -115,8 +123,17 @@ public class EtaxFileUtils {
 			
 			/**处理当前年数据START**/
 			String maxYear=years.get(years.size()-1);//取最大年份
+			if(maxYear==null){
+				maxYear="";
+			}
 			List<TaxFilesModel> yearMonthDateList=mapTax.get(maxYear);//获取最大年份对应文件数据
+			if(yearMonthDateList==null){
+				yearMonthDateList=new ArrayList<TaxFilesModel>();
+			}
 			List<TaxFilesModel> currentSixMonthTaxs=getPreSixMonthData(maxYear, yearMonthDateList,null);
+			if(currentSixMonthTaxs==null){
+				currentSixMonthTaxs=new ArrayList<TaxFilesModel>();
+			}
 			for(TaxFilesModel t:currentSixMonthTaxs){
 				System.out.println("最大年份："+t.getStartYear()+"-----"+t.getStartMonth());
 			}
@@ -138,8 +155,14 @@ public class EtaxFileUtils {
 			//设置标题2
 			templetModel.setTitle2(lastYear+".1-12");
 			List<TaxFilesModel> lastMonthDateList=mapTax.get(lastYear);
+			if(lastMonthDateList==null){
+				lastMonthDateList=new ArrayList<TaxFilesModel>();
+			}
 			List<TaxFilesModel> lastYearSixMonthTaxs=getPreSixMonthData(lastYear, lastMonthDateList,
 					yearMonthDateList.get(yearMonthDateList.size()-1).getStartMonth());
+			if(lastYearSixMonthTaxs==null){
+				lastYearSixMonthTaxs=new ArrayList<TaxFilesModel>();
+			}
 			for(TaxFilesModel t:lastYearSixMonthTaxs){
 				System.out.println("上一年年份："+t.getStartYear()+"-----"+t.getStartMonth());
 			}
@@ -169,6 +192,9 @@ public class EtaxFileUtils {
 			//设置标题1
 			templetModel.setTitle1(lastTwoYear+".1-12");
 			List<TaxFilesModel> lastTwoMonthDateList=mapTax.get(lastTwoYear);
+			if(lastTwoMonthDateList==null){
+				lastTwoMonthDateList=new ArrayList<TaxFilesModel>();
+			}
 			//上两年最后一个月（必须是十二月）数据
 			for(TaxFilesModel t:lastTwoMonthDateList){
 				if("12".equals(t.getStartMonth())){
@@ -182,8 +208,10 @@ public class EtaxFileUtils {
 		
 		
 		//获取纳税人名称+title4-作为Excel名称
-		String excelName=templetModel.getCurrentSixMonthTaxs().get(templetModel.getCurrentSixMonthTaxs().size()-1).getCompanyName()+"("+templetModel.getTitle4()+")";
-		templetModel.setExcelName(excelName);
+		if(templetModel.getCurrentSixMonthTaxs()!=null&&templetModel.getCurrentSixMonthTaxs().size()>0){
+			String excelName=templetModel.getCurrentSixMonthTaxs().get(templetModel.getCurrentSixMonthTaxs().size()-1).getCompanyName()+"("+templetModel.getTitle4()+")";
+			templetModel.setExcelName(excelName);
+		}
 		return templetModel;
 	}
 	/**
@@ -264,16 +292,24 @@ public class EtaxFileUtils {
         	setExcelCellValue(workbook, 0, 9, 1, templetModel.getTitle4());
         	
         	//写入第一行数据-倒推两年
-        	writePart1YearData(workbook,6,templetModel.getLastTwoYearDecember());
+        	if(templetModel.getLastTwoYearDecember()!=null){
+        		writePart1YearData(workbook,6,templetModel.getLastTwoYearDecember());
+        	}
         	
         	//写入第二行数据-倒推一年
-        	writePart1YearData(workbook,7,templetModel.getLastOneYearDecember());
+        	if(templetModel.getLastOneYearDecember()!=null){
+        		writePart1YearData(workbook,7,templetModel.getLastOneYearDecember());
+        	}
         	
         	//写入第三行数据
-        	writePart1YearData(workbook,8,templetModel.getLastYearSixMonthTaxs().get(templetModel.getLastYearSixMonthTaxs().size()-1));
+        	if(templetModel.getLastYearSixMonthTaxs()!=null&&templetModel.getLastYearSixMonthTaxs().size()>0){
+        		writePart1YearData(workbook,8,templetModel.getLastYearSixMonthTaxs().get(templetModel.getLastYearSixMonthTaxs().size()-1));
+        	}
         	
         	//写入第四行数据
-        	writePart1YearData(workbook,9,templetModel.getCurrentSixMonthTaxs().get(templetModel.getCurrentSixMonthTaxs().size()-1));
+        	if(templetModel.getCurrentSixMonthTaxs()!=null&&templetModel.getCurrentSixMonthTaxs().size()>0){
+        		writePart1YearData(workbook,9,templetModel.getCurrentSixMonthTaxs().get(templetModel.getCurrentSixMonthTaxs().size()-1));
+        	}
         	
         	/**写入第一块数据 -年化销售额比较END **/
         	
@@ -367,10 +403,11 @@ public class EtaxFileUtils {
 	 * 
 	 * @time   2018年11月17日 上午11:07:01
 	 * @author zuoqb
+	 * @throws Exception 
 	 * @todo   处理指定目录下面文件，将文件解析为bean
 	 * @return_type   Map<String,Object>
 	 */
-	public static Map<String, Object> dealFiles(String sourceFilePath) {
+	public static Map<String, Object> dealFiles(String sourceFilePath) throws Exception {
 		Map<String, Object> result = new HashMap<String, Object>();
 		List<TaxFilesModel> taxFiles = new ArrayList<TaxFilesModel>();
 		File sourceFile = new File(sourceFilePath);
@@ -378,32 +415,28 @@ public class EtaxFileUtils {
 			result.put("success", false);
 			result.put("msg", "文件目录不存在");
 		} else {
-			File[] sourceFiles = sourceFile.listFiles();
-			if (null == sourceFiles || sourceFiles.length < 1) {
+			List<File> sourceFiles = FileUtil.getAllFileByPath(new ArrayList<File>(),sourceFilePath);
+			if (null == sourceFiles || sourceFiles.size() < 1) {
 				result.put("success", false);
 				result.put("msg", "文件目录下文件为空!");
 			} else {
-				try {
-					 for(File file:sourceFiles){
-						 if(ExcleUtils.validateExcel(file.getName())||FileUtil.isPdf(file.getName())){
-							 //只处理excel  pdf
-							 TaxFilesModel tax=fielToTaxFiles(file);
-							 if(tax.isApply()){
-								 //只处理主表
-								 taxFiles.add(tax);
-							 }
+				 for(File file:sourceFiles){
+					 if(file.isFile()&&ExcleUtils.validateExcel(file.getName())||FileUtil.isPdf(file.getName())){
+						 //只处理excel  pdf
+						 TaxFilesModel tax=fielToTaxFiles(file);
+						 if(tax.isApply()){
+							 //只处理主表
+							 taxFiles.add(tax);
 						 }
-	            	 }
-					 result.put("success", true);
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
+					 }
+            	 }
+				result.put("success", true);
 			}
 		}
 		result.put("taxFiles", taxFiles);
 		return result;
 	}
-	public static TaxFilesModel fielToTaxFiles(File file){
+	public static TaxFilesModel fielToTaxFiles(File file) throws Exception{
 		TaxFilesModel taxFiles=new TaxFilesModel();
 		//设置文件相关公用属性
 		setCommonPropertities(file, taxFiles);
@@ -419,37 +452,34 @@ public class EtaxFileUtils {
 	 * 
 	 * @time   2018年11月16日 下午5:50:10
 	 * @author zuoqb
+	 * @throws Exception 
 	 * @todo   处理excel文件读取需要内容
 	 * @return_type   TaxFiles
 	 */
-	public static TaxFilesModel excelFileToTaxFiles(File file,TaxFilesModel taxFiles){
+	public static TaxFilesModel excelFileToTaxFiles(File file,TaxFilesModel taxFiles) throws Exception{
 		if(file!=null&&!file.exists()){
 			return taxFiles;
 		}
 		InputStream is = null;
-		try {
-			// 根据新建的文件实例化输入流
-			is = new FileInputStream(file);
-			// 根据版本选择创建Workbook的方式
-			Workbook wb = WorkbookFactory.create(is);
-			/*// 根据文件名判断文件是2003版本还是2007版本
-			if (taxFiles.isExcel2007()) {
+		// 根据新建的文件实例化输入流
+		is = new FileInputStream(file);
+		// 根据版本选择创建Workbook的方式
+		Workbook wb = WorkbookFactory.create(is);
+		/*// 根据文件名判断文件是2003版本还是2007版本
+		if (taxFiles.isExcel2007()) {
+			wb = new XSSFWorkbook(is);
+		} else {
+			try {
+				wb = new HSSFWorkbook(is);
+			} catch (Exception e) {
+			}finally{
+				//他们文件生成的有问题，明明是xls但是结构却是xlsx  万马奔腾.....
+				is = new FileInputStream(file);
 				wb = new XSSFWorkbook(is);
-			} else {
-				try {
-					wb = new HSSFWorkbook(is);
-				} catch (Exception e) {
-				}finally{
-					//他们文件生成的有问题，明明是xls但是结构却是xlsx  万马奔腾.....
-					is = new FileInputStream(file);
-					wb = new XSSFWorkbook(is);
-				}
-			}*/
-			getExcelProperties2Bean(taxFiles, wb);
-			is.close();
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
+			}
+		}*/
+		getExcelProperties2Bean(taxFiles, wb);
+		is.close();
 		return taxFiles;
 	}
 	
@@ -531,6 +561,13 @@ public class EtaxFileUtils {
 			if(zzs.indexOf("增值税纳税申报表")!=-1&&zzs.indexOf("附列资料")==-1){
 				System.out.println(taxFiles.getName()+"-----------增值税纳税申报表");
 				addedGeneralTaxpayer(taxFiles, wb);
+			}else{
+				//加密的
+				String sec=readExcelValueByPosition(4, 4, wb, 0);
+				if(sec.indexOf("增值税纳税申报表")!=-1&&sec.indexOf("附列资料")==-1){
+					System.out.println(taxFiles.getName()+"-----------加密版增值税纳税申报表");
+					addedSecGeneralTaxpayer(taxFiles, wb);
+				}
 			}
 		}
 	}
@@ -610,6 +647,84 @@ public class EtaxFileUtils {
 		 * 进项税-进项税额
 		 */
 		String jinxiangshuiYear=readExcelValueByPosition(24, 4, wb, 0);//进项税年累-进项税额
+		taxFiles.setJinxiangshuiYear(jinxiangshuiYear);
+	}
+	/**
+	 * @time   2018年11月16日 下午8:08:21
+	 * @author zuoqb
+	 * @todo   适用于增值税一般纳税人-加密版-比如成都
+	 * @return_type   void
+	 */
+	public static void addedSecGeneralTaxpayer(TaxFilesModel taxFiles, Workbook wb) {
+		taxFiles.setApply(true);//业务主表
+		//处理日期
+		String startDate=readExcelValueByPosition(7, 7, wb, 0);
+		startDate=startDate.replaceAll("税款所属时间：", "").replaceAll("税款所属期间:", "").replaceAll("年", "").replaceAll("月", "").replaceAll("日", "").split("至")[0].replaceAll(" ", "");
+		if(StringUtils.isNotBlank(startDate)){
+			taxFiles.setStartDate(startDate);
+			taxFiles.setStartYear(startDate.substring(0,4));
+			taxFiles.setStartMonth(Integer.valueOf(startDate.substring(4,6))+"");
+		}
+		//公司名称
+		String companyName=readExcelValueByPosition(9, 7, wb, 0);
+		companyName=companyName.replaceAll("纳税人名称：", "");
+		taxFiles.setCompanyName(companyName);
+		
+		/**
+		 * 解析excel 数据字段
+		 */
+		/**
+		 * 销售额-（一）按适用税率计税销售额
+		 */
+		String xiaoshoueYear=readExcelValueByPosition(13, 14, wb, 0);//销售额年累-（一）按适用税率计税销售额
+		taxFiles.setXiaoshoueYear(xiaoshoueYear);
+		String xiaoshoueMonth=readExcelValueByPosition(13, 13, wb, 0);//销售额月累-（一）按适用税率计税销售额
+		taxFiles.setXiaoshoueMonth(xiaoshoueMonth);
+		/**
+		 * 税额-销项税额
+		 */
+		String shuieYear=readExcelValueByPosition(23, 14, wb, 0);//税额年累-销项税额
+		taxFiles.setShuieYear(shuieYear);
+		String shuieMonth=readExcelValueByPosition(23, 13, wb, 0);//税额月累-销项税额
+		taxFiles.setShuieMonth(shuieMonth);
+		
+		/**
+		 * 第三项-（三）免、抵、退办法出口销售额
+		 */
+		String disanxiangYear=readExcelValueByPosition(19, 14, wb, 0);//第三项年累-（三）免、抵、退办法出口销售额
+		taxFiles.setDisanxiangYear(disanxiangYear);
+		String disanxiangMonth=readExcelValueByPosition(19, 13, wb, 0);//第三项月累-（三）免、抵、退办法出口销售额
+		taxFiles.setDisanxiangMonth(disanxiangMonth);
+		
+		/**
+		 * 第四项-（四）免税销售额
+		 */
+		String disixiangYear=readExcelValueByPosition(20, 14, wb, 0);//第四项年累-（四）免税销售额
+		taxFiles.setDisixiangYear(disixiangYear);
+		String disixiangMonth=readExcelValueByPosition(20, 13, wb, 0);//第四项月累-（四）免税销售额
+		taxFiles.setDisixiangMonth(disixiangMonth);
+		
+		
+		/**
+		 * 简易征收-（二）按简易办法计税销售额
+		 */
+		String jyzsYear=readExcelValueByPosition(17, 14, wb, 0);//简易征收年累-（二）按简易办法计税销售额
+		taxFiles.setJyzsYear(jyzsYear);
+		String jyzsMonth=readExcelValueByPosition(17, 13, wb, 0);//简易征收月累-（二）按简易办法计税销售额
+		taxFiles.setJyzsMonth(jyzsMonth);
+		
+		/**
+		 * 简易税-简易计税办法计算的应纳税额
+		 */
+		String jysYear=readExcelValueByPosition(34, 14, wb, 0);//简易税年累-简易计税办法计算的应纳税额
+		taxFiles.setJysYear(jysYear);
+		String jysMonth=readExcelValueByPosition(34,13, wb, 0);//简易税月累-简易计税办法计算的应纳税额
+		taxFiles.setJysMonth(jysMonth);
+		
+		/**
+		 * 进项税-进项税额
+		 */
+		String jinxiangshuiYear=readExcelValueByPosition(24, 14, wb, 0);//进项税年累-进项税额
 		taxFiles.setJinxiangshuiYear(jinxiangshuiYear);
 	}
 	/**

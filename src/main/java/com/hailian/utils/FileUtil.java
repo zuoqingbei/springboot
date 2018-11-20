@@ -221,6 +221,22 @@ public class FileUtil {
         return flag;
     }
 
+    public static List<File> getAllFileByPath(List<File> listFile,String path) {
+        File file = new File(path);
+        File[] tempList = file.listFiles();
+        for (File f : tempList) {
+            if (f.isFile()) {
+            	listFile.add(f);
+                System.out.println(f.getPath());
+                continue;
+            }
+            if (f.isDirectory()) {
+            	getAllFileByPath(listFile,f.getPath());
+            }
+        }
+        return listFile;
+
+    }
     public static void getFile(String path) {
         File file = new File(path);
         File[] tempList = file.listFiles();
@@ -1240,7 +1256,13 @@ public class FileUtil {
 		if (isCompress(file.getName())) {
 			try {
 				//解压文件
-				UnCompressFile.unzip(file.getPath(), targetPath+File.separator+getFileName(file.getName()));
+				String postFix = getFileExt(file.getName());
+				if("zip".equals(postFix.toLowerCase())){
+					UnCompressFile.unzip(file.getPath(), targetPath+File.separator+getFileName(file.getName()));
+				}else if("rar".equals(postFix.toLowerCase())){
+					UnCompressFile.unrar(file.getPath(), targetPath+File.separator+getFileName(file.getName()));
+				}
+				
 			} catch (Exception e) {
 				e.printStackTrace();
 			}

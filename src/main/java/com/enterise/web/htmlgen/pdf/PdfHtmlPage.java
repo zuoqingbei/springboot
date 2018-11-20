@@ -1,4 +1,3 @@
-package com.enterise.web.htmlgen.pdf;
 /*package com.enterise.web.htmlgen.pdf;
 
 import java.awt.image.BufferedImage;
@@ -11,9 +10,9 @@ import javax.imageio.ImageIO;
 import org.apache.pdfbox.pdmodel.graphics.xobject.PDXObjectImage;
 import org.dom4j.Element;
 
+import com.enterise.gis.image.ImageScale;
 import com.enterise.web.htmlgen.HtmlPage;
-import com.haier.datamart.config.Constant;
-import com.haier.datamart.utils.FileUtil;
+import com.hailian.utils.FileUtil;
 
 public class PdfHtmlPage extends HtmlPage {
 
@@ -25,7 +24,7 @@ public class PdfHtmlPage extends HtmlPage {
 		Random r = new Random();
 		String pictureId = String.valueOf(Math.abs(r.nextInt()));
 		String name=getDocumentId() + "_" + pictureId + "." + fileExtensionName;
-		String fileName =FileUtil.CREATE_IMAGE_PATH+name;
+		String fileName =FileUtil.FILE_UPLOAD_IMAGE_PATH+name;
 		
 		try {
 			BufferedImage srcImage = image.getRGBImage();

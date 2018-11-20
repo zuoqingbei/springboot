@@ -269,11 +269,15 @@
                         title: "原文件类型",
                         field: "orgCompressType"
                     },{
-                        title: "生成Excel目录",
-                        field: "targetPath"
-                    },{
                         title: "生成Excel名称",
                         field: "targetFileName"
+                    },{
+                        title: "生成时间",
+                        field: "createDate",
+                        formatter: function (value, row, index) {
+                        	var createDate =formatDate(new Date(value));
+                            return createDate;
+                        }
                     },{
                         title: "操作",
                         field: "empty",
@@ -288,10 +292,21 @@
 
             function detailFormatter(index, row) {
                 var html = [];
-                html.push('<p><b>描述:</b> ' + row.description + '</p>');
+                html.push('<p>压缩文件路径:</b>' + row.orgCompressPath + '</p>');
+                html.push('<p>Excel文件路径:</b>' + row.targetPath + '</p>');
+                html.push('<p>Excel名称:</b>' + row.targetFileName + '</p>');
+                html.push('<p><a target="_blank" href="${ctx}/api/v1/docUploadFile/viewFile?id='+row.fileId+' ">文件预览地址:</b>${ctx}/api/v1/docUploadFile/viewFile?id= ' + row.fileId + '</a>');
                 return html.join('');
             }
-
+			function formatDate(now) { 
+			     var year=now.getFullYear(); 
+			     var month=now.getMonth()+1; 
+			     var date=now.getDate(); 
+			     var hour=now.getHours(); 
+			     var minute=now.getMinutes(); 
+			     var second=now.getSeconds(); 
+			     return year+"-"+month+"-"+date+" "+hour+":"+minute+":"+second; 
+			} 
             function getQueryParams(params){
                 var params={
                     "pageNumber":params.pageNumber,
@@ -305,7 +320,7 @@
                 $('#etaxListTable').bootstrapTable("refresh");
             }
             function view(id){
-                layer.open({
+                /**layer.open({
                     type: 2,
                     title: '文件预览',
                     shadeClose: true,
@@ -315,7 +330,8 @@
                     end: function(index){
                         $('#etaxListTable').bootstrapTable("refresh");
                     }
-                });
+                });**/
+                window.open( '${ctx}/api/v1/docUploadFile/viewFile?id='  + id);
             }
              function add(){
                 layer.open({

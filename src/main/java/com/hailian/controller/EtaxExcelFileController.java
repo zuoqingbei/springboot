@@ -150,6 +150,7 @@ public class EtaxExcelFileController extends BaseController {
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
+			return new PublicResult<>(PublicResultConstant.ERROR, e.getMessage());
 		}
     	
 		return new PublicResult<>(PublicResultConstant.ERROR, null);
