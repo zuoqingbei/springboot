@@ -46,6 +46,45 @@ public class TaxFilesModel {
 	private String jysMonth;//简易税月累
 
 	private String jinxiangshuiYear;//进项税年累
+	
+	
+	
+	private String jzjtxseYear;// 即征即退销售额年累
+	private String jzjtxseMonth;// 即征即退销售额月累
+	private String jzjtseYear;// 即征即退税额年累
+	private String jzjtseMonth;// 即征即退税额月累
+	
+	public String getJzjtxseYear() {
+		return jzjtxseYear;
+	}
+
+	public void setJzjtxseYear(String jzjtxseYear) {
+		this.jzjtxseYear = jzjtxseYear;
+	}
+
+	public String getJzjtxseMonth() {
+		return jzjtxseMonth;
+	}
+
+	public void setJzjtxseMonth(String jzjtxseMonth) {
+		this.jzjtxseMonth = jzjtxseMonth;
+	}
+
+	public String getJzjtseYear() {
+		return jzjtseYear;
+	}
+
+	public void setJzjtseYear(String jzjtseYear) {
+		this.jzjtseYear = jzjtseYear;
+	}
+
+	public String getJzjtseMonth() {
+		return jzjtseMonth;
+	}
+
+	public void setJzjtseMonth(String jzjtseMonth) {
+		this.jzjtseMonth = jzjtseMonth;
+	}
 
 	public boolean isPdf() {
 		return isPdf;
