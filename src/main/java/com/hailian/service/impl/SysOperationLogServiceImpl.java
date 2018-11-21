@@ -24,6 +24,7 @@ import java.util.Date;
 import java.util.List;
 
 import org.apache.commons.lang3.StringUtils;
+import org.apache.ibatis.session.RowBounds;
 /**
  * @date 2018-10-09
  * @author zuoqb123
@@ -89,8 +90,9 @@ public class SysOperationLogServiceImpl extends BaseServiceImpl<SysOperationLogM
 	public PageInfo<SysOperationLog> pageList(BaseController c, HttpServletRequest request, SysOperationLog entity,Integer pageNum,Integer pageSize) {
 		PageHelper.startPage(pageNum, pageSize);
 		EntityWrapper<SysOperationLog> wrapper = searchWrapper(c,request, entity);
-		List<SysOperationLog> list = sysOperationLogMapper.selectList(wrapper);
+		List<SysOperationLog> list = sysOperationLogMapper.selectPage(new RowBounds((pageNum-1)*pageSize, pageSize),wrapper);
 		PageInfo<SysOperationLog> page = new PageInfo<SysOperationLog>(list);
+		page.setTotal(sysOperationLogMapper.selectCount(wrapper));
 		return page;
 	}
 	

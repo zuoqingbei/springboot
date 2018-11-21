@@ -22,8 +22,8 @@ public class PDFtoTXT {
     public static WritableSheet ws;
     public static void main(String[] args) {
         //将当前目录下的pdf文件转成txt文件
-    	String path="C:/Users/Administrator/Desktop/lianxin/upload/testpdf/";
-    	String name="报税09";
+    	String path="C:/Users/Administrator/Desktop/lianxin/报税模板/pdf有问题的/大连/";
+    	String name="YBNSRZZS 5月";
         File f = new File(path+name+".pdf"); //获得当前路径
         PDFtoTXT(path,f);
         File txt = new File(path+name+".txt"); //获得当前路径

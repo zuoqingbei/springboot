@@ -13,6 +13,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.lang3.StringUtils;
+import org.apache.ibatis.session.RowBounds;
 import org.apache.poi.xssf.usermodel.XSSFCell;
 import org.apache.poi.xssf.usermodel.XSSFRow;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
@@ -112,8 +113,9 @@ public class CommonInterfaceExcelTableServiceImpl extends BaseServiceImpl<Common
 	public PageInfo<CommonInterfaceExcelTable> pageList(BaseController c, HttpServletRequest request, CommonInterfaceExcelTable entity,Integer pageNum,Integer pageSize) {
 		PageHelper.startPage(pageNum, pageSize);
 		EntityWrapper<CommonInterfaceExcelTable> wrapper = searchWrapper(c,request, entity);
-		List<CommonInterfaceExcelTable> list = commonInterfaceExcelTableMapper.selectList(wrapper);
+		List<CommonInterfaceExcelTable> list = commonInterfaceExcelTableMapper.selectPage(new RowBounds((pageNum-1)*pageSize, pageSize),wrapper);
 		PageInfo<CommonInterfaceExcelTable> page = new PageInfo<CommonInterfaceExcelTable>(list);
+		page.setTotal(commonInterfaceExcelTableMapper.selectCount(wrapper));
 		return page;
 	}
 	

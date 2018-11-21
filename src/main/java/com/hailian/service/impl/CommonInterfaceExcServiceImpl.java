@@ -15,6 +15,7 @@ import java.util.regex.Pattern;
 import javax.servlet.http.HttpServletRequest;
 
 import org.apache.commons.lang3.StringUtils;
+import org.apache.ibatis.session.RowBounds;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Service;
@@ -111,8 +112,9 @@ public class CommonInterfaceExcServiceImpl extends BaseServiceImpl<CommonInterfa
 	public PageInfo<CommonInterfaceExc> pageList(BaseController c, HttpServletRequest request, CommonInterfaceExc entity,Integer pageNum,Integer pageSize) {
 		PageHelper.startPage(pageNum, pageSize);
 		EntityWrapper<CommonInterfaceExc> wrapper = searchWrapper(c,request, entity);
-		List<CommonInterfaceExc> list = commonInterfaceExcMapper.selectList(wrapper);
+		List<CommonInterfaceExc> list = commonInterfaceExcMapper.selectPage(new RowBounds((pageNum-1)*pageSize, pageSize),wrapper);
 		PageInfo<CommonInterfaceExc> page = new PageInfo<CommonInterfaceExc>(list);
+		page.setTotal(commonInterfaceExcMapper.selectCount(wrapper));
 		return page;
 	}
 	 /**

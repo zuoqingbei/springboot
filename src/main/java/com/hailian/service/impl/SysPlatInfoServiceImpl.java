@@ -6,6 +6,7 @@ import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 
 import org.apache.commons.lang3.StringUtils;
+import org.apache.ibatis.session.RowBounds;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -85,8 +86,9 @@ public class SysPlatInfoServiceImpl extends BaseServiceImpl<SysPlatInfoMapper, S
 	public PageInfo<SysPlatInfo> pageList(BaseController c, HttpServletRequest request, SysPlatInfo entity,Integer pageNum,Integer pageSize) {
 		PageHelper.startPage(pageNum, pageSize);
 		EntityWrapper<SysPlatInfo> wrapper = searchWrapper(c,request, entity);
-		List<SysPlatInfo> list = sysPlatInfoMapper.selectList(wrapper);
+		List<SysPlatInfo> list = sysPlatInfoMapper.selectPage(new RowBounds((pageNum-1)*pageSize, pageSize),wrapper);
 		PageInfo<SysPlatInfo> page = new PageInfo<SysPlatInfo>(list);
+		page.setTotal(sysPlatInfoMapper.selectCount(wrapper));
 		return page;
 	}
 	

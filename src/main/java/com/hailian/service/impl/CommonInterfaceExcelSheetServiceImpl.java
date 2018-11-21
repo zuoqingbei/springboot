@@ -6,6 +6,7 @@ import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 
 import org.apache.commons.lang3.StringUtils;
+import org.apache.ibatis.session.RowBounds;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -94,8 +95,9 @@ public class CommonInterfaceExcelSheetServiceImpl extends BaseServiceImpl<Common
 	public PageInfo<CommonInterfaceExcelSheet> pageList(BaseController c, HttpServletRequest request, CommonInterfaceExcelSheet entity,Integer pageNum,Integer pageSize) {
 		PageHelper.startPage(pageNum, pageSize);
 		EntityWrapper<CommonInterfaceExcelSheet> wrapper = searchWrapper(c,request, entity);
-		List<CommonInterfaceExcelSheet> list = commonInterfaceExcelSheetMapper.selectList(wrapper);
+		List<CommonInterfaceExcelSheet> list = commonInterfaceExcelSheetMapper.selectPage(new RowBounds((pageNum-1)*pageSize, pageSize),wrapper);
 		PageInfo<CommonInterfaceExcelSheet> page = new PageInfo<CommonInterfaceExcelSheet>(list);
+		page.setTotal(commonInterfaceExcelSheetMapper.selectCount(wrapper));
 		return page;
 	}
 	

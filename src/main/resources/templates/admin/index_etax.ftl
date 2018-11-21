@@ -309,7 +309,7 @@
 			} 
             function getQueryParams(params){
                 var params={
-                    "pageNumber":params.pageNumber,
+                    "pageNum":params.pageNumber,
                     "pageSize":params.pageSize,
                     "targetFileName":$("#targetFileName").val()
                 }

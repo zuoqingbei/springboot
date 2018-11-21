@@ -23,6 +23,7 @@ import org.springframework.core.io.ClassPathResource;
 import com.hailian.conf.Constant;
 import com.hailian.utils.ExcleUtils;
 import com.hailian.utils.FileUtil;
+import com.hailian.utils.ReadMergeRegionExcel;
 
 public class EtaxFileUtils {
 	public static boolean isDev=false;
@@ -61,7 +62,7 @@ public class EtaxFileUtils {
 		List<String> years=new ArrayList<String>();
 		//处理全部年月
 		for(TaxFilesModel tax:orgTaxs){
-			if(!years.contains(tax.getStartYear())){
+			if(tax.getStartYear()!=null&&!years.contains(tax.getStartYear())){
 				years.add(tax.getStartYear());
 			}
 		}
@@ -89,6 +90,9 @@ public class EtaxFileUtils {
 		//按照年放入月份
 		for(TaxFilesModel tax:orgTaxs){
 			List<TaxFilesModel> monthDateList=mapTax.get(tax.getStartYear());
+			if(monthDateList==null){
+				monthDateList=new ArrayList<TaxFilesModel>();
+			}
 			monthDateList.add(tax);
 			mapTax.put(tax.getStartYear(), monthDateList);
 		}
@@ -211,6 +215,8 @@ public class EtaxFileUtils {
 		if(templetModel.getCurrentSixMonthTaxs()!=null&&templetModel.getCurrentSixMonthTaxs().size()>0){
 			String excelName=templetModel.getCurrentSixMonthTaxs().get(templetModel.getCurrentSixMonthTaxs().size()-1).getCompanyName()+"("+templetModel.getTitle4()+")";
 			templetModel.setExcelName(excelName);
+		}else{
+			templetModel.setExcelName(orgTaxs.get(0).getCompanyName());
 		}
 		return templetModel;
 	}
@@ -445,6 +451,7 @@ public class EtaxFileUtils {
 			excelFileToTaxFiles(file,taxFiles);
 		}else{
 			//处理pdf
+			PDFToEtax.pdfFileToTaxFiles(file, taxFiles);
 		}
 		return taxFiles;
 	}
@@ -509,7 +516,7 @@ public class EtaxFileUtils {
 				}
 			}
 		}
-		return cellValue.trim();
+		return StringUtils.deleteWhitespace(cellValue.trim());
 	}
 	/**
 	 * 
@@ -548,10 +555,10 @@ public class EtaxFileUtils {
 		/**
 		 * 解析excel通用属性
 		 */
-		String fujian=readExcelValueByPosition(0, 0, wb, 0);
-		String title=readExcelValueByPosition(1, 15, wb, 0);
+		String fujian=StringUtils.deleteWhitespace(readExcelValueByPosition(0, 0, wb, 0));
+		String title=StringUtils.deleteWhitespace(readExcelValueByPosition(1, 15, wb, 0));
 		if(fujian.indexOf("附件1")!=-1&&title.indexOf("一般纳税人适用")!=-1
-				&&fujian.indexOf("增 值 税 纳 税 申 报 表")!=-1){
+				&&fujian.indexOf("增值税纳税申报表")!=-1){
 			//一般纳税人适用
 			System.out.println(taxFiles.getName()+"-------一般纳税人适用");
 			generalTaxpayer(taxFiles, wb);
@@ -589,7 +596,7 @@ public class EtaxFileUtils {
 		}
 		//公司名称
 		String companyName=readExcelValueByPosition(9, 0, wb, 0);
-		companyName=companyName.replaceAll("纳税人名称：", "");
+		companyName=companyName.replaceAll("纳税人名称：", "").replaceAll("（公章）：", "").replaceAll("（公章）", "");;
 		taxFiles.setCompanyName(companyName);
 		
 		/**
@@ -667,7 +674,7 @@ public class EtaxFileUtils {
 		}
 		//公司名称
 		String companyName=readExcelValueByPosition(9, 7, wb, 0);
-		companyName=companyName.replaceAll("纳税人名称：", "");
+		companyName=companyName.replaceAll("纳税人名称：", "").replaceAll("（公章）：", "").replaceAll("（公章）", "");;
 		taxFiles.setCompanyName(companyName);
 		
 		/**
@@ -744,7 +751,7 @@ public class EtaxFileUtils {
 			taxFiles.setStartMonth(Integer.parseInt(startDate.substring(4,6))+"");
 		}
 		//公司名称
-		String companyName=readExcelValueByPosition(5, 4, wb, 0);
+		String companyName=readExcelValueByPosition(5, 4, wb, 0).replaceAll("（公章）：", "").replaceAll("（公章）", "");
 		taxFiles.setCompanyName(companyName);
 		
 		/**

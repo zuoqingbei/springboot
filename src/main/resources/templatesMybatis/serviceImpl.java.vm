@@ -16,6 +16,7 @@ import com.github.pagehelper.PageInfo;
 import com.hailian.base.BaseController;
 import java.util.Date;
 import java.util.List;
+import org.apache.ibatis.session.RowBounds;
 import org.apache.commons.lang3.StringUtils;
 /**
  * @date ${date}
@@ -82,8 +83,11 @@ public class ${table.serviceImplName} extends ${superServiceImplClass}<${table.m
 	public PageInfo<${entity}> pageList(BaseController c, HttpServletRequest request, ${entity} entity,Integer pageNum,Integer pageSize) {
 		PageHelper.startPage(pageNum, pageSize);
 		EntityWrapper<${entity}> wrapper = searchWrapper(c,request, entity);
-		List<${entity}> list = ${table.entityPath}Mapper.selectList(wrapper);
-		PageInfo<${entity}> page = new PageInfo<${entity}>(list);
+		List<${entity}> list = ${table.entityPath}Mapper.selectPage(new RowBounds((pageNum-1)*pageSize, pageSize),wrapper);
+		PageInfo<${entity}> page = new PageInfo<${entity}>();
+		page.setList(list);
+		page.setTotal(${table.entityPath}Mapper.selectCount(wrapper));
+		
 		return page;
 	}
 	

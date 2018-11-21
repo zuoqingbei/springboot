@@ -6,6 +6,7 @@ import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 
 import org.apache.commons.lang3.StringUtils;
+import org.apache.ibatis.session.RowBounds;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -85,8 +86,10 @@ public class EtaxExcelFileServiceImpl extends BaseServiceImpl<EtaxExcelFileMappe
 	public PageInfo<EtaxExcelFile> pageList(BaseController c, HttpServletRequest request, EtaxExcelFile entity,Integer pageNum,Integer pageSize) {
 		PageHelper.startPage(pageNum, pageSize);
 		EntityWrapper<EtaxExcelFile> wrapper = searchWrapper(c,request, entity);
-		List<EtaxExcelFile> list = etaxExcelFileMapper.selectList(wrapper);
-		PageInfo<EtaxExcelFile> page = new PageInfo<EtaxExcelFile>(list);
+		List<EtaxExcelFile> list=etaxExcelFileMapper.selectPage(new RowBounds((pageNum-1)*pageSize, pageSize), wrapper);
+		PageInfo<EtaxExcelFile> page = new PageInfo<EtaxExcelFile>();
+		page.setList(list);
+		page.setTotal(etaxExcelFileMapper.selectCount(wrapper));
 		return page;
 	}
 	
