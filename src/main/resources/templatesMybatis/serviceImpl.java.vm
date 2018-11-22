@@ -101,7 +101,7 @@ public class ${table.serviceImplName} extends ${superServiceImplClass}<${table.m
 		wrapper.where("del_flag={0}", UN_DEL_FLAG);
 		if(c!=null&&request!=null&&c.getLoginUser(request)!=null&&StringUtils.isNotBlank(c.getLoginUser(request).getId())){
 			if(!c.isAdmin(request))
-			 wrapper.and("create_by", c.getLoginUser(request).getId());
+			 wrapper.eq("create_by", c.getLoginUser(request).getId());
 		}
 		#foreach($field in ${table.fields})
 		#if(${field.propertyType.equals("boolean")})

@@ -204,24 +204,24 @@ public class PDFToEtax {
 		/**
 		 * 即征即退销售额  
 		 */
-		float jzjtxseYear0=Float.parseFloat(readPdfValueByPosition(content, Arrays.asList("（一）按适用税率计税销售额","（一）按适用税率征税销售额"), 4));
-		float jzjtxseYear1=Float.parseFloat(readPdfValueByPosition(content, Arrays.asList("（二）按简易办法计税销售额", "（二）按简易征收办法征税销售额"), 4));
+		double jzjtxseYear0=Double.parseDouble(readPdfValueByPosition(content, Arrays.asList("（一）按适用税率计税销售额","（一）按适用税率征税销售额"), 4));
+		double jzjtxseYear1=Double.parseDouble(readPdfValueByPosition(content, Arrays.asList("（二）按简易办法计税销售额", "（二）按简易征收办法征税销售额"), 4));
 		String jzjtxseYear=(jzjtxseYear0+jzjtxseYear1)+"";
 		taxFiles.setJzjtxseYear(jzjtxseYear);
-		float jzjtxseMonth0=Float.parseFloat(readPdfValueByPosition(content, Arrays.asList("（一）按适用税率计税销售额","（一）按适用税率征税销售额"), 3));
-		float jzjtxseMonth1=Float.parseFloat(readPdfValueByPosition(content, Arrays.asList("（二）按简易办法计税销售额", "（二）按简易征收办法征税销售额"), 3));
+		double jzjtxseMonth0=Double.parseDouble(readPdfValueByPosition(content, Arrays.asList("（一）按适用税率计税销售额","（一）按适用税率征税销售额"), 3));
+		double jzjtxseMonth1=Double.parseDouble(readPdfValueByPosition(content, Arrays.asList("（二）按简易办法计税销售额", "（二）按简易征收办法征税销售额"), 3));
 		String jzjtxseMonth=(jzjtxseMonth0+jzjtxseMonth1)+"";
 		taxFiles.setJzjtxseMonth(jzjtxseMonth);
 		
 		/**
 		 * 即征即退税额  
 		 */
-		float jzjtseYear0=Float.parseFloat(readPdfValueByPosition(content, Arrays.asList("销项税额"), 4));
-		float jzjtseYear1=Float.parseFloat(readPdfValueByPosition(content, Arrays.asList("简易计税办法计算的应纳税额"), 4));
+		double jzjtseYear0=Double.parseDouble(readPdfValueByPosition(content, Arrays.asList("销项税额"), 4));
+		double jzjtseYear1=Double.parseDouble(readPdfValueByPosition(content, Arrays.asList("简易计税办法计算的应纳税额"), 4));
 		String jzjtseYear=(jzjtseYear0+jzjtseYear1)+"";
 		taxFiles.setJzjtseYear(jzjtseYear);
-		float jzjtseMonth0=Float.parseFloat(readPdfValueByPosition(content, Arrays.asList("销项税额"), 3));
-		float jzjtseMonth1=Float.parseFloat(readPdfValueByPosition(content, Arrays.asList("简易计税办法计算的应纳税额"), 3));
+		double jzjtseMonth0=Double.parseDouble(readPdfValueByPosition(content, Arrays.asList("销项税额"), 3));
+		double jzjtseMonth1=Double.parseDouble(readPdfValueByPosition(content, Arrays.asList("简易计税办法计算的应纳税额"), 3));
 		String jzjtseMonth=(jzjtseMonth0+jzjtseMonth1)+"";
 		taxFiles.setJzjtseMonth(jzjtseMonth);
 		
@@ -229,8 +229,8 @@ public class PDFToEtax {
 		/**
 		 * 进项税-进项税额
 		 */
-		float jinxiangshuiYear0=Float.parseFloat(readPdfValueByPosition(content, Arrays.asList("进项税额"), 2));
-		float jinxiangshuiYear1=Float.parseFloat(readPdfValueByPosition(content, Arrays.asList("进项税额"), 4));
+		double jinxiangshuiYear0=Double.parseDouble(readPdfValueByPosition(content, Arrays.asList("进项税额"), 2));
+		double jinxiangshuiYear1=Double.parseDouble(readPdfValueByPosition(content, Arrays.asList("进项税额"), 4));
 		String jinxiangshuiYear=(jinxiangshuiYear0+jinxiangshuiYear1)+"";//进项税年累-进项税额
 		taxFiles.setJinxiangshuiYear(jinxiangshuiYear);
 	}

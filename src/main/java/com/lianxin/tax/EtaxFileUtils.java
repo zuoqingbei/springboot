@@ -671,24 +671,24 @@ public class EtaxFileUtils {
 		/**
 		 * 即征即退销售额  
 		 */
-		float jzjtxseYear0=Float.parseFloat(readExcelValueByPosition(13, 6, wb, 0));
-		float jzjtxseYear1=Float.parseFloat(readExcelValueByPosition(17, 6, wb, 0));
+		double jzjtxseYear0=Double.parseDouble(readExcelValueByPosition(13, 6, wb, 0));
+		double jzjtxseYear1=Double.parseDouble(readExcelValueByPosition(17, 6, wb, 0));
 		String jzjtxseYear=(jzjtxseYear0+jzjtxseYear1)+"";
 		taxFiles.setJzjtxseYear(jzjtxseYear);
-		float jzjtxseMonth0=Float.parseFloat(readExcelValueByPosition(13, 5, wb, 0));
-		float jzjtxseMonth1=Float.parseFloat(readExcelValueByPosition(17, 5, wb, 0));
+		double jzjtxseMonth0=Double.parseDouble(readExcelValueByPosition(13, 5, wb, 0));
+		double jzjtxseMonth1=Double.parseDouble(readExcelValueByPosition(17, 5, wb, 0));
 		String jzjtxseMonth=(jzjtxseMonth0+jzjtxseMonth1)+"";
 		taxFiles.setJzjtxseMonth(jzjtxseMonth);
 		
 		/**
 		 * 即征即退税额  
 		 */
-		float jzjtseYear0=Float.parseFloat(readExcelValueByPosition(23, 6, wb, 0));
-		float jzjtseYear1=Float.parseFloat(readExcelValueByPosition(33, 6, wb, 0));
+		double jzjtseYear0=Double.parseDouble(readExcelValueByPosition(23, 6, wb, 0));
+		double jzjtseYear1=Double.parseDouble(readExcelValueByPosition(33, 6, wb, 0));
 		String jzjtseYear=(jzjtseYear0+jzjtseYear1)+"";
 		taxFiles.setJzjtseYear(jzjtseYear);
-		float jzjtseMonth0=Float.parseFloat(readExcelValueByPosition(23, 5, wb, 0));
-		float jzjtseMonth1=Float.parseFloat(readExcelValueByPosition(33, 5, wb, 0));
+		double jzjtseMonth0=Double.parseDouble(readExcelValueByPosition(23, 5, wb, 0));
+		double jzjtseMonth1=Double.parseDouble(readExcelValueByPosition(33, 5, wb, 0));
 		String jzjtseMonth=(jzjtseMonth0+jzjtseMonth1)+"";
 		taxFiles.setJzjtseMonth(jzjtseMonth);
 		
@@ -696,8 +696,8 @@ public class EtaxFileUtils {
 		/**
 		 * 进项税-进项税额
 		 */
-		float jinxiangshuiYear0=Float.parseFloat(readExcelValueByPosition(24, 4, wb, 0));
-		float jinxiangshuiYear1=Float.parseFloat(readExcelValueByPosition(24, 6, wb, 0));
+		double jinxiangshuiYear0=Double.parseDouble(readExcelValueByPosition(24, 4, wb, 0));
+		double jinxiangshuiYear1=Double.parseDouble(readExcelValueByPosition(24, 6, wb, 0));
 		String jinxiangshuiYear=(jinxiangshuiYear0+jinxiangshuiYear1)+"";//进项税年累-进项税额
 		taxFiles.setJinxiangshuiYear(jinxiangshuiYear);
 	}
@@ -777,24 +777,24 @@ public class EtaxFileUtils {
 		/**
 		 * 即征即退销售额  
 		 */
-		float jzjtxseYear0=Float.parseFloat(readExcelValueByPosition(13, 16, wb, 0));
-		float jzjtxseYear1=Float.parseFloat(readExcelValueByPosition(17, 16, wb, 0));
+		double jzjtxseYear0=Double.parseDouble(readExcelValueByPosition(13, 18, wb, 0));
+		double jzjtxseYear1=Double.parseDouble(readExcelValueByPosition(17, 18, wb, 0));
 		String jzjtxseYear=(jzjtxseYear0+jzjtxseYear1)+"";
 		taxFiles.setJzjtxseYear(jzjtxseYear);
-		float jzjtxseMonth0=Float.parseFloat(readExcelValueByPosition(13, 15, wb, 0));
-		float jzjtxseMonth1=Float.parseFloat(readExcelValueByPosition(17, 15, wb, 0));
+		double jzjtxseMonth0=Double.parseDouble(readExcelValueByPosition(13, 16, wb, 0));
+		double jzjtxseMonth1=Double.parseDouble(readExcelValueByPosition(17, 16, wb, 0));
 		String jzjtxseMonth=(jzjtxseMonth0+jzjtxseMonth1)+"";
 		taxFiles.setJzjtxseMonth(jzjtxseMonth);
 		
 		/**
 		 * 即征即退税额  
 		 */
-		float jzjtseYear0=Float.parseFloat(readExcelValueByPosition(23, 16, wb, 0));
-		float jzjtseYear1=Float.parseFloat(readExcelValueByPosition(33, 16, wb, 0));
+		double jzjtseYear0=Double.parseDouble(readExcelValueByPosition(23, 18, wb, 0));
+		double jzjtseYear1=Double.parseDouble(readExcelValueByPosition(33, 18, wb, 0));
 		String jzjtseYear=(jzjtseYear0+jzjtseYear1)+"";
 		taxFiles.setJzjtseYear(jzjtseYear);
-		float jzjtseMonth0=Float.parseFloat(readExcelValueByPosition(23, 15, wb, 0));
-		float jzjtseMonth1=Float.parseFloat(readExcelValueByPosition(33, 15, wb, 0));
+		double jzjtseMonth0=Double.parseDouble(readExcelValueByPosition(23, 16, wb, 0));
+		double jzjtseMonth1=Double.parseDouble(readExcelValueByPosition(33, 16, wb, 0));
 		String jzjtseMonth=(jzjtseMonth0+jzjtseMonth1)+"";
 		taxFiles.setJzjtseMonth(jzjtseMonth);
 		
@@ -802,8 +802,8 @@ public class EtaxFileUtils {
 		/**
 		 * 进项税-进项税额
 		 */
-		float jinxiangshuiYear0=Float.parseFloat(readExcelValueByPosition(24, 14, wb, 0));
-		float jinxiangshuiYear1=Float.parseFloat(readExcelValueByPosition(24, 16, wb, 0));
+		double jinxiangshuiYear0=Double.parseDouble(readExcelValueByPosition(24, 14, wb, 0));
+		double jinxiangshuiYear1=Double.parseDouble(readExcelValueByPosition(24, 18, wb, 0));
 		String jinxiangshuiYear=(jinxiangshuiYear0+jinxiangshuiYear1)+"";//进项税年累-进项税额
 		taxFiles.setJinxiangshuiYear(jinxiangshuiYear);
 		
@@ -882,24 +882,24 @@ public class EtaxFileUtils {
 		/**
 		 * 即征即退销售额  
 		 */
-		float jzjtxseYear0=Float.parseFloat(readExcelValueByPosition(9, 27, wb, 0));
-		float jzjtxseYear1=Float.parseFloat(readExcelValueByPosition(13, 27, wb, 0));
+		double jzjtxseYear0=Double.parseDouble(readExcelValueByPosition(9, 35, wb, 0));
+		double jzjtxseYear1=Double.parseDouble(readExcelValueByPosition(13, 35, wb, 0));
 		String jzjtxseYear=(jzjtxseYear0+jzjtxseYear1)+"";
 		taxFiles.setJzjtxseYear(jzjtxseYear);
-		float jzjtxseMonth0=Float.parseFloat(readExcelValueByPosition(9, 26, wb, 0));
-		float jzjtxseMonth1=Float.parseFloat(readExcelValueByPosition(13, 26, wb, 0));
+		double jzjtxseMonth0=Double.parseDouble(readExcelValueByPosition(9, 30, wb, 0));
+		double jzjtxseMonth1=Double.parseDouble(readExcelValueByPosition(13, 30, wb, 0));
 		String jzjtxseMonth=(jzjtxseMonth0+jzjtxseMonth1)+"";
 		taxFiles.setJzjtxseMonth(jzjtxseMonth);
 		
 		/**
 		 * 即征即退税额  
 		 */
-		float jzjtseYear0=Float.parseFloat(readExcelValueByPosition(19, 27, wb, 0));
-		float jzjtseYear1=Float.parseFloat(readExcelValueByPosition(29, 27, wb, 0));
+		double jzjtseYear0=Double.parseDouble(readExcelValueByPosition(19, 35, wb, 0));
+		double jzjtseYear1=Double.parseDouble(readExcelValueByPosition(29, 35, wb, 0));
 		String jzjtseYear=(jzjtseYear0+jzjtseYear1)+"";
 		taxFiles.setJzjtseYear(jzjtseYear);
-		float jzjtseMonth0=Float.parseFloat(readExcelValueByPosition(19, 26, wb, 0));
-		float jzjtseMonth1=Float.parseFloat(readExcelValueByPosition(29, 26, wb, 0));
+		double jzjtseMonth0=Double.parseDouble(readExcelValueByPosition(19, 30, wb, 0));
+		double jzjtseMonth1=Double.parseDouble(readExcelValueByPosition(29, 30, wb, 0));
 		String jzjtseMonth=(jzjtseMonth0+jzjtseMonth1)+"";
 		taxFiles.setJzjtseMonth(jzjtseMonth);
 		
@@ -907,8 +907,8 @@ public class EtaxFileUtils {
 		/**
 		 * 进项税-进项税额
 		 */
-		float jinxiangshuiYear0=Float.parseFloat(readExcelValueByPosition(20, 25, wb, 0));
-		float jinxiangshuiYear1=Float.parseFloat(readExcelValueByPosition(20, 27, wb, 0));
+		double jinxiangshuiYear0=Double.parseDouble(readExcelValueByPosition(20, 25, wb, 0));
+		double jinxiangshuiYear1=Double.parseDouble(readExcelValueByPosition(20, 35, wb, 0));
 		String jinxiangshuiYear=(jinxiangshuiYear0+jinxiangshuiYear1)+"";//进项税年累-进项税额
 		taxFiles.setJinxiangshuiYear(jinxiangshuiYear);
 	}
