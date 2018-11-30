@@ -173,6 +173,23 @@ public class JdbcUtil implements Constant{
     	
     	return new PublicResult<>(PublicResultConstant.SUCCESS,null);
 	}
+	
+	
+	public static PublicResult<Map<String, List<Map<String, Object>>>> formatInsertSql(String sql,
+			List<String> matcher, PublicResult<Map<String, String>> dealParamsResult) {
+		if(StringUtils.isBlank(sql)){
+    		return new PublicResult<>(PublicResultConstant.PARAM_ERROR,"SQL语句为空！", null);
+    	}
+		if(!PublicResultConstant.SUCCESS.msg.equals(dealParamsResult.getMsg())){
+			return new PublicResult<>(PublicResultConstant.PARAM_ERROR,"params格式必须为key1::value1;;key2::value2格式!", null);
+		}
+		//验证SQL需要参数必须都传递 扩展
+    	if(!canMatchSqlParams(matcher, dealParamsResult)){
+    		return new PublicResult<>(PublicResultConstant.PARAM_ERROR,"params传递的参数与SQL中需要的参数不匹配！", null);
+    	}
+    	
+    	return new PublicResult<>(PublicResultConstant.SUCCESS,null);
+	}
     /**
      * @time   2018年9月27日 下午1:02:26
      * @author zuoqb

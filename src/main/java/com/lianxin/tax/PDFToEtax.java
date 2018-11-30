@@ -104,7 +104,7 @@ public class PDFToEtax {
 		List<String> dateKeys=Arrays.asList("税款所属期间","税款所属期","税款所属时间","所属时期");
 		Map<String,Object> mapDate=readPdfValueByKey(content,dateKeys);
 		if("true".equals(String.valueOf(mapDate.get("has")))){
-			String startDate=mapDate.get("value").toString();
+			String startDate=mapDate.get("value").toString().replaceAll("金额单位：元（列至角分）", "");
 			for(String key:dateKeys){
 				startDate=startDate.replace(key, "");
 			}

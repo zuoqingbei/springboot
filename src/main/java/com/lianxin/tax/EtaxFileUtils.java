@@ -14,7 +14,11 @@ import java.util.List;
 import java.util.Map;
 
 import org.apache.commons.lang3.StringUtils;
+import org.apache.poi.hssf.usermodel.HSSFCellStyle;
+import org.apache.poi.hssf.usermodel.HSSFDataFormat;
 import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.ss.usermodel.CellStyle;
+import org.apache.poi.ss.usermodel.DataFormat;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
@@ -335,6 +339,9 @@ public class EtaxFileUtils {
         	//暂无
         	/**写入第三块数据 -开票汇总表销售额END **/
         	
+        	//设置公式
+        	setExcelCellValue(workbook, 0, 9, 10, sum(workbook, 9, 2, 9));
+        	//setExcelCellFormula(workbook, 0, 9, 10, "SUM(C10:J10)");
         	//重新生成文件
         	out = new FileOutputStream(filePath+File.separator+fileName);
         	workbook.write(out);
@@ -353,6 +360,13 @@ public class EtaxFileUtils {
                 e.printStackTrace();
             }
         }
+	}
+	public static String sum(Workbook workbook,int row,int start,int end){
+		double sum=0;
+		for(int x=start;x<(end+1);x++){
+			sum+=Double.parseDouble(readExcelValueByPosition(row, x, workbook, 0));
+		}
+		return dealNums(sum+"");
 	}
 	public static String dealNums(String pre){
 		if(StringUtils.isNotBlank(pre)){
@@ -416,7 +430,29 @@ public class EtaxFileUtils {
 		if(cell==null){
 			cell=r.createCell(columnNum);
 		}
+		/*if(StringUtils.isNotBlank(cellValue)){
+			
+			boolean isNum = cellValue.toString().matches("^(-?\\d+)(\\.\\d+)?$");
+			if(isNum){
+				CellStyle contextstyle =workbook.createCellStyle();
+				DataFormat df = workbook.createDataFormat();
+				contextstyle.setDataFormat(df.getFormat("#,##0.00"));//保留两位小数点
+			}
+		}*/
 		cell.setCellValue(cellValue);
+	}
+	
+	public static void setExcelCellFormula(Workbook workbook, int sheetIndex, int rowNum, int columnNum, String formula) {
+		Sheet sheet = workbook.getSheetAt(sheetIndex); // 工作表
+		Row r=sheet.getRow(rowNum);
+		if(r==null){
+			r=sheet.createRow(rowNum);
+		}
+		Cell cell=r.getCell(columnNum);
+		if(cell==null){
+			cell=r.createCell(columnNum);
+		}
+		cell.setCellFormula(formula);
 	}
 	/**
 	 * 
@@ -529,7 +565,7 @@ public class EtaxFileUtils {
 				}
 			}
 		}
-		cellValue=StringUtils.deleteWhitespace(cellValue.trim());
+		cellValue=StringUtils.deleteWhitespace(cellValue.trim()).replaceAll(",", "").replaceAll("-", "").replaceAll("，", "").replaceAll("—", "");
 		if(StringUtils.isBlank(cellValue)){
 			cellValue="0";
 		}
@@ -582,9 +618,44 @@ public class EtaxFileUtils {
 		}else{
 			//（适用于增值税一般纳税人）
 			String zzs=readExcelValueByPosition(2, 0, wb, 0);
-			if(zzs.indexOf("增值税纳税申报表")!=-1&&zzs.indexOf("附列资料")==-1){
+			String zzs1=readExcelValueByPosition(1, 2, wb, 0);
+			String zzs2=readExcelValueByPosition(2, 0, wb, 0);
+			String yydz=readExcelValueByPosition(8, 0, wb, 0);//武汉友成工单
+			String in=readExcelValueByPosition(1, 0, wb, 0);
+			if(zzs.indexOf("增值税纳税申报表")!=-1&&zzs.indexOf("附列资料")==-1&&!"营业地址".equals(yydz)){
 				System.out.println(taxFiles.getName()+"-----------增值税纳税申报表");
 				addedGeneralTaxpayer(taxFiles, wb);
+			}else if(zzs1.indexOf("增值税纳税申报表")!=-1&&zzs2.indexOf("（一般纳税人适用）")!=-1&&!"营业地址".equals(yydz)){
+				//部分成都文件
+				addedGeneralTaxpayerForChengDu(taxFiles, wb);
+			}else if((fujian.indexOf("一般纳税人适用")!=-1&&fujian.indexOf("增值税纳税申报表")!=-1)
+					||("营业地址".equals(yydz)&&zzs.indexOf("增值税纳税申报表")!=-1&&zzs.indexOf("附列资料")==-1)
+					||(fujian.indexOf("增值税纳税申报表")!=-1&&in.indexOf("一般纳税人适用")!=-1)){
+				//Adobe reader转化的文件
+				int num=2;
+				String startDate=readExcelValueByPosition(2, 0, wb, 0);
+				if(startDate.indexOf("税款所属期间")==-1){
+					num++;
+				}
+				if(fujian.indexOf("增值税纳税申报表")!=-1&&in.indexOf("一般纳税人适用")!=-1){
+					addedGeneralTaxpayerForAdoberWuHan(taxFiles, wb);
+				}else if("营业地址".equals(yydz)){
+					num=3;
+					addedGeneralTaxpayerForAdoberWuHan(taxFiles, wb, num);
+				}else if(in.indexOf("根据国家税")!=-1){
+					String cc=readExcelValueByPosition(6, 0, wb, 0);
+					if(zzs2.indexOf("税款所属期间：")!=-1){
+						addedGeneralTaxpayerForAdober2(taxFiles, wb,2);
+					}else if(cc.indexOf("纳税人识别号")!=-1){
+						addedGeneralTaxpayerForAdober3(taxFiles, wb,3);
+					}
+					//num
+					
+				}else if(zzs.indexOf("金额单位:元至角分")!=-1&&in.indexOf("税款所属期间")!=-1){
+					addedGeneralTaxpayerForAdober4(taxFiles, wb,0);
+				}else{
+					addedGeneralTaxpayerForAdober(taxFiles, wb,num);
+				}
 			}else{
 				//加密的
 				String sec=readExcelValueByPosition(4, 4, wb, 0);
@@ -594,6 +665,677 @@ public class EtaxFileUtils {
 				}
 			}
 		}
+	}
+	public static void addedGeneralTaxpayerForAdoberWuHan(TaxFilesModel taxFiles, Workbook wb) {
+		taxFiles.setApply(true);//业务主表
+		//处理日期
+		String startDate=readExcelValueByPosition(3, 0, wb, 0);
+		startDate=startDate.substring(startDate.indexOf("税款所属时期")).replaceAll("税款所属时期", "").replaceAll(":", "").replaceAll("：", "").replaceAll("年", "").replaceAll("月", "").replaceAll("日", "").split("至")[0].replaceAll(" ", "");
+		if(StringUtils.isNotBlank(startDate)){
+			taxFiles.setStartDate(startDate);
+			taxFiles.setStartYear(startDate.substring(0,4));
+			taxFiles.setStartMonth(Integer.valueOf(startDate.substring(4,6))+"");
+		}
+		//公司名称
+		String companyName=readExcelValueByPosition(4, 0, wb, 0);
+		companyName=companyName.replaceAll("纳税人名称", "").replaceAll("（公章）：", "").replaceAll("（公章）", "").replaceAll(":", "").replaceAll(":", "");
+		taxFiles.setCompanyName(companyName);
+		
+		method(taxFiles, wb);
+	}
+	private static void method(TaxFilesModel taxFiles, Workbook wb) {
+		/**
+		 * 解析excel 数据字段
+		 */
+		/**
+		 * 销售额-（一）按适用税率计税销售额
+		 */
+		String xiaoshoueYear=readExcelValueByPosition(11, 9, wb, 0);//销售额年累-（一）按适用税率计税销售额
+		taxFiles.setXiaoshoueYear(xiaoshoueYear);
+		String xiaoshoueMonth=readExcelValueByPosition(11, 6, wb, 0);//销售额月累-（一）按适用税率计税销售额
+		taxFiles.setXiaoshoueMonth(xiaoshoueMonth);
+		/**
+		 * 税额-销项税额
+		 */
+		String shuieYear=readExcelValueByPosition(21, 9, wb, 0);//税额年累-销项税额
+		taxFiles.setShuieYear(shuieYear);
+		String shuieMonth=readExcelValueByPosition(21, 6, wb, 0);//税额月累-销项税额
+		taxFiles.setShuieMonth(shuieMonth);
+		
+		/**
+		 * 第三项-（三）免、抵、退办法出口销售额
+		 */
+		String disanxiangYear=readExcelValueByPosition(17, 9, wb, 0);//第三项年累-（三）免、抵、退办法出口销售额
+		taxFiles.setDisanxiangYear(disanxiangYear);
+		String disanxiangMonth=readExcelValueByPosition(17, 6, wb, 0);//第三项月累-（三）免、抵、退办法出口销售额
+		taxFiles.setDisanxiangMonth(disanxiangMonth);
+		
+		/**
+		 * 第四项-（四）免税销售额
+		 */
+		String disixiangYear=readExcelValueByPosition(18, 9, wb, 0);//第四项年累-（四）免税销售额
+		taxFiles.setDisixiangYear(disixiangYear);
+		String disixiangMonth=readExcelValueByPosition(18, 6, wb, 0);//第四项月累-（四）免税销售额
+		taxFiles.setDisixiangMonth(disixiangMonth);
+		
+		
+		/**
+		 * 简易征收-（二）按简易办法计税销售额
+		 */
+		String jyzsYear=readExcelValueByPosition(15, 9, wb, 0);//简易征收年累-（二）按简易办法计税销售额
+		taxFiles.setJyzsYear(jyzsYear);
+		String jyzsMonth=readExcelValueByPosition(15, 6, wb, 0);//简易征收月累-（二）按简易办法计税销售额
+		taxFiles.setJyzsMonth(jyzsMonth);
+		
+		/**
+		 * 简易税-简易计税办法计算的应纳税额
+		 */
+		String jysYear=readExcelValueByPosition(32, 9, wb, 0);//简易税年累-简易计税办法计算的应纳税额
+		taxFiles.setJysYear(jysYear);
+		String jysMonth=readExcelValueByPosition(32, 6, wb, 0);//简易税月累-简易计税办法计算的应纳税额
+		taxFiles.setJysMonth(jysMonth);
+		
+		
+		/**
+		 * 即征即退销售额  
+		 */
+		double jzjtxseYear0=Double.parseDouble(readExcelValueByPosition(11, 13, wb, 0));
+		double jzjtxseYear1=Double.parseDouble(readExcelValueByPosition(15, 13, wb, 0));
+		String jzjtxseYear=(jzjtxseYear0+jzjtxseYear1)+"";
+		taxFiles.setJzjtxseYear(jzjtxseYear);
+		double jzjtxseMonth0=Double.parseDouble(readExcelValueByPosition(11, 11, wb, 0));
+		double jzjtxseMonth1=Double.parseDouble(readExcelValueByPosition(15, 11, wb, 0));
+		String jzjtxseMonth=(jzjtxseMonth0+jzjtxseMonth1)+"";
+		taxFiles.setJzjtxseMonth(jzjtxseMonth);
+		
+		/**
+		 * 即征即退税额  
+		 */
+		double jzjtseYear0=Double.parseDouble(readExcelValueByPosition(21, 13, wb, 0));
+		double jzjtseYear1=Double.parseDouble(readExcelValueByPosition(32, 13, wb, 0));
+		String jzjtseYear=(jzjtseYear0+jzjtseYear1)+"";
+		taxFiles.setJzjtseYear(jzjtseYear);
+		double jzjtseMonth0=Double.parseDouble(readExcelValueByPosition(21, 11, wb, 0));
+		double jzjtseMonth1=Double.parseDouble(readExcelValueByPosition(32, 11, wb, 0));
+		String jzjtseMonth=(jzjtseMonth0+jzjtseMonth1)+"";
+		taxFiles.setJzjtseMonth(jzjtseMonth);
+		
+		
+		/**
+		 * 进项税-进项税额
+		 */
+		double jinxiangshuiYear0=Double.parseDouble(readExcelValueByPosition(22, 13, wb, 0));
+		double jinxiangshuiYear1=Double.parseDouble(readExcelValueByPosition(22, 9, wb, 0));
+		String jinxiangshuiYear=(jinxiangshuiYear0+jinxiangshuiYear1)+"";//进项税年累-进项税额
+		taxFiles.setJinxiangshuiYear(jinxiangshuiYear);
+	}
+	/**
+	 * @time   2018年11月16日 下午8:08:21
+	 * @author zuoqb
+	 * @todo   适用于增值税一般纳税人-Adobe Reader
+	 */
+	public static void addedGeneralTaxpayerForAdoberWuHan(TaxFilesModel taxFiles, Workbook wb,int num) {
+		taxFiles.setApply(true);//业务主表
+		//处理日期
+		String startDate=readExcelValueByPosition(5, 0, wb, 0);
+		startDate=startDate.replaceAll("税款所属时间", "").replaceAll("-", "").replaceAll("税款所属期间", "").replaceAll("税款所属时期", "").replaceAll(":", "").replaceAll("：", "").replaceAll("年", "").replaceAll("月", "").replaceAll("日", "").split("至")[0].replaceAll(" ", "");
+		if(StringUtils.isNotBlank(startDate)){
+			taxFiles.setStartDate(startDate);
+			taxFiles.setStartYear(startDate.substring(0,4));
+			taxFiles.setStartMonth(Integer.valueOf(startDate.substring(4,6))+"");
+		}
+		//公司名称
+		String companyName=readExcelValueByPosition(7,8, wb, 0);
+		companyName=companyName.replaceAll("纳税人名称：", "").replaceAll("（公章）：", "").replaceAll("（公章）", "");;
+		taxFiles.setCompanyName(companyName);
+		
+		method2(taxFiles, wb, num);
+	}
+	private static void method2(TaxFilesModel taxFiles, Workbook wb, int num) {
+		/**
+		 * 解析excel 数据字段
+		 */
+		/**
+		 * 销售额-（一）按适用税率计税销售额
+		 */
+		for(int x=0;x<80;x++){
+			System.out.println("cell"+x+"--"+readExcelValueByPosition(11, x, wb, 0));
+		}
+		String xiaoshoueYear=readExcelValueByPosition(num+8, 23, wb, 0);//销售额年累-（一）按适用税率计税销售额
+		taxFiles.setXiaoshoueYear(xiaoshoueYear);
+		String xiaoshoueMonth=readExcelValueByPosition(num+8, 17, wb, 0);//销售额月累-（一）按适用税率计税销售额
+		taxFiles.setXiaoshoueMonth(xiaoshoueMonth);
+		/**
+		 * 税额-销项税额
+		 */
+		String shuieYear=readExcelValueByPosition(num+18, 23, wb, 0);//税额年累-销项税额
+		taxFiles.setShuieYear(shuieYear);
+		String shuieMonth=readExcelValueByPosition(num+18, 17, wb, 0);//税额月累-销项税额
+		taxFiles.setShuieMonth(shuieMonth);
+		
+		/**
+		 * 第三项-（三）免、抵、退办法出口销售额
+		 */
+		String disanxiangYear=readExcelValueByPosition(num+14, 23, wb, 0);//第三项年累-（三）免、抵、退办法出口销售额
+		taxFiles.setDisanxiangYear(disanxiangYear);
+		String disanxiangMonth=readExcelValueByPosition(num+14, 17, wb, 0);//第三项月累-（三）免、抵、退办法出口销售额
+		taxFiles.setDisanxiangMonth(disanxiangMonth);
+		
+		/**
+		 * 第四项-（四）免税销售额
+		 */
+		String disixiangYear=readExcelValueByPosition(num+15, 23, wb, 0);//第四项年累-（四）免税销售额
+		taxFiles.setDisixiangYear(disixiangYear);
+		String disixiangMonth=readExcelValueByPosition(num+15, 17, wb, 0);//第四项月累-（四）免税销售额
+		taxFiles.setDisixiangMonth(disixiangMonth);
+		
+		
+		/**
+		 * 简易征收-（二）按简易办法计税销售额
+		 */
+		String jyzsYear=readExcelValueByPosition(num+12, 23, wb, 0);//简易征收年累-（二）按简易办法计税销售额
+		taxFiles.setJyzsYear(jyzsYear);
+		String jyzsMonth=readExcelValueByPosition(num+12, 17, wb, 0);//简易征收月累-（二）按简易办法计税销售额
+		taxFiles.setJyzsMonth(jyzsMonth);
+		
+		/**
+		 * 简易税-简易计税办法计算的应纳税额
+		 */
+		String jysYear=readExcelValueByPosition(num+28, 23, wb, 0);//简易税年累-简易计税办法计算的应纳税额
+		taxFiles.setJysYear(jysYear);
+		String jysMonth=readExcelValueByPosition(num+28, 17, wb, 0);//简易税月累-简易计税办法计算的应纳税额
+		taxFiles.setJysMonth(jysMonth);
+		
+		
+		/**
+		 * 即征即退销售额  
+		 */
+		double jzjtxseYear0=Double.parseDouble(readExcelValueByPosition(num+8, 38, wb, 0));
+		double jzjtxseYear1=Double.parseDouble(readExcelValueByPosition(num+12, 38, wb, 0));
+		String jzjtxseYear=(jzjtxseYear0+jzjtxseYear1)+"";
+		taxFiles.setJzjtxseYear(jzjtxseYear);
+		double jzjtxseMonth0=Double.parseDouble(readExcelValueByPosition(num+8, 30, wb, 0));
+		double jzjtxseMonth1=Double.parseDouble(readExcelValueByPosition(num+12, 30, wb, 0));
+		String jzjtxseMonth=(jzjtxseMonth0+jzjtxseMonth1)+"";
+		taxFiles.setJzjtxseMonth(jzjtxseMonth);
+		
+		/**
+		 * 即征即退税额  
+		 */
+		double jzjtseYear0=Double.parseDouble(readExcelValueByPosition(num+18, 38, wb, 0));
+		double jzjtseYear1=Double.parseDouble(readExcelValueByPosition(num+28, 38, wb, 0));
+		String jzjtseYear=(jzjtseYear0+jzjtseYear1)+"";
+		taxFiles.setJzjtseYear(jzjtseYear);
+		double jzjtseMonth0=Double.parseDouble(readExcelValueByPosition(num+19, 30, wb, 0));
+		double jzjtseMonth1=Double.parseDouble(readExcelValueByPosition(num+29, 30, wb, 0));
+		String jzjtseMonth=(jzjtseMonth0+jzjtseMonth1)+"";
+		taxFiles.setJzjtseMonth(jzjtseMonth);
+		
+		
+		/**
+		 * 进项税-进项税额
+		 */
+		double jinxiangshuiYear0=Double.parseDouble(readExcelValueByPosition(num+19, 38, wb, 0));
+		double jinxiangshuiYear1=Double.parseDouble(readExcelValueByPosition(num+19, 23, wb, 0));
+		String jinxiangshuiYear=(jinxiangshuiYear0+jinxiangshuiYear1)+"";//进项税年累-进项税额
+		taxFiles.setJinxiangshuiYear(jinxiangshuiYear);
+	}
+	public static void addedGeneralTaxpayerForAdober3(TaxFilesModel taxFiles, Workbook wb,int num) {
+		taxFiles.setApply(true);//业务主表
+		//处理日期
+		String startDate=readExcelValueByPosition(3, 0, wb, 0);
+		startDate=startDate.replaceAll("税款所属时间", "").replaceAll("-", "").replaceAll("税款所属期间", "").replaceAll("税款所属时期", "").replaceAll(":", "").replaceAll("：", "").replaceAll("年", "").replaceAll("月", "").replaceAll("日", "").split("至")[0].replaceAll(" ", "");
+		if(StringUtils.isNotBlank(startDate)){
+			taxFiles.setStartDate(startDate);
+			taxFiles.setStartYear(startDate.substring(0,4));
+			taxFiles.setStartMonth(Integer.valueOf(startDate.substring(4,6))+"");
+		}
+		//公司名称
+		String companyName=readExcelValueByPosition(7,6, wb, 0);
+		companyName=companyName.replaceAll("纳税人名称：", "").replaceAll("（公章）：", "").replaceAll("（公章）", "");;
+		taxFiles.setCompanyName(companyName);
+		
+		menthod1(taxFiles, wb, num);
+	}
+	private static void menthod1(TaxFilesModel taxFiles, Workbook wb, int num) {
+		/**
+		 * 解析excel 数据字段
+		 */
+		/**
+		 * 销售额-（一）按适用税率计税销售额
+		 */
+		String xiaoshoueYear=readExcelValueByPosition(num+8, 27, wb, 0);//销售额年累-（一）按适用税率计税销售额
+		taxFiles.setXiaoshoueYear(xiaoshoueYear);
+		String xiaoshoueMonth=readExcelValueByPosition(num+8, 21, wb, 0);//销售额月累-（一）按适用税率计税销售额
+		taxFiles.setXiaoshoueMonth(xiaoshoueMonth);
+		/**
+		 * 税额-销项税额
+		 */
+		String shuieYear=readExcelValueByPosition(num+18, 27, wb, 0);//税额年累-销项税额
+		taxFiles.setShuieYear(shuieYear);
+		String shuieMonth=readExcelValueByPosition(num+18, 21, wb, 0);//税额月累-销项税额
+		taxFiles.setShuieMonth(shuieMonth);
+		
+		/**
+		 * 第三项-（三）免、抵、退办法出口销售额
+		 */
+		String disanxiangYear=readExcelValueByPosition(num+14, 27, wb, 0);//第三项年累-（三）免、抵、退办法出口销售额
+		taxFiles.setDisanxiangYear(disanxiangYear);
+		String disanxiangMonth=readExcelValueByPosition(num+14, 21, wb, 0);//第三项月累-（三）免、抵、退办法出口销售额
+		taxFiles.setDisanxiangMonth(disanxiangMonth);
+		
+		/**
+		 * 第四项-（四）免税销售额
+		 */
+		String disixiangYear=readExcelValueByPosition(num+15, 27, wb, 0);//第四项年累-（四）免税销售额
+		taxFiles.setDisixiangYear(disixiangYear);
+		String disixiangMonth=readExcelValueByPosition(num+15, 21, wb, 0);//第四项月累-（四）免税销售额
+		taxFiles.setDisixiangMonth(disixiangMonth);
+		
+		
+		/**
+		 * 简易征收-（二）按简易办法计税销售额
+		 */
+		String jyzsYear=readExcelValueByPosition(num+12, 27, wb, 0);//简易征收年累-（二）按简易办法计税销售额
+		taxFiles.setJyzsYear(jyzsYear);
+		String jyzsMonth=readExcelValueByPosition(num+12, 21, wb, 0);//简易征收月累-（二）按简易办法计税销售额
+		taxFiles.setJyzsMonth(jyzsMonth);
+		
+		/**
+		 * 简易税-简易计税办法计算的应纳税额
+		 */
+		String jysYear=readExcelValueByPosition(num+28, 27, wb, 0);//简易税年累-简易计税办法计算的应纳税额
+		taxFiles.setJysYear(jysYear);
+		String jysMonth=readExcelValueByPosition(num+28, 21, wb, 0);//简易税月累-简易计税办法计算的应纳税额
+		taxFiles.setJysMonth(jysMonth);
+		
+		
+		/**
+		 * 即征即退销售额  
+		 */
+		double jzjtxseYear0=Double.parseDouble(readExcelValueByPosition(num+8, 38, wb, 0));
+		double jzjtxseYear1=Double.parseDouble(readExcelValueByPosition(num+12, 38, wb, 0));
+		String jzjtxseYear=(jzjtxseYear0+jzjtxseYear1)+"";
+		taxFiles.setJzjtxseYear(jzjtxseYear);
+		double jzjtxseMonth0=Double.parseDouble(readExcelValueByPosition(num+8, 34, wb, 0));
+		double jzjtxseMonth1=Double.parseDouble(readExcelValueByPosition(num+12, 34, wb, 0));
+		String jzjtxseMonth=(jzjtxseMonth0+jzjtxseMonth1)+"";
+		taxFiles.setJzjtxseMonth(jzjtxseMonth);
+		
+		/**
+		 * 即征即退税额  
+		 */
+		double jzjtseYear0=Double.parseDouble(readExcelValueByPosition(num+18, 38, wb, 0));
+		double jzjtseYear1=Double.parseDouble(readExcelValueByPosition(num+28, 38, wb, 0));
+		String jzjtseYear=(jzjtseYear0+jzjtseYear1)+"";
+		taxFiles.setJzjtseYear(jzjtseYear);
+		double jzjtseMonth0=Double.parseDouble(readExcelValueByPosition(num+19, 34, wb, 0));
+		double jzjtseMonth1=Double.parseDouble(readExcelValueByPosition(num+29, 34, wb, 0));
+		String jzjtseMonth=(jzjtseMonth0+jzjtseMonth1)+"";
+		taxFiles.setJzjtseMonth(jzjtseMonth);
+		
+		
+		/**
+		 * 进项税-进项税额
+		 */
+		double jinxiangshuiYear0=Double.parseDouble(readExcelValueByPosition(num+19, 38, wb, 0));
+		double jinxiangshuiYear1=Double.parseDouble(readExcelValueByPosition(num+19, 27, wb, 0));
+		String jinxiangshuiYear=(jinxiangshuiYear0+jinxiangshuiYear1)+"";//进项税年累-进项税额
+		taxFiles.setJinxiangshuiYear(jinxiangshuiYear);
+	}
+	public static void addedGeneralTaxpayerForAdober2(TaxFilesModel taxFiles, Workbook wb,int num) {
+		taxFiles.setApply(true);//业务主表
+		//处理日期
+		String startDate=readExcelValueByPosition(2, 0, wb, 0);
+		startDate=startDate.replaceAll("税款所属时间", "").replaceAll("-", "").replaceAll("税款所属期间", "").replaceAll("税款所属时期", "").replaceAll(":", "").replaceAll("：", "").replaceAll("年", "").replaceAll("月", "").replaceAll("日", "").split("至")[0].replaceAll(" ", "");
+		if(StringUtils.isNotBlank(startDate)){
+			taxFiles.setStartDate(startDate);
+			taxFiles.setStartYear(startDate.substring(0,4));
+			taxFiles.setStartMonth(Integer.valueOf(startDate.substring(4,6))+"");
+		}
+		//公司名称
+		String companyName=readExcelValueByPosition(6,6, wb, 0);
+		companyName=companyName.replaceAll("纳税人名称：", "").replaceAll("（公章）：", "").replaceAll("（公章）", "");;
+		taxFiles.setCompanyName(companyName);
+		
+		menthod1(taxFiles, wb, num);
+	}
+	/**
+	 * @time   2018年11月16日 下午8:08:21
+	 * @author zuoqb
+	 * @todo   适用于增值税一般纳税人-Adobe Reader
+	 */
+	public static void addedGeneralTaxpayerForAdober(TaxFilesModel taxFiles, Workbook wb,int num) {
+		taxFiles.setApply(true);//业务主表
+		//处理日期
+		String startDate=readExcelValueByPosition(num, 0, wb, 0);
+		startDate=startDate.replaceAll("税款所属时间", "").replaceAll("-", "").replaceAll("税款所属期间", "").replaceAll("税款所属时期", "").replaceAll(":", "").replaceAll("：", "").replaceAll("年", "").replaceAll("月", "").replaceAll("日", "").split("至")[0].replaceAll(" ", "");
+		if(StringUtils.isNotBlank(startDate)){
+			taxFiles.setStartDate(startDate);
+			taxFiles.setStartYear(startDate.substring(0,4));
+			taxFiles.setStartMonth(Integer.valueOf(startDate.substring(4,6))+"");
+		}
+		//公司名称
+		String companyName=readExcelValueByPosition(num+4,8, wb, 0);
+		companyName=companyName.replaceAll("纳税人名称：", "").replaceAll("（公章）：", "").replaceAll("（公章）", "");;
+		taxFiles.setCompanyName(companyName);
+		
+		method3(taxFiles, wb, num);
+	}
+	public static void addedGeneralTaxpayerForAdober4(TaxFilesModel taxFiles, Workbook wb,int num) {
+		taxFiles.setApply(true);//业务主表
+		//处理日期
+		String startDate=readExcelValueByPosition(1, 0, wb, 0);
+		startDate=startDate.replaceAll("税款所属时间", "").replaceAll("-", "").replaceAll("税款所属期间", "").replaceAll("税款所属时期", "").replaceAll(":", "").replaceAll("：", "").replaceAll("年", "").replaceAll("月", "").replaceAll("日", "").split("至")[0].replaceAll(" ", "");
+		if(StringUtils.isNotBlank(startDate)){
+			taxFiles.setStartDate(startDate);
+			taxFiles.setStartYear(startDate.substring(0,4));
+			taxFiles.setStartMonth(Integer.valueOf(startDate.substring(4,6))+"");
+		}
+		//公司名称
+		String companyName=readExcelValueByPosition(4,8, wb, 0);
+		companyName=companyName.replaceAll("纳税人名称：", "").replaceAll("（公章）：", "").replaceAll("（公章）", "");;
+		taxFiles.setCompanyName(companyName);
+		
+		menthod1(taxFiles, wb, num);
+	}
+	private static void method3(TaxFilesModel taxFiles, Workbook wb, int num) {
+		/**
+		 * 解析excel 数据字段
+		 */
+		/**
+		 * 销售额-（一）按适用税率计税销售额
+		 */
+		String xiaoshoueYear=readExcelValueByPosition(num+8, 33, wb, 0);//销售额年累-（一）按适用税率计税销售额
+		taxFiles.setXiaoshoueYear(xiaoshoueYear);
+		String xiaoshoueMonth=readExcelValueByPosition(num+8, 22, wb, 0);//销售额月累-（一）按适用税率计税销售额
+		taxFiles.setXiaoshoueMonth(xiaoshoueMonth);
+		/**
+		 * 税额-销项税额
+		 */
+		String shuieYear=readExcelValueByPosition(num+18, 33, wb, 0);//税额年累-销项税额
+		taxFiles.setShuieYear(shuieYear);
+		String shuieMonth=readExcelValueByPosition(num+18, 22, wb, 0);//税额月累-销项税额
+		taxFiles.setShuieMonth(shuieMonth);
+		
+		/**
+		 * 第三项-（三）免、抵、退办法出口销售额
+		 */
+		String disanxiangYear=readExcelValueByPosition(num+14, 33, wb, 0);//第三项年累-（三）免、抵、退办法出口销售额
+		taxFiles.setDisanxiangYear(disanxiangYear);
+		String disanxiangMonth=readExcelValueByPosition(num+14, 22, wb, 0);//第三项月累-（三）免、抵、退办法出口销售额
+		taxFiles.setDisanxiangMonth(disanxiangMonth);
+		
+		/**
+		 * 第四项-（四）免税销售额
+		 */
+		String disixiangYear=readExcelValueByPosition(num+15, 33, wb, 0);//第四项年累-（四）免税销售额
+		taxFiles.setDisixiangYear(disixiangYear);
+		String disixiangMonth=readExcelValueByPosition(num+15, 22, wb, 0);//第四项月累-（四）免税销售额
+		taxFiles.setDisixiangMonth(disixiangMonth);
+		
+		
+		/**
+		 * 简易征收-（二）按简易办法计税销售额
+		 */
+		String jyzsYear=readExcelValueByPosition(num+12, 33, wb, 0);//简易征收年累-（二）按简易办法计税销售额
+		taxFiles.setJyzsYear(jyzsYear);
+		String jyzsMonth=readExcelValueByPosition(num+12, 22, wb, 0);//简易征收月累-（二）按简易办法计税销售额
+		taxFiles.setJyzsMonth(jyzsMonth);
+		
+		/**
+		 * 简易税-简易计税办法计算的应纳税额
+		 */
+		String jysYear=readExcelValueByPosition(num+28, 33, wb, 0);//简易税年累-简易计税办法计算的应纳税额
+		taxFiles.setJysYear(jysYear);
+		String jysMonth=readExcelValueByPosition(num+28, 22, wb, 0);//简易税月累-简易计税办法计算的应纳税额
+		taxFiles.setJysMonth(jysMonth);
+		
+		
+		/**
+		 * 即征即退销售额  
+		 */
+		double jzjtxseYear0=Double.parseDouble(readExcelValueByPosition(num+8, 54, wb, 0));
+		double jzjtxseYear1=Double.parseDouble(readExcelValueByPosition(num+12, 54, wb, 0));
+		String jzjtxseYear=(jzjtxseYear0+jzjtxseYear1)+"";
+		taxFiles.setJzjtxseYear(jzjtxseYear);
+		double jzjtxseMonth0=Double.parseDouble(readExcelValueByPosition(num+8, 43, wb, 0));
+		double jzjtxseMonth1=Double.parseDouble(readExcelValueByPosition(num+12, 43, wb, 0));
+		String jzjtxseMonth=(jzjtxseMonth0+jzjtxseMonth1)+"";
+		taxFiles.setJzjtxseMonth(jzjtxseMonth);
+		
+		/**
+		 * 即征即退税额  
+		 */
+		double jzjtseYear0=Double.parseDouble(readExcelValueByPosition(num+18, 54, wb, 0));
+		double jzjtseYear1=Double.parseDouble(readExcelValueByPosition(num+28, 54, wb, 0));
+		String jzjtseYear=(jzjtseYear0+jzjtseYear1)+"";
+		taxFiles.setJzjtseYear(jzjtseYear);
+		double jzjtseMonth0=Double.parseDouble(readExcelValueByPosition(num+19, 43, wb, 0));
+		double jzjtseMonth1=Double.parseDouble(readExcelValueByPosition(num+29, 43, wb, 0));
+		String jzjtseMonth=(jzjtseMonth0+jzjtseMonth1)+"";
+		taxFiles.setJzjtseMonth(jzjtseMonth);
+		
+		
+		/**
+		 * 进项税-进项税额
+		 */
+		double jinxiangshuiYear0=Double.parseDouble(readExcelValueByPosition(num+19, 54, wb, 0));
+		double jinxiangshuiYear1=Double.parseDouble(readExcelValueByPosition(num+19, 33, wb, 0));
+		String jinxiangshuiYear=(jinxiangshuiYear0+jinxiangshuiYear1)+"";//进项税年累-进项税额
+		taxFiles.setJinxiangshuiYear(jinxiangshuiYear);
+	}
+	
+	/**
+	 * @time   2018年11月16日 下午8:08:21
+	 * @author zuoqb
+	 * @todo   适用于增值税一般纳税人-成都
+	 */
+	public static void addedGeneralTaxpayerForChengDu(TaxFilesModel taxFiles, Workbook wb) {
+		taxFiles.setApply(true);//业务主表
+		//处理日期
+		String startDate=readExcelValueByPosition(4, 0, wb, 0);
+		startDate=startDate.replaceAll("税款所属时间：", "").replaceAll("税款所属期间:", "").replaceAll("年", "").replaceAll("月", "").replaceAll("日", "").split("至")[0].replaceAll(" ", "");
+		if(StringUtils.isNotBlank(startDate)){
+			taxFiles.setStartDate(startDate);
+			taxFiles.setStartYear(startDate.substring(0,4));
+			taxFiles.setStartMonth(Integer.valueOf(startDate.substring(4,6))+"");
+		}
+		//公司名称
+		String companyName=readExcelValueByPosition(6, 2, wb, 0);
+		companyName=companyName.replaceAll("纳税人名称：", "").replaceAll("（公章）：", "").replaceAll("（公章）", "");;
+		taxFiles.setCompanyName(companyName);
+		
+		/**
+		 * 解析excel 数据字段
+		 */
+		/**
+		 * 销售额-（一）按适用税率计税销售额
+		 */
+		String xiaoshoueYear=readExcelValueByPosition(11, 6, wb, 0);//销售额年累-（一）按适用税率计税销售额
+		taxFiles.setXiaoshoueYear(xiaoshoueYear);
+		String xiaoshoueMonth=readExcelValueByPosition(11, 4, wb, 0);//销售额月累-（一）按适用税率计税销售额
+		taxFiles.setXiaoshoueMonth(xiaoshoueMonth);
+		/**
+		 * 税额-销项税额
+		 */
+		String shuieYear=readExcelValueByPosition(21, 6, wb, 0);//税额年累-销项税额
+		taxFiles.setShuieYear(shuieYear);
+		String shuieMonth=readExcelValueByPosition(21, 4, wb, 0);//税额月累-销项税额
+		taxFiles.setShuieMonth(shuieMonth);
+		
+		/**
+		 * 第三项-（三）免、抵、退办法出口销售额
+		 */
+		String disanxiangYear=readExcelValueByPosition(17, 6, wb, 0);//第三项年累-（三）免、抵、退办法出口销售额
+		taxFiles.setDisanxiangYear(disanxiangYear);
+		String disanxiangMonth=readExcelValueByPosition(17, 4, wb, 0);//第三项月累-（三）免、抵、退办法出口销售额
+		taxFiles.setDisanxiangMonth(disanxiangMonth);
+		
+		/**
+		 * 第四项-（四）免税销售额
+		 */
+		String disixiangYear=readExcelValueByPosition(18, 6, wb, 0);//第四项年累-（四）免税销售额
+		taxFiles.setDisixiangYear(disixiangYear);
+		String disixiangMonth=readExcelValueByPosition(18, 4, wb, 0);//第四项月累-（四）免税销售额
+		taxFiles.setDisixiangMonth(disixiangMonth);
+		
+		
+		/**
+		 * 简易征收-（二）按简易办法计税销售额
+		 */
+		String jyzsYear=readExcelValueByPosition(15, 6, wb, 0);//简易征收年累-（二）按简易办法计税销售额
+		taxFiles.setJyzsYear(jyzsYear);
+		String jyzsMonth=readExcelValueByPosition(15, 4, wb, 0);//简易征收月累-（二）按简易办法计税销售额
+		taxFiles.setJyzsMonth(jyzsMonth);
+		
+		/**
+		 * 简易税-简易计税办法计算的应纳税额
+		 */
+		String jysYear=readExcelValueByPosition(31, 6, wb, 0);//简易税年累-简易计税办法计算的应纳税额
+		taxFiles.setJysYear(jysYear);
+		String jysMonth=readExcelValueByPosition(31, 4, wb, 0);//简易税月累-简易计税办法计算的应纳税额
+		taxFiles.setJysMonth(jysMonth);
+		
+		
+		/**
+		 * 即征即退销售额  
+		 */
+		double jzjtxseYear0=Double.parseDouble(readExcelValueByPosition(11, 11, wb, 0));
+		double jzjtxseYear1=Double.parseDouble(readExcelValueByPosition(15, 11, wb, 0));
+		String jzjtxseYear=(jzjtxseYear0+jzjtxseYear1)+"";
+		taxFiles.setJzjtxseYear(jzjtxseYear);
+		double jzjtxseMonth0=Double.parseDouble(readExcelValueByPosition(11, 9, wb, 0));
+		double jzjtxseMonth1=Double.parseDouble(readExcelValueByPosition(15, 9, wb, 0));
+		String jzjtxseMonth=(jzjtxseMonth0+jzjtxseMonth1)+"";
+		taxFiles.setJzjtxseMonth(jzjtxseMonth);
+		
+		/**
+		 * 即征即退税额  
+		 */
+		double jzjtseYear0=Double.parseDouble(readExcelValueByPosition(21, 11, wb, 0));
+		double jzjtseYear1=Double.parseDouble(readExcelValueByPosition(31, 11, wb, 0));
+		String jzjtseYear=(jzjtseYear0+jzjtseYear1)+"";
+		taxFiles.setJzjtseYear(jzjtseYear);
+		double jzjtseMonth0=Double.parseDouble(readExcelValueByPosition(21, 9, wb, 0));
+		double jzjtseMonth1=Double.parseDouble(readExcelValueByPosition(31, 9, wb, 0));
+		String jzjtseMonth=(jzjtseMonth0+jzjtseMonth1)+"";
+		taxFiles.setJzjtseMonth(jzjtseMonth);
+		
+		
+		/**
+		 * 进项税-进项税额
+		 */
+		double jinxiangshuiYear0=Double.parseDouble(readExcelValueByPosition(22, 11, wb, 0));
+		double jinxiangshuiYear1=Double.parseDouble(readExcelValueByPosition(22, 6, wb, 0));
+		String jinxiangshuiYear=(jinxiangshuiYear0+jinxiangshuiYear1)+"";//进项税年累-进项税额
+		taxFiles.setJinxiangshuiYear(jinxiangshuiYear);
+	}
+	
+	/**
+	 * @time   2018年11月16日 下午8:08:21
+	 * @author zuoqb
+	 * @todo   适用于增值税一般纳税人-成都
+	 */
+	public static void addedGeneralTaxpayerForWuHang(TaxFilesModel taxFiles, Workbook wb) {
+		taxFiles.setApply(true);//业务主表
+		//处理日期
+		String startDate=readExcelValueByPosition(3, 0, wb, 0);
+		startDate=startDate.replaceAll("税款所属时间：", "").replaceAll("税款所属期间:", "").replaceAll("年", "").replaceAll("月", "").replaceAll("日", "").split("至")[0].replaceAll(" ", "");
+		if(StringUtils.isNotBlank(startDate)){
+			taxFiles.setStartDate(startDate);
+			taxFiles.setStartYear(startDate.substring(0,4));
+			taxFiles.setStartMonth(Integer.valueOf(startDate.substring(4,6))+"");
+		}
+		//公司名称
+		String companyName=readExcelValueByPosition(6, 2, wb, 0);
+		companyName=companyName.replaceAll("纳税人名称：", "").replaceAll("（公章）：", "").replaceAll("（公章）", "");;
+		taxFiles.setCompanyName(companyName);
+		
+		/**
+		 * 解析excel 数据字段
+		 */
+		/**
+		 * 销售额-（一）按适用税率计税销售额
+		 */
+		String xiaoshoueYear=readExcelValueByPosition(11, 6, wb, 0);//销售额年累-（一）按适用税率计税销售额
+		taxFiles.setXiaoshoueYear(xiaoshoueYear);
+		String xiaoshoueMonth=readExcelValueByPosition(11, 4, wb, 0);//销售额月累-（一）按适用税率计税销售额
+		taxFiles.setXiaoshoueMonth(xiaoshoueMonth);
+		/**
+		 * 税额-销项税额
+		 */
+		String shuieYear=readExcelValueByPosition(21, 6, wb, 0);//税额年累-销项税额
+		taxFiles.setShuieYear(shuieYear);
+		String shuieMonth=readExcelValueByPosition(21, 4, wb, 0);//税额月累-销项税额
+		taxFiles.setShuieMonth(shuieMonth);
+		
+		/**
+		 * 第三项-（三）免、抵、退办法出口销售额
+		 */
+		String disanxiangYear=readExcelValueByPosition(17, 6, wb, 0);//第三项年累-（三）免、抵、退办法出口销售额
+		taxFiles.setDisanxiangYear(disanxiangYear);
+		String disanxiangMonth=readExcelValueByPosition(17, 4, wb, 0);//第三项月累-（三）免、抵、退办法出口销售额
+		taxFiles.setDisanxiangMonth(disanxiangMonth);
+		
+		/**
+		 * 第四项-（四）免税销售额
+		 */
+		String disixiangYear=readExcelValueByPosition(18, 6, wb, 0);//第四项年累-（四）免税销售额
+		taxFiles.setDisixiangYear(disixiangYear);
+		String disixiangMonth=readExcelValueByPosition(18, 4, wb, 0);//第四项月累-（四）免税销售额
+		taxFiles.setDisixiangMonth(disixiangMonth);
+		
+		
+		/**
+		 * 简易征收-（二）按简易办法计税销售额
+		 */
+		String jyzsYear=readExcelValueByPosition(15, 6, wb, 0);//简易征收年累-（二）按简易办法计税销售额
+		taxFiles.setJyzsYear(jyzsYear);
+		String jyzsMonth=readExcelValueByPosition(15, 4, wb, 0);//简易征收月累-（二）按简易办法计税销售额
+		taxFiles.setJyzsMonth(jyzsMonth);
+		
+		/**
+		 * 简易税-简易计税办法计算的应纳税额
+		 */
+		String jysYear=readExcelValueByPosition(31, 6, wb, 0);//简易税年累-简易计税办法计算的应纳税额
+		taxFiles.setJysYear(jysYear);
+		String jysMonth=readExcelValueByPosition(31, 4, wb, 0);//简易税月累-简易计税办法计算的应纳税额
+		taxFiles.setJysMonth(jysMonth);
+		
+		
+		/**
+		 * 即征即退销售额  
+		 */
+		double jzjtxseYear0=Double.parseDouble(readExcelValueByPosition(11, 11, wb, 0));
+		double jzjtxseYear1=Double.parseDouble(readExcelValueByPosition(15, 11, wb, 0));
+		String jzjtxseYear=(jzjtxseYear0+jzjtxseYear1)+"";
+		taxFiles.setJzjtxseYear(jzjtxseYear);
+		double jzjtxseMonth0=Double.parseDouble(readExcelValueByPosition(11, 9, wb, 0));
+		double jzjtxseMonth1=Double.parseDouble(readExcelValueByPosition(15, 9, wb, 0));
+		String jzjtxseMonth=(jzjtxseMonth0+jzjtxseMonth1)+"";
+		taxFiles.setJzjtxseMonth(jzjtxseMonth);
+		
+		/**
+		 * 即征即退税额  
+		 */
+		double jzjtseYear0=Double.parseDouble(readExcelValueByPosition(21, 11, wb, 0));
+		double jzjtseYear1=Double.parseDouble(readExcelValueByPosition(31, 11, wb, 0));
+		String jzjtseYear=(jzjtseYear0+jzjtseYear1)+"";
+		taxFiles.setJzjtseYear(jzjtseYear);
+		double jzjtseMonth0=Double.parseDouble(readExcelValueByPosition(21, 9, wb, 0));
+		double jzjtseMonth1=Double.parseDouble(readExcelValueByPosition(31, 9, wb, 0));
+		String jzjtseMonth=(jzjtseMonth0+jzjtseMonth1)+"";
+		taxFiles.setJzjtseMonth(jzjtseMonth);
+		
+		
+		/**
+		 * 进项税-进项税额
+		 */
+		double jinxiangshuiYear0=Double.parseDouble(readExcelValueByPosition(22, 11, wb, 0));
+		double jinxiangshuiYear1=Double.parseDouble(readExcelValueByPosition(22, 6, wb, 0));
+		String jinxiangshuiYear=(jinxiangshuiYear0+jinxiangshuiYear1)+"";//进项税年累-进项税额
+		taxFiles.setJinxiangshuiYear(jinxiangshuiYear);
 	}
 	/**
 	 * @time   2018年11月16日 下午8:08:21
@@ -684,11 +1426,11 @@ public class EtaxFileUtils {
 		 * 即征即退税额  
 		 */
 		double jzjtseYear0=Double.parseDouble(readExcelValueByPosition(23, 6, wb, 0));
-		double jzjtseYear1=Double.parseDouble(readExcelValueByPosition(33, 6, wb, 0));
+		double jzjtseYear1=Double.parseDouble(readExcelValueByPosition(34, 6, wb, 0));
 		String jzjtseYear=(jzjtseYear0+jzjtseYear1)+"";
 		taxFiles.setJzjtseYear(jzjtseYear);
 		double jzjtseMonth0=Double.parseDouble(readExcelValueByPosition(23, 5, wb, 0));
-		double jzjtseMonth1=Double.parseDouble(readExcelValueByPosition(33, 5, wb, 0));
+		double jzjtseMonth1=Double.parseDouble(readExcelValueByPosition(34, 5, wb, 0));
 		String jzjtseMonth=(jzjtseMonth0+jzjtseMonth1)+"";
 		taxFiles.setJzjtseMonth(jzjtseMonth);
 		

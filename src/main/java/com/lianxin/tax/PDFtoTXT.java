@@ -3,18 +3,29 @@ package com.lianxin.tax;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
+import java.util.Iterator;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import jxl.write.WritableSheet;
 import jxl.write.WritableWorkbook;
 
+import org.apache.derby.tools.sysinfo;
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.text.PDFTextStripper;
+import org.w3c.dom.Document;
+
+import com.itextpdf.text.DocumentException;
+import com.itextpdf.text.pdf.AcroFields;
+import com.itextpdf.text.pdf.PdfReader;
+import com.itextpdf.text.pdf.PdfStamper;
+import com.itextpdf.text.pdf.XfaForm;
+import com.itextpdf.xmp.XMPIterator;
 
 public class PDFtoTXT {
 	//初始化excel
@@ -24,10 +35,11 @@ public class PDFtoTXT {
         //将当前目录下的pdf文件转成txt文件
     	String path="C:/Users/Administrator/Desktop/lianxin/报税模板/pdf有问题的/大连/";
     	String name="YBNSRZZS 5月";
-        File f = new File(path+name+".pdf"); //获得当前路径
+    	manipulatePdf(path+name+".pdf", path+"哈哈.pdf");
+       /* File f = new File(path+name+".pdf"); //获得当前路径
         PDFtoTXT(path,f);
         File txt = new File(path+name+".txt"); //获得当前路径
-        TXTtoEXCEL(path,txt);
+        TXTtoEXCEL(path,txt);*/
        /* try {
             //从内存中写入文件中
             wwb.write();
@@ -39,6 +51,30 @@ public class PDFtoTXT {
             e.printStackTrace();
         }*/
 
+    }
+    public static void manipulatePdf(String src, String dest) {
+    	   try {
+    		   PdfReader reader = new PdfReader(src);
+       	    PdfStamper stamper = new PdfStamper(reader,
+       	            new FileOutputStream(dest));
+       	    System.out.println(stamper.getUnderContent(1));
+       	 XMPIterator i=stamper.getWriter().getXmpWriter().getXmpMeta().iterator();
+       	 while (i.hasNext()) {
+       		Object type = i.next();
+       		System.out.println(type);
+			
+		}
+       	    AcroFields form = stamper.getAcroFields();
+       	 System.out.println(stamper.getOverContent(1));
+       	    XfaForm xfa = form.getXfa();
+       	    Document document= xfa.getDomDocument();
+       	    System.out.println(document.getTextContent());
+       	    stamper.close();
+       	    reader.close();
+		} catch (Exception e) {
+			// TODO: handle exception
+			e.printStackTrace();
+		}
     }
 	//将pdf文件输出为txt
     public static void PDFtoTXT(String path,File pdf) {
