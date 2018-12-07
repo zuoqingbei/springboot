@@ -101,11 +101,11 @@ public class UnCompressFile {
                    String destDirName = "";    
                    //非windows系统    
                    if(File.separator.equals("/")){    
-                       destFileName = destDir +File.separator + compressFileName.replaceAll("\\\\", "/");    
+                       destFileName = destDir +File.separator + compressFileName.replaceAll("\\\\", "/").replaceAll("[^0-9a-zA-Z\u4e00-\u9fa5.，,。？“”]+","");    
                        destDirName = destFileName.substring(0, destFileName.lastIndexOf("/"));    
                    //windows系统     
                    }else{    
-                       destFileName = destDir+	File.separator + compressFileName.replaceAll("/", "\\\\");    
+                       destFileName = destDir+	File.separator + compressFileName.replaceAll("/", "\\\\").replaceAll("[^0-9a-zA-Z\u4e00-\u9fa5.，,。？“”]+", "");    
                        destDirName = destFileName.substring(0, destFileName.lastIndexOf("\\"));    
                    }    
                    //2创建文件夹    

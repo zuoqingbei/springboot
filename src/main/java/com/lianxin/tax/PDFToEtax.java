@@ -104,7 +104,7 @@ public class PDFToEtax {
 		List<String> dateKeys=Arrays.asList("税款所属期间","税款所属期","税款所属时间","所属时期");
 		Map<String,Object> mapDate=readPdfValueByKey(content,dateKeys);
 		if("true".equals(String.valueOf(mapDate.get("has")))){
-			String startDate=mapDate.get("value").toString().replaceAll("金额单位：元（列至角分）", "");
+			String startDate=mapDate.get("value").toString().replaceAll("金额单位：元（列至角分）", "").replaceAll("自", "").replaceAll("：", "").replaceAll(":", "");
 			for(String key:dateKeys){
 				startDate=startDate.replace(key, "");
 			}
@@ -370,8 +370,8 @@ public class PDFToEtax {
             	}else{
             		if(StringUtils.isNotBlank(line)&&line.indexOf(key)!=-1){
             			map.put("has", true);
-            			int start=content.indexOf(line);
-            			int end=content.indexOf(nextKey);
+            			int start=getIndex(content,line);
+            			int end=getIndex(content,nextKey);
             			for(int x=start;x<end+1;x++){
             				line+=content.get(x);
             			}
@@ -387,4 +387,14 @@ public class PDFToEtax {
         return map;
     }
   
+    public  static int getIndex(List<String> content,String key){
+    	int index=0;
+    	for(int x=0;x<content.size();x++){
+    		if(content.get(x).indexOf(key)!=-1){
+    			index=x;
+    			break;
+    		}
+    	}
+    	return index;
+    }
 }

@@ -96,6 +96,31 @@ public class ReadMergeRegionExcel {
       }  
       return false;  
     }  
+    
+    public static Map<String,Object> mergedRegion(Sheet sheet,int row ,int column) {  
+        Map<String,Object> map=new HashMap<String, Object>();
+        map.put("isMerged", false);
+  	  	map.put("firstColumn", column);
+  	    map.put("lastColumn", column);
+        int sheetMergeCount = sheet.getNumMergedRegions();  
+        for (int i = 0; i < sheetMergeCount; i++) {
+          CellRangeAddress range = sheet.getMergedRegion(i);  
+          int firstColumn = range.getFirstColumn();  
+          int lastColumn = range.getLastColumn();  
+          int firstRow = range.getFirstRow();  
+          int lastRow = range.getLastRow();  
+          if(row >= firstRow && row <= lastRow){  
+              if(column >= firstColumn && column <= lastColumn){  
+              	//System.out.println(firstRow+","+firstColumn+","+lastRow+","+lastColumn+"\n");
+            	  map.put("isMerged", true);
+            	  map.put("firstColumn", firstColumn);
+            	  map.put("lastColumn", lastColumn);
+                  break;
+              }  
+          } 
+        }  
+        return map;  
+      } 
     /**  
     * 判断sheet页中是否含有合并单元格   
     * @param sheet   
