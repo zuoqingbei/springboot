@@ -1,7 +1,8 @@
 package com.hailian.interceptors;
 
-import com.alibaba.fastjson.JSON;
-import com.hailian.result.ResultDO;
+import java.lang.reflect.Method;
+
+import javax.servlet.http.HttpServletRequest;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -13,10 +14,8 @@ import org.springframework.http.server.ServletServerHttpRequest;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseBodyAdvice;
 
-import javax.servlet.http.HttpServletRequest;
-
-import java.lang.reflect.Method;
-import java.util.Date;
+import com.alibaba.fastjson.JSON;
+import com.hailian.result.ResultDO;
 
 /**
  * @Description: 统一响应结果处理

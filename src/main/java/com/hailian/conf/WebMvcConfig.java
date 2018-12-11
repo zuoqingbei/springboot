@@ -1,4 +1,4 @@
-package com.hailian.conf;
+/*package com.hailian.conf;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -19,9 +19,9 @@ public class WebMvcConfig extends WebMvcConfigurerAdapter {
 	@Autowired
 	private CommonInterceptor commonInterceptor;
 
-	/**
+	*//**
 	 * fastJson相关设置
-	 */
+	 *//*
 	private FastJsonConfig getFastJsonConfig() {
 
 		FastJsonConfig fastJsonConfig = new FastJsonConfig();
@@ -38,9 +38,9 @@ public class WebMvcConfig extends WebMvcConfigurerAdapter {
 		return fastJsonConfig;
 	}
 
-	/**
+	*//**
 	 * fastJson相关设置
-	 */
+	 *//*
 	private FastJsonHttpMessageConverter4 fastJsonHttpMessageConverter() {
 
 		FastJsonHttpMessageConverter4 fastJsonHttpMessageConverter = new FastJsonHttpMessageConverter4();
@@ -55,17 +55,17 @@ public class WebMvcConfig extends WebMvcConfigurerAdapter {
 		return fastJsonHttpMessageConverter;
 	}
 
-	/**
+	*//**
 	 * 添加fastJsonHttpMessageConverter到converters
-	 */
+	 *//*
 	@Override
 	public void configureMessageConverters(List<HttpMessageConverter<?>> converters) {
 		converters.add(fastJsonHttpMessageConverter());
 	}
 
-	/**
+	*//**
 	 * 添加拦截器
-	 */
+	 *//*
 	@Override
 	public void addInterceptors(InterceptorRegistry registry) {
 		registry.addInterceptor(commonInterceptor).addPathPatterns("/**");
@@ -83,3 +83,4 @@ public class WebMvcConfig extends WebMvcConfigurerAdapter {
 
 
 }
+*/

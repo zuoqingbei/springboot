@@ -114,7 +114,7 @@ public class JdbcUtil implements Constant{
 		while(rs.next()) {
 		    Map<String, Object> mapOfColValues = new HashMap<String, Object>();
 		    for(int i = 1; i <= columnCount; ++i) {
-		    	mapOfColValues.put(colNames[i - 1], rs.getString(i));
+		    	mapOfColValues.put(colNames[i - 1], rs.getObject(i)+"");
 		    }
 		    list.add(mapOfColValues);
 		}

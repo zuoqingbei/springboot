@@ -8,7 +8,6 @@ import io.swagger.annotations.ApiOperation;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -35,7 +34,6 @@ import com.hailian.entity.CommonInterfaceExc;
 import com.hailian.entity.DbDatasourceConfig;
 import com.hailian.entity.SysPlatInfo;
 import com.hailian.enums.PublicResultConstant;
-import com.hailian.interceptors.AppInterceptors;
 import com.hailian.service.ICommonInterfaceExcService;
 import com.hailian.service.IDbDatasourceConfigService;
 import com.hailian.service.ISysPlatInfoService;
@@ -158,7 +156,13 @@ public class CommonInterfaceController extends BaseController {
         	if(!PublicResultConstant.SUCCESS.msg.equals(execeResult.getMsg())){
         		return new PublicResult<>(PublicResultConstant.PARAM_ERROR,execeResult.getErrorMsg(), null);
         	}
-        	result.put(entity.getDataSpace(), execeResult.getData());
+        	if(execeResult.getData() instanceof List){
+        		List<Map<String, Object>> verticalData=(List<Map<String, Object>>) execeResult.getData();
+        		result.put(entity.getDataSpace(),verticalData);
+        	}else{
+        		Map<String,List<Object>> horizontalData= (Map<String, List<Object>>) execeResult.getData();
+        		result.put(entity.getDataSpace(),horizontalData);
+        	}
     	}
     	return new PublicResult<>(PublicResultConstant.SUCCESS, result);
    	}
