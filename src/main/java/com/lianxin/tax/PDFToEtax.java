@@ -230,7 +230,8 @@ public class PDFToEtax {
 		 * 进项税-进项税额
 		 */
 		double jinxiangshuiYear0=Double.parseDouble(readPdfValueByPosition(content, Arrays.asList("进项税额"), 2));
-		double jinxiangshuiYear1=Double.parseDouble(readPdfValueByPosition(content, Arrays.asList("进项税额"), 4));
+		//double jinxiangshuiYear1=Double.parseDouble(readPdfValueByPosition(content, Arrays.asList("进项税额"), 4));
+		double jinxiangshuiYear1=0;
 		String jinxiangshuiYear=(jinxiangshuiYear0+jinxiangshuiYear1)+"";//进项税年累-进项税额
 		taxFiles.setJinxiangshuiYear(jinxiangshuiYear);
 	}

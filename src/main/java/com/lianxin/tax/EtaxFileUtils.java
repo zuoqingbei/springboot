@@ -5,20 +5,18 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.InputStream;
 import java.io.OutputStream;
-import java.math.BigDecimal;
-import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import org.apache.commons.lang3.StringUtils;
 import org.apache.poi.hssf.usermodel.HSSFCell;
 import org.apache.poi.hssf.usermodel.HSSFFormulaEvaluator;
-import org.apache.poi.hssf.usermodel.HSSFRow;
-import org.apache.poi.hssf.usermodel.HSSFSheet;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.CellStyle;
@@ -32,14 +30,12 @@ import org.apache.poi.xssf.usermodel.XSSFFormulaEvaluator;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.springframework.core.io.ClassPathResource;
 
-import com.hailian.conf.Constant;
 import com.hailian.utils.ExcleUtils;
 import com.hailian.utils.FileUtil;
 import com.hailian.utils.ReadMergeRegionExcel;
 
 public class EtaxFileUtils {
-	public static boolean isDev=false;
-	public static void main(String[] args) {
+	/*public static void main(String[] args) {
 		try {
 			String path="C://Users//Administrator//Desktop//lianxin//upload";
 			Map<String, Object> data=dealFiles(path+"//orgFiles"+ File.separator+Constant.DEFAULT_ETAX_TEMP_NAME+"//2081118");//FileUtil.ETAX_FILE_UPLOAD
@@ -57,6 +53,21 @@ public class EtaxFileUtils {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+	}*/
+	public static void main(String[] args) {
+		 String a="love23next234csdn3423javaeye";
+		 List<String> digitList = new ArrayList<String>();
+		 Pattern p = Pattern.compile("[^0-9]");
+		 Matcher m = p.matcher(a);
+		 String result = m.replaceAll("");
+		 System.out.println(result);
+	}
+	public static String getNumFromString(String input){
+		 Pattern p = Pattern.compile("[^0-9]");
+		 Matcher m = p.matcher(input);
+		 String result = m.replaceAll("");
+		 System.out.println(result);
+		 return result;
 	}
 	/**
 	 * 
@@ -526,6 +537,22 @@ public class EtaxFileUtils {
 				result.put("success", false);
 				result.put("msg", "文件目录下文件为空!");
 			} else {
+				//先选出其中所有的附件一
+				List<File> attachs=new ArrayList<File>();
+				for(File file:sourceFiles){
+					if(ExcleUtils.validateExcel(file.getPath())){
+						InputStream is = null;
+						// 根据新建的文件实例化输入流
+						is = new FileInputStream(file);
+						// 根据版本选择创建Workbook的方式
+						Workbook wb = WorkbookFactory.create(is);
+						////这块要读sheet
+						is.close();
+					}
+				}
+				//sourceFiles去掉上面确定的文件
+				
+				//处理excel
 				 for(File file:sourceFiles){
 					 if(file.isFile()&&ExcleUtils.validateExcel(file.getName())||FileUtil.isPdf(file.getName())){
 						 //只处理excel  pdf
@@ -688,6 +715,8 @@ public class EtaxFileUtils {
 				addedGeneralTaxpayer(taxFiles, wb);
 			}else if(fujian.indexOf("增值税纳税申报表")!=-1&&in.indexOf("适用于增值税一般纳税人")!=-1){
 				addedGeneralTaxpayer2(taxFiles, wb);
+			}else if(fujian.indexOf("增值税纳税申报表")!=-1&&fujian.indexOf("一般纳税人适用")!=-1){
+				addedGeneralTaxpayer11(taxFiles, wb);
 			}else if(zzs1.indexOf("增值税纳税申报表")!=-1&&zzs2.indexOf("（一般纳税人适用）")!=-1&&!"营业地址".equals(yydz)){
 				//部分成都文件
 				addedGeneralTaxpayerForChengDu(taxFiles, wb);
@@ -733,6 +762,7 @@ public class EtaxFileUtils {
 		//处理日期
 		String startDate=readExcelValueByPosition(3, 0, wb, 0);
 		startDate=startDate.substring(startDate.indexOf("税款所属时期")).replaceAll("税款所属时期", "").replaceAll(":", "").replaceAll("：", "").replaceAll("年", "").replaceAll("月", "").replaceAll("日", "").split("至")[0].replaceAll(" ", "");
+		startDate=getNumFromString(startDate);
 		if(StringUtils.isNotBlank(startDate)){
 			taxFiles.setStartDate(startDate);
 			taxFiles.setStartYear(startDate.substring(0,4));
@@ -751,6 +781,7 @@ public class EtaxFileUtils {
 		//处理日期
 		String startDate=readExcelValueByPosition(5, 4, wb, 0);
 		startDate=startDate.replaceAll(":", "").replaceAll("：", "").replaceAll("年", "").replaceAll("月", "").replaceAll("日", "").split("至")[0].replaceAll(" ", "");
+		startDate=getNumFromString(startDate);
 		if(StringUtils.isNotBlank(startDate)){
 			taxFiles.setStartDate(startDate);
 			taxFiles.setStartYear(startDate.substring(0,4));
@@ -773,6 +804,7 @@ public class EtaxFileUtils {
 		//处理日期
 		String startDate=readExcelValueByPosition(5, 0, wb, 0);
 		startDate=startDate.replaceAll("税款所属时间", "").replaceAll("-", "").replaceAll("税款所属期间", "").replaceAll("税款所属时期", "").replaceAll(":", "").replaceAll("：", "").replaceAll("年", "").replaceAll("月", "").replaceAll("日", "").split("至")[0].replaceAll(" ", "");
+		startDate=getNumFromString(startDate);
 		if(StringUtils.isNotBlank(startDate)){
 			taxFiles.setStartDate(startDate);
 			taxFiles.setStartYear(startDate.substring(0,4));
@@ -790,6 +822,7 @@ public class EtaxFileUtils {
 		//处理日期
 		String startDate=readExcelValueByPosition(3, 0, wb, 0);
 		startDate=startDate.replaceAll("税款所属时间", "").replaceAll("-", "").replaceAll("税款所属期间", "").replaceAll("税款所属时期", "").replaceAll(":", "").replaceAll("：", "").replaceAll("年", "").replaceAll("月", "").replaceAll("日", "").split("至")[0].replaceAll(" ", "");
+		startDate=getNumFromString(startDate);
 		if(StringUtils.isNotBlank(startDate)){
 			taxFiles.setStartDate(startDate);
 			taxFiles.setStartYear(startDate.substring(0,4));
@@ -881,6 +914,9 @@ public class EtaxFileUtils {
 	    for(int rowNum=0;rowNum<totalRows;rowNum++){
 	    	if(finalIndex==0){
 	    		Row r=sheet.getRow(rowNum);
+	    		if(r==null){
+	    			r=sheet.createRow(rowNum);
+	    		}
 	    		int columnNum=r.getPhysicalNumberOfCells();
 	    		for(int x=0;x<columnNum;x++){
 	    			String v1=readExcelValueByPosition(rowNum, x, wb, sheetIndex);
@@ -1022,7 +1058,8 @@ public class EtaxFileUtils {
 		String jzjtseYear=(jzjtseYear0+jzjtseYear1)+"";
 		taxFiles.setJzjtseYear(jzjtseYear);
 		double jzjtseMonth0=Double.parseDouble(readExcelValueByPosition(xxSrIndex, index3, wb, 0));
-		double jzjtseMonth1=Double.parseDouble(readExcelValueByPosition(jysIndex, index3, wb, 0));
+		//double jzjtseMonth1=Double.parseDouble(readExcelValueByPosition(jysIndex, index3, wb, 0));
+		double jzjtseMonth1=0;
 		String jzjtseMonth=(jzjtseMonth0+jzjtseMonth1)+"";
 		taxFiles.setJzjtseMonth(jzjtseMonth);
 		
@@ -1049,6 +1086,7 @@ public class EtaxFileUtils {
 		//处理日期
 		String startDate=readExcelValueByPosition(row, 0, wb, 0);
 		startDate=startDate.replaceAll("税款所属时间", "").replaceAll("-", "").replaceAll("税款所属期间", "").replaceAll("税款所属时期", "").replaceAll(":", "").replaceAll("：", "").replaceAll("年", "").replaceAll("月", "").replaceAll("日", "").split("至")[0].replaceAll(" ", "");
+		startDate=getNumFromString(startDate);
 		if(StringUtils.isNotBlank(startDate)){
 			taxFiles.setStartDate(startDate);
 			taxFiles.setStartYear(startDate.substring(0,4));
@@ -1066,6 +1104,7 @@ public class EtaxFileUtils {
 		//处理日期
 		String startDate=readExcelValueByPosition(3, 0, wb, 0);
 		startDate=startDate.replaceAll("税款所属时间", "").replaceAll("税款所属时间", "").replaceAll("-", "").replaceAll("税款所属期间", "").replaceAll("税款所属时期", "").replaceAll(":", "").replaceAll("：", "").replaceAll("年", "").replaceAll("月", "").replaceAll("日", "").split("至")[0].replaceAll(" ", "");
+		startDate=getNumFromString(startDate);
 		if(StringUtils.isNotBlank(startDate)){
 			taxFiles.setStartDate(startDate);
 			taxFiles.setStartYear(startDate.substring(0,4));
@@ -1087,6 +1126,7 @@ public class EtaxFileUtils {
 		//处理日期
 		String startDate=readExcelValueByPosition(2, 0, wb, 0);
 		startDate=startDate.replaceAll("税款所属时间", "").replaceAll("-", "").replaceAll("税款所属期间", "").replaceAll("税款所属时期", "").replaceAll(":", "").replaceAll("：", "").replaceAll("年", "").replaceAll("月", "").replaceAll("日", "").split("至")[0].replaceAll(" ", "");
+		startDate=getNumFromString(startDate);
 		if(StringUtils.isNotBlank(startDate)){
 			taxFiles.setStartDate(startDate);
 			taxFiles.setStartYear(startDate.substring(0,4));
@@ -1109,6 +1149,7 @@ public class EtaxFileUtils {
 		//处理日期
 		String startDate=readExcelValueByPosition(num, 0, wb, 0);
 		startDate=startDate.replaceAll("税款所属时间", "").replaceAll("-", "").replaceAll("税款所属期间", "").replaceAll("税款所属时期", "").replaceAll(":", "").replaceAll("：", "").replaceAll("年", "").replaceAll("月", "").replaceAll("日", "").split("至")[0].replaceAll(" ", "");
+		startDate=getNumFromString(startDate);
 		if(StringUtils.isNotBlank(startDate)){
 			taxFiles.setStartDate(startDate);
 			taxFiles.setStartYear(startDate.substring(0,4));
@@ -1126,6 +1167,7 @@ public class EtaxFileUtils {
 		//处理日期
 		String startDate=readExcelValueByPosition(1, 0, wb, 0);
 		startDate=startDate.replaceAll("税款所属时间", "").replaceAll("-", "").replaceAll("税款所属期间", "").replaceAll("税款所属时期", "").replaceAll(":", "").replaceAll("：", "").replaceAll("年", "").replaceAll("月", "").replaceAll("日", "").split("至")[0].replaceAll(" ", "");
+		startDate=getNumFromString(startDate);
 		if(StringUtils.isNotBlank(startDate)){
 			taxFiles.setStartDate(startDate);
 			taxFiles.setStartYear(startDate.substring(0,4));
@@ -1149,6 +1191,7 @@ public class EtaxFileUtils {
 		//处理日期
 		String startDate=readExcelValueByPosition(4, 0, wb, 0);
 		startDate=startDate.replaceAll("税款所属时间：", "").replaceAll("税款所属期间:", "").replaceAll("年", "").replaceAll("月", "").replaceAll("日", "").split("至")[0].replaceAll(" ", "");
+		startDate=getNumFromString(startDate);
 		if(StringUtils.isNotBlank(startDate)){
 			taxFiles.setStartDate(startDate);
 			taxFiles.setStartYear(startDate.substring(0,4));
@@ -1193,6 +1236,7 @@ public class EtaxFileUtils {
 		//处理日期
 		String startDate=readExcelValueByPosition(7, 0, wb, 0);
 		startDate=startDate.replaceAll("税款所属时间：", "").replaceAll("税款所属期间:", "").replaceAll("年", "").replaceAll("月", "").replaceAll("日", "").split("至")[0].replaceAll(" ", "");
+		startDate=getNumFromString(startDate);
 		if(StringUtils.isNotBlank(startDate)){
 			taxFiles.setStartDate(startDate);
 			taxFiles.setStartYear(startDate.substring(0,4));
@@ -1211,6 +1255,7 @@ public class EtaxFileUtils {
 		//处理日期
 		String startDate=readExcelValueByPosition(4, 0, wb, 0);
 		startDate=startDate.replaceAll("税款所属时间：", "").replaceAll("税款所属期间:", "").replaceAll("年", "").replaceAll("月", "").replaceAll("日", "").split("至")[0].replaceAll(" ", "");
+		startDate=getNumFromString(startDate);
 		if(StringUtils.isNotBlank(startDate)){
 			taxFiles.setStartDate(startDate);
 			taxFiles.setStartYear(startDate.substring(0,4));
@@ -1219,6 +1264,27 @@ public class EtaxFileUtils {
 		//公司名称
 		String companyName=readExcelValueByPosition(6, 0, wb, 0);
 		companyName=companyName.replaceAll("纳税人名称：", "").replaceAll("（公章）：", "").replaceAll("（公章）", "");;
+		taxFiles.setCompanyName(companyName);
+		
+		menthod1(taxFiles, wb);
+	}
+	public static void addedGeneralTaxpayer11(TaxFilesModel taxFiles, Workbook wb) {
+		taxFiles.setApply(true);//业务主表
+		//处理日期
+		String startDate=readExcelValueByPosition(3, 0, wb, 0);
+		startDate=startDate.replaceAll("填表日期", "").replaceAll("税款所属时间", "").replaceAll(":", "").replaceAll("：", "").replaceAll("年", "").replaceAll("月", "").replaceAll("日", "").split("至")[0].replaceAll(" ", "");
+		startDate=getNumFromString(startDate);
+		if(StringUtils.isNotBlank(startDate)){
+			taxFiles.setStartDate(startDate);
+			taxFiles.setStartYear(startDate.substring(0,4));
+			taxFiles.setStartMonth(Integer.valueOf(startDate.substring(4,6))+"");
+		}
+		//公司名称
+		String companyName=readExcelValueByPosition(5, 1, wb, 0);
+		companyName=companyName.replaceAll("纳税人名称：", "").replaceAll("（公章）：", "").replaceAll("（公章）", "");;
+		if(companyName.indexOf("纳税人识别号：")!=-1){
+			 companyName=readExcelValueByPosition(6, 5, wb, 0);
+		}
 		taxFiles.setCompanyName(companyName);
 		
 		menthod1(taxFiles, wb);
@@ -1234,6 +1300,7 @@ public class EtaxFileUtils {
 		//处理日期
 		String startDate=readExcelValueByPosition(7, 7, wb, 0);
 		startDate=startDate.replaceAll("税款所属时间：", "").replaceAll("税款所属期间:", "").replaceAll("年", "").replaceAll("月", "").replaceAll("日", "").split("至")[0].replaceAll(" ", "");
+		startDate=getNumFromString(startDate);
 		if(StringUtils.isNotBlank(startDate)){
 			taxFiles.setStartDate(startDate);
 			taxFiles.setStartYear(startDate.substring(0,4));
@@ -1258,6 +1325,7 @@ public class EtaxFileUtils {
 		//处理日期
 		String startDate=readExcelValueByPosition(3, 0, wb, 0);
 		startDate=startDate.replaceAll("税款所属期间:", "").replaceAll("年", "").replaceAll("月", "").replaceAll("日", "").split("至")[0].replaceAll(" ", "");
+		startDate=getNumFromString(startDate);
 		if(StringUtils.isNotBlank(startDate)){
 			taxFiles.setStartDate(startDate);
 			taxFiles.setStartYear(startDate.substring(0,4));
