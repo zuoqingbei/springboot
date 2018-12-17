@@ -56,18 +56,8 @@ public class EtaxFileUtils {
 	}*/
 	public static void main(String[] args) {
 		 String a="love23next234csdn3423javaeye";
-		 List<String> digitList = new ArrayList<String>();
-		 Pattern p = Pattern.compile("[^0-9]");
-		 Matcher m = p.matcher(a);
-		 String result = m.replaceAll("");
+		 String result = getNumFromString(a);
 		 System.out.println(result);
-	}
-	public static String getNumFromString(String input){
-		 Pattern p = Pattern.compile("[^0-9]");
-		 Matcher m = p.matcher(input);
-		 String result = m.replaceAll("");
-		 System.out.println(result);
-		 return result;
 	}
 	/**
 	 * 
@@ -1336,5 +1326,12 @@ public class EtaxFileUtils {
 		taxFiles.setCompanyName(companyName);
 		
 		menthod1(taxFiles, wb);
+	}
+	public static String getNumFromString(String input){
+		 Pattern p = Pattern.compile("[^0-9]");
+		 Matcher m = p.matcher(input);
+		 String result = m.replaceAll("");
+		 System.out.println(result);
+		 return result;
 	}
 }
