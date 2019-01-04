@@ -2,6 +2,7 @@ package com.lianxin.tax;
 
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -15,6 +16,8 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import org.apache.commons.lang3.StringUtils;
+import org.apache.derby.tools.sysinfo;
+import org.apache.hadoop.hive.ql.udf.generic.GenericUDAFSumEmptyIsZero.SumDoubleZeroIfEmpty;
 import org.apache.poi.hssf.usermodel.HSSFCell;
 import org.apache.poi.hssf.usermodel.HSSFFormulaEvaluator;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
@@ -506,6 +509,50 @@ public class EtaxFileUtils {
 			}
 		}
 	}
+	public static void getAllAttach(List<File> sourceFiles) throws Exception{
+		List<File> attachs=new ArrayList<File>();
+		for(File file:sourceFiles){
+			if(ExcleUtils.validateExcel(file.getPath())){
+				InputStream is = null;
+				// 根据新建的文件实例化输入流
+				is = new FileInputStream(file);
+				// 根据版本选择创建Workbook的方式
+				Workbook wb = WorkbookFactory.create(is);
+				////这块要读sheet
+				int row=getRowIndex2(wb, 0,0,Arrays.asList("增值税纳税申报表附列资料（一）"));
+				Double sum=0d;
+				if(row>=0){
+					//是附件
+					attachs.add(file);
+					//获取
+					Map<String,Object> m=getRowIndex3(wb, 0,row,Arrays.asList("税款所属时间","税款所属期间","税款所属期"));
+					String date="";
+					if(Integer.valueOf(m.get("row")+"")>0){
+						String[] s=(m.get("value")+"").split("至");
+						date=getNumFromString(s[0]);
+					}
+					System.out.println(date);
+					int startRow=getRowIndex2(wb,row, 0,Arrays.asList("16%税率的货物及加工修理修配劳务"));
+					startRow++;
+					if(startRow>=0){
+						int ms=getRowIndex2(wb,row, 0,Arrays.asList("四、免税"));
+						int endRow=getRowIndex2(wb,ms, 0,Arrays.asList("服务、不动产和无形资产"));
+						int columnNum1=getValueIndexByPosition(wb, 0, startRow-1, "5",1);
+						int columnNum2=getValueIndexByPosition(wb, 0, startRow-1, "6",1);
+						for(int x=startRow;x<=endRow;x++){
+							for(int y=columnNum1;y<=columnNum2;y++){
+								String value=readExcelValueByPosition(x, y, wb, 0);
+								sum=sum+Double.parseDouble(value);
+								System.out.println("x="+x+",y="+y+",value="+value);
+							}
+						}
+					}
+				}
+				System.out.println("sum="+sum);
+				is.close();
+			}
+		}
+	}
 	/**
 	 * 
 	 * @time   2018年11月17日 上午11:07:01
@@ -529,19 +576,8 @@ public class EtaxFileUtils {
 			} else {
 				//先选出其中所有的附件一
 				List<File> attachs=new ArrayList<File>();
-				for(File file:sourceFiles){
-					if(ExcleUtils.validateExcel(file.getPath())){
-						InputStream is = null;
-						// 根据新建的文件实例化输入流
-						is = new FileInputStream(file);
-						// 根据版本选择创建Workbook的方式
-						Workbook wb = WorkbookFactory.create(is);
-						////这块要读sheet
-						is.close();
-					}
-				}
+				//getAllAttach(sourceFiles);
 				//sourceFiles去掉上面确定的文件
-				
 				//处理excel
 				 for(File file:sourceFiles){
 					 if(file.isFile()&&ExcleUtils.validateExcel(file.getName())||FileUtil.isPdf(file.getName())){
@@ -700,6 +736,8 @@ public class EtaxFileUtils {
 			String yydz=readExcelValueByPosition(8, 0, wb, 0);//武汉友成工单
 			String in=readExcelValueByPosition(1, 0, wb, 0);
 			String fff=readExcelValueByPosition(3, 2, wb, 0);
+			String bbb=readExcelValueByPosition(0, 3, wb, 0);
+			String bbb1=readExcelValueByPosition(1, 5, wb, 0);
 			if(zzs.indexOf("增值税纳税申报表")!=-1&&zzs.indexOf("附列资料")==-1&&!"营业地址".equals(yydz)){
 				System.out.println(taxFiles.getName()+"-----------增值税纳税申报表");
 				addedGeneralTaxpayer(taxFiles, wb);
@@ -737,6 +775,8 @@ public class EtaxFileUtils {
 				}else{
 					addedGeneralTaxpayerForAdober(taxFiles, wb,num);
 				}
+			}else if((bbb.indexOf("增值税纳税申报表")!=-1&&bbb1.indexOf("适用于增值税一般纳税人")!=-1)){
+				addedGeneralTaxpayerForAdoberXiXi(taxFiles, wb);
 			}else{
 				//加密的
 				String sec=readExcelValueByPosition(4, 4, wb, 0);
@@ -746,6 +786,25 @@ public class EtaxFileUtils {
 				}
 			}
 		}
+	}
+	
+	public static void addedGeneralTaxpayerForAdoberXiXi(TaxFilesModel taxFiles, Workbook wb) {
+		taxFiles.setApply(true);//业务主表
+		//处理日期
+		String startDate=readExcelValueByPosition(3, 2, wb, 0);
+		startDate=startDate.substring(startDate.indexOf("税款所属时间")).replaceAll("税款所属时间", "").replaceAll("自", "").replaceAll(":", "").replaceAll("：", "").replaceAll("年", "").replaceAll("月", "").replaceAll("日", "").split("至")[0].replaceAll(" ", "");
+		startDate=getNumFromString(startDate);
+		if(StringUtils.isNotBlank(startDate)){
+			taxFiles.setStartDate(startDate);
+			taxFiles.setStartYear(startDate.substring(0,4));
+			taxFiles.setStartMonth(Integer.valueOf(startDate.substring(4,6))+"");
+		}
+		//公司名称
+		String companyName=readExcelValueByPosition(6, 3, wb, 0);
+		companyName=companyName.replaceAll("纳税人名称", "").replaceAll("（公章）：", "").replaceAll("（公章）", "").replaceAll(":", "").replaceAll(":", "");
+		taxFiles.setCompanyName(companyName);
+		
+		menthod1(taxFiles, wb);
 	}
 	public static void addedGeneralTaxpayerForAdoberWuHan(TaxFilesModel taxFiles, Workbook wb) {
 		taxFiles.setApply(true);//业务主表
@@ -880,7 +939,7 @@ public class EtaxFileUtils {
 		}
 		int columnNum=r.getPhysicalNumberOfCells();
 		int finalIndex=0;
-		for(int x=columnNum-1;x>=0;x--){
+		for(int x=columnNum;x>=0;x--){
 			String v1=readExcelValueByPosition(rowNum, x, wb, sheetIndex);
 			if(StringUtils.isNotBlank(v1)&&value.equals(v1.trim())){
 				finalIndex=x;
@@ -921,14 +980,18 @@ public class EtaxFileUtils {
 	    };
 	    return finalIndex;
 	}
-	public static int getRowIndex2(Workbook wb,int sheetIndex,List<String> values){
+	
+	public static int getRowIndex2(Workbook wb,int rowStart,int sheetIndex,List<String> values){
 		Sheet sheet = wb.getSheetAt(sheetIndex);
 		//得到Excel的行数
 	    int totalRows=sheet.getPhysicalNumberOfRows();
-	    int finalIndex=0;
-	    for(int rowNum=0;rowNum<totalRows;rowNum++){
-	    	if(finalIndex==0){
+	    int finalIndex=-1;
+	    for(int rowNum=rowStart;rowNum<totalRows;rowNum++){
+	    	if(finalIndex==-1){
 	    		Row r=sheet.getRow(rowNum);
+	    		if(r==null){
+	    			r=sheet.createRow(rowNum);
+	    		}
 	    		int columnNum=r.getPhysicalNumberOfCells();
 	    		for(int x=0;x<columnNum;x++){
 	    			String v1=readExcelValueByPosition(rowNum, x, wb, sheetIndex);
@@ -942,6 +1005,39 @@ public class EtaxFileUtils {
 	    	}
 	    };
 	    return finalIndex;
+	}
+	
+	public static Map<String,Object> getRowIndex3(Workbook wb,int gRowIndex,int sheetIndex,List<String> values){
+		Map<String,Object> m=new HashMap<String, Object>();
+		Sheet sheet = wb.getSheetAt(sheetIndex);
+		//得到Excel的行数
+	    int totalRows=sheet.getPhysicalNumberOfRows();
+	    int finalIndex=-1;
+	    m.put("row", finalIndex);
+		m.put("col", finalIndex);
+		m.put("value", "");
+	    for(int rowNum=gRowIndex;rowNum<totalRows;rowNum++){
+	    	if(finalIndex==-1){
+	    		Row r=sheet.getRow(rowNum);
+	    		if(r==null){
+	    			r=sheet.createRow(rowNum);
+	    		}
+	    		int columnNum=r.getPhysicalNumberOfCells();
+	    		for(int x=0;x<columnNum;x++){
+	    			String v1=readExcelValueByPosition(rowNum, x, wb, sheetIndex);
+	    			if(StringUtils.isNotBlank(v1)&&checkContion(values,v1)){
+	    				finalIndex=rowNum;
+	    				m.put("row", rowNum);
+	    				m.put("col", x);
+	    				m.put("value", v1);
+	    				break;
+	    			}
+	    		}
+	    	}else{
+	    		break;
+	    	}
+	    };
+	    return m;
 	}
 	
 	public static boolean checkContion(List<String> values,String input){
@@ -1020,7 +1116,7 @@ public class EtaxFileUtils {
 		/**
 		 * 简易税-简易计税办法计算的应纳税额
 		 */
-		int jysIndex=getRowIndex(wb, 0,Arrays.asList("简易计税办法计算的应纳税额","简易征收办法计算的应纳税额"));
+		int jysIndex=getRowIndex(wb, 0,Arrays.asList("简易计税办法计算的应纳税额","简易征收办法计算的应纳税额","按简易征收办法计算的应纳税额"));
 		String jysYear=readExcelValueByPosition(jysIndex, index2, wb, 0);//简易税年累-简易计税办法计算的应纳税额
 		taxFiles.setJysYear(jysYear);
 		String jysMonth=readExcelValueByPosition(jysIndex, index1, wb, 0);//简易税月累-简易计税办法计算的应纳税额
@@ -1044,7 +1140,8 @@ public class EtaxFileUtils {
 		 * 即征即退税额  
 		 */
 		double jzjtseYear0=Double.parseDouble(readExcelValueByPosition(xxSrIndex, index4, wb, 0));
-		double jzjtseYear1=Double.parseDouble(readExcelValueByPosition(jysIndex, index4, wb, 0));
+		//double jzjtseYear1=Double.parseDouble(readExcelValueByPosition(jysIndex, index4, wb, 0));
+		double jzjtseYear1=0;
 		String jzjtseYear=(jzjtseYear0+jzjtseYear1)+"";
 		taxFiles.setJzjtseYear(jzjtseYear);
 		double jzjtseMonth0=Double.parseDouble(readExcelValueByPosition(xxSrIndex, index3, wb, 0));
@@ -1072,7 +1169,7 @@ public class EtaxFileUtils {
 	}
 	public static void addedGeneralTaxpayerForAdober5(TaxFilesModel taxFiles, Workbook wb) {
 		taxFiles.setApply(true);//业务主表
-		int row=getRowIndex2(wb, 0,Arrays.asList("税款所属时间","税款所属期间","税款所属时期"));
+		int row=getRowIndex2(wb, 0,0,Arrays.asList("税款所属时间","税款所属期间","税款所属时期"));
 		//处理日期
 		String startDate=readExcelValueByPosition(row, 0, wb, 0);
 		startDate=startDate.replaceAll("税款所属时间", "").replaceAll("-", "").replaceAll("税款所属期间", "").replaceAll("税款所属时期", "").replaceAll(":", "").replaceAll("：", "").replaceAll("年", "").replaceAll("月", "").replaceAll("日", "").split("至")[0].replaceAll(" ", "");
@@ -1262,7 +1359,15 @@ public class EtaxFileUtils {
 		taxFiles.setApply(true);//业务主表
 		//处理日期
 		String startDate=readExcelValueByPosition(3, 0, wb, 0);
-		startDate=startDate.replaceAll("填表日期", "").replaceAll("税款所属时间", "").replaceAll(":", "").replaceAll("：", "").replaceAll("年", "").replaceAll("月", "").replaceAll("日", "").split("至")[0].replaceAll(" ", "");
+		if(startDate.indexOf("填表日期")!=-1){
+			startDate=readExcelValueByPosition(2, 0, wb, 0);
+		}
+		String m=startDate.replaceAll("税款所属时间", "").replaceAll(":", "").replaceAll("：", "").replaceAll("年", "").replaceAll("月", "").replaceAll("日", "");
+		if(m.startsWith("至")){
+			startDate=m.replaceAll("至", "");
+		}else{
+			startDate=m.split("至")[0].replaceAll(" ", "");
+		}
 		startDate=getNumFromString(startDate);
 		if(StringUtils.isNotBlank(startDate)){
 			taxFiles.setStartDate(startDate);
@@ -1331,7 +1436,6 @@ public class EtaxFileUtils {
 		 Pattern p = Pattern.compile("[^0-9]");
 		 Matcher m = p.matcher(input);
 		 String result = m.replaceAll("");
-		 System.out.println(result);
 		 return result;
 	}
 }
