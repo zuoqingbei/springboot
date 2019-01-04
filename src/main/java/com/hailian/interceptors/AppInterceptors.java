@@ -1,10 +1,21 @@
 package com.hailian.interceptors;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.util.Map;
 import java.util.regex.Pattern;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-
+import javax.servlet.http.HttpSession;
+import org.apache.http.client.methods.CloseableHttpResponse;
+import org.apache.http.client.methods.HttpPost;
+import org.apache.http.impl.client.CloseableHttpClient;
+import org.apache.http.impl.client.HttpClients;
+import org.apache.http.util.EntityUtils;
+import org.codehaus.jackson.JsonParseException;
+import org.codehaus.jackson.map.JsonMappingException;
+import org.codehaus.jackson.map.ObjectMapper;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.util.StringUtils;
@@ -12,9 +23,9 @@ import org.springframework.web.method.HandlerMethod;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
 import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
-
 import com.hailian.annotation.AuthPower;
 import com.hailian.common.TokenConstants;
+import com.hailian.conf.Constant;
 import com.hailian.enums.PlatformType;
 import com.hailian.exception.AppWebException;
 import com.hailian.utils.JWTUtil;
@@ -61,8 +72,70 @@ public class AppInterceptors extends WebMvcConfigurerAdapter{
             }
         }).addPathPatterns("/*","/user/**");*/
         registry.addInterceptor(new ApiInterceptor()).addPathPatterns("/api/**");
+        //registry.addInterceptor(new TokenInterceptor()).addPathPatterns("/bigSreen/**");
     }
 
+    /**
+     * 单点登录
+     * @author lzg
+     */
+    private class TokenInterceptor extends HandlerInterceptorAdapter{
+    	 @Override
+    	 public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
+    		 response.setCharacterEncoding("utf-8");
+    		 request.setCharacterEncoding("utf-8");
+    		 String targetUrl = "http://t.c.haier.net/login?url=http://dvp.haier.net";
+    		 //检验session
+    		 HttpSession session = request.getSession();
+    		 String userCode = (String) session.getAttribute(Constant.PORTAL_USER_690);
+    		 
+    		 //若session为空检验token
+    		 if(StringUtils.isEmpty(userCode)) {
+    			 
+    			 String tokenStr = request.getParameter("token");
+        		 
+        		 if(StringUtils.isEmpty(tokenStr)) {response.sendRedirect(targetUrl);}
+        		 
+        		 HttpPost post = new HttpPost("http://dvp.haier.net/userServiceYonghong/checkUserToken?token="+tokenStr);
+        			 
+        		 CloseableHttpClient client = HttpClients.createDefault();
+        		 CloseableHttpResponse response1 = null;
+        		 String rest = "";
+        			try {
+        				response1 = client.execute(post);
+        				
+        				rest = EntityUtils.toString(response1.getEntity(), "utf-8");
+        				
+        				//返回结果形如  {"result":"success","userAlias":"王健","userId":"A0000662"}
+        				System.out.println(rest);
+        				
+        				if(StringUtils.isEmpty(rest)) {response.sendRedirect(targetUrl);}
+        				
+        				//获取信息账户
+        				ObjectMapper  objectMapper = new ObjectMapper(); 
+        				Map<String,String> maps = objectMapper.readValue(rest, Map.class);
+        				for (String string : maps.keySet()) { System.out.println(string+":"+maps.get(string)); 	}
+        				String status =  maps.get("result");
+        				String userAlias = maps.get("userAlias");
+        				userCode = maps.get("userId");
+        				if("error".equals(status)||StringUtils.isEmpty(status)||StringUtils.isEmpty(userAlias)||StringUtils.isEmpty(userCode)) {
+        					response.reset();response.sendRedirect(targetUrl);
+        				}
+        				//设置session
+        				request.getSession().setAttribute(Constant.PORTAL_USER_690,userCode);
+        			} catch (JsonParseException e) { e.printStackTrace();
+        			response.sendRedirect(targetUrl);
+        			} catch (JsonMappingException e) { e.printStackTrace();
+        			response.sendRedirect(targetUrl);
+        			} catch (IOException e) { e.printStackTrace();
+        			} catch (Exception e) { e.printStackTrace();
+        			}
+    		 }
+			return true;
+    	 }
+    	
+    }
+    
     /**
      * api 拦截器
      */
@@ -136,7 +209,7 @@ public class AppInterceptors extends WebMvcConfigurerAdapter{
 
             }
 
-          /*  if(request instanceof BodyReaderHttpServletRequestWrapper){
+            /*if(request instanceof BodyReaderHttpServletRequestWrapper){
 
                 BodyReaderHttpServletRequestWrapper requestWrapper = (BodyReaderHttpServletRequestWrapper) request;
 

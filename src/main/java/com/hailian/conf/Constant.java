@@ -20,4 +20,18 @@ public interface Constant {
 	
 	public static final String DEFAULT_UPLOAD_TEMP_NAME="system";//通过上传接口上传的文件保存文件夹名称
 	public static final String DEFAULT_ETAX_TEMP_NAME="etax";//联信报税的文件保存文件夹名称
+	
+	
+public static final String PORTAL_USER_690="portal_user_690";
+	
+	//权限来源数据源信息
+	public static final String AUTHORITY_FROM_DB_lOCATION ="jdbc:mysql://10.135.26.190:5627/bd_permission_prod";
+	public static final String AUTHORITY_FROM_DB_NAME ="pdview";
+	public static final String AUTHORITY_FROM_DB_PASSWORD ="pdview2019"; 
+	
+	//权限目标插入库数据源信息
+	public static final String AUTHORITY_TARGET_DB_lOCATION ="jdbc:oracle:thin:@10.138.225.210:1521/bgdrac";
+	public static final String AUTHORITY_TARGET_DB_NAME ="cdwl";
+	public static final String AUTHORITY_TARGET_DB_PASSWORD ="LM2zEmCHRgKT36QM"; 
+	
 }
