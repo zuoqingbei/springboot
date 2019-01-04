@@ -33,6 +33,6 @@
     width: 2rem;
     height: 2rem;
     border: 0;
-    background: url("${ctx}/690/images/home.png") no-repeat;
+    background: url("../images/home.png") no-repeat;
     background-size: 2rem 2rem;
 }

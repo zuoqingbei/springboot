@@ -195,13 +195,13 @@
 }
 .btn_box span.left_arrow{
     display: none;
-    background: url("${ctx}/690/images/left_month.png") no-repeat;
+    background: url("../images/left_month.png") no-repeat;
     background-size: 100% 100%;
     left: 2%;
 }
 .btn_box span.right_arrow{
     display: none;
-    background: url("${ctx}/690/images/right_month.png") no-repeat;
+    background: url("../images/right_month.png") no-repeat;
     background-size: 100% 100%;
     right: 2%;
 }

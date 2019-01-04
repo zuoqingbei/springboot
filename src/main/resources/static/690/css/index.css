@@ -46,7 +46,7 @@
     width: 1rem;
     height: 1rem;
     display: inline-block;
-    background: url("${ctx}/690/images/star-on.png") no-repeat;
+    background: url("../images/star-on.png") no-repeat;
     background-size: 100% 100%;
 }
 .dixian{
@@ -56,7 +56,7 @@
     margin-left: 0.5%;
 }
 .dixian{
-    background: url('${ctx}/690/images/sy-y2.jpg') no-repeat;
+    background: url('../images/sy-y2.jpg') no-repeat;
     background-size: 100% 100%;
 }
 .xAxis_box .xAxis_numbs{

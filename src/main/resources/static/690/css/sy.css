@@ -360,7 +360,7 @@ main>div {
 .line_2 {
     top: 62%;
     height: 36%;
-    background-image: url('${ctx}/690/images/A.png');
+    background-image: url('../images/A.png');
     border-top: .05rem solid var(--fontColor);
     border-bottom: .1rem solid var(--fontColor);
 }
@@ -893,7 +893,7 @@ div.addline {
     height: 120%;
     top: 1.3%;
     right: -4.9%;
-    background: url(${ctx}/690/images/yAxis.png) no-repeat;
+    background: url(../images/yAxis.png) no-repeat;
     background-size: 75% 100%;
 }
 
@@ -912,7 +912,7 @@ div.addline3 {
 .line_bottom {
     width: 100%;
     height: 16px;
-    background: url(${ctx}/690/images/xAxis.png) no-repeat;
+    background: url(../images/xAxis.png) no-repeat;
     position: absolute;
     bottom: 4.3%;
     background-size: 100% 70%;

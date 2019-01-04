@@ -95,17 +95,17 @@ header {
 
 .sheng {
     width: 1.5rem;
-    background: url('${ctx}/690/images/up.gif') no-repeat;
+    background: url('../images/up.gif') no-repeat;
 }
 
 .ping {
     width: 1.5rem;
-    background: url('${ctx}/690/images/on.gif') no-repeat;
+    background: url('../images/on.gif') no-repeat;
 }
 
 .jiang {
     width: 1.5rem;
-    background: url('${ctx}/690/images/down.gif') no-repeat;
+    background: url('../images/down.gif') no-repeat;
 }
 
 /* 产业对应x轴 */
@@ -159,7 +159,7 @@ header {
 @-moz-document url-prefix() {
     select {
         -moz-appearance: none !important;
-        background: url('${ctx}/690/images/input_arrow.png') no-repeat 94% center !important;
+        background: url('../images/input_arrow.png') no-repeat 94% center !important;
     }
     @media (max-width: 1400px) {
         .boxcnt,
