@@ -11,7 +11,8 @@ import java.util.Enumeration;
 import java.util.List;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
-import de.innosystec.unrar.Archive;    
+import de.innosystec.unrar.Archive;
+import de.innosystec.unrar.NativeStorage;
 import de.innosystec.unrar.rarfile.FileHeader;  
 
 /**
@@ -90,7 +91,7 @@ public class UnCompressFile {
        Archive a = null;    
        FileOutputStream fos = null;    
        try{    
-           a = new Archive(new File(sourceRar));    
+           a = new Archive(new NativeStorage(new File(sourceRar)));    // a = new Archive(new File(sourceRar));
            FileHeader fh = a.nextFileHeader();    
            while(fh!=null){    
                if(!fh.isDirectory()){    
