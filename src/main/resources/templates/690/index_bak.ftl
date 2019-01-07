@@ -53,7 +53,7 @@
     <div class="pt_btn" id="fhxw">孵化小微</div>
 </div>
 
-<iframe id="mainContent" frameborder="no" width="100%" height="100%" src="${ctx}/690/home.html"></iframe>
+<iframe id="mainContent" frameborder="no" width="100%" height="100%" src="${ctx}/bigSreen/sys/v1/home"></iframe>
 
 <script src="${ctx}/690/js/jquery-3.3.1.min.js"></script>
 <script src="${ctx}/690/js/common.js"></script>
@@ -68,16 +68,16 @@ $(function(){
         let btn_id=$(this).attr("id");
         switch (btn_id) {
           /*  case "home":
-                $('#mainContent').attr("src","${ctx}/690/home.html");
+                $('#mainContent').attr("src","${ctx}/bigSreen/sys/v1/home");
                 break;*/
             case "yhxw":
-                $('#mainContent').attr("src","${ctx}/690/yhxw.html");
+                $('#mainContent').attr("src","${ctx}/bigSreen/sys/v1/yhxw");
                 break;
             case "fhxw":
-                $('#mainContent').attr("src","${ctx}/690/fhxv.html");
+                $('#mainContent').attr("src","${ctx}/bigSreen/sys/v1/fhxv");
                 break;
             case "cdwl":
-                $('#mainContent').attr("src","${ctx}/690/cdwl-sq.html");
+                $('#mainContent').attr("src","${ctx}/bigSreen/sys/v1/cdwl-sq");
                 break;
 
         }

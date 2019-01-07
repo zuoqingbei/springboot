@@ -585,7 +585,7 @@
     $('body').on('click', '.title3', function () {
         //var XW_CODE =  $(this).data("xwcode");
         //var i =1;
-        parent.location.href = "${ctx}/690/cdwl-sq.html"
+        parent.location.href = "${ctx}/bigSreen/sys/v1/cdwl-sq"
     })
 </script>
 

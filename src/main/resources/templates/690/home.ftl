@@ -91,7 +91,7 @@
         <div class="pt_btn" id="cdwl">触点网络</div>
         <div class="pt_btn" id="fhxw">孵化小微</div>
 </div> -->
-<iframe id="mainContent" frameborder="no" width="100%" height="100%" src="${ctx}/690/sy-yhxw.html"></iframe>
+<iframe id="mainContent" frameborder="no" width="100%" height="100%" src="${ctx}/bigSreen/sys/v1/sy-yhxw"></iframe>
 <!-- <div class="leftnav">
     <div class="show_btn">
         <img src="${ctx}/690/images/侧栏icon.png" alt="">
@@ -121,13 +121,13 @@
             let btn_id=$(this).attr("id");
             switch (btn_id) {
                 case "yhxw":
-                    $('#mainContent').attr("src","${ctx}/690/sy-yhxw.html");
+                    $('#mainContent').attr("src","${ctx}/bigSreen/sys/v1/sy-yhxw");
                     break;
                 case "fhxw":
-                    $('#mainContent').attr("src","${ctx}/690/fhxv.html");
+                    $('#mainContent').attr("src","${ctx}/bigSreen/sys/v1/fhxv");
                     break;
                 case "cdwl":
-                    $('#mainContent').attr("src","${ctx}/690/sy-cdwl.html");
+                    $('#mainContent').attr("src","${ctx}/bigSreen/sys/v1/sy-cdwl");
                     break;
 
             }
