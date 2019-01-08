@@ -102,6 +102,7 @@ $(function () {
             let date = abledata[i]['DATE_DT'].substr(0, 4) + '.' + abledata[i]['DATE_DT'].substr(4, 2) + '';
             xdata.push(date);
         }
+        console.log(xdata)
         let commonLine = echarts.init($("#"+echartId)[0]);
         commonLine.clear();
         commonLine.setOption(com_line);
@@ -126,18 +127,37 @@ $(function () {
                 }
 
             },
-            xAxis: {
-                name: '月份',
-                nameGap: 2 * bodyScale,
-                axisLabel: { //标签名称
-                    margin: 2 * bodyScale,
-                    fontSize: 13 * bodyScale,
-                },
-                axisTick: { 
-                    show: true
-                },
-                data: xdata,
-            },
+            xAxis: [
+                {
+                    position: 'bottom',
+                    name: '月份',
+                    nameGap: 15 * bodyScale,
+                    boundaryGap: 0,
+                    axisLabel: { //标签名称
+                        margin: 2 * bodyScale,
+                        fontSize: 13 * bodyScale,
+                        interval: 0,
+                        formatter: function(data){
+                            var xAxisTime = data.substr(0, 4) + data.substr(5, 2);
+                            if (parseInt(xAxisTime) > parseInt(time.substr(0, 6))){
+                                return data.substr(5, 2) + "E";
+                            }
+                            return data.substr(5, 2);
+                        },
+                    },
+                    axisTick: {
+                        show: true,
+                        alignWithLabel: true
+                    },
+                    axisLine: {
+                        lineStyle: {
+                            color: '#0083b3'
+                        }
+                    },
+                    data: xdata,
+                }
+
+            ],
             yAxis: {
                 show: false,
             },

@@ -629,7 +629,7 @@ function getDateByCommonInterface2(dataType, params, successCallBack, SJData, XD
     };
     $.get(clientUrl, { "dataType": dataType, "params": params }, function (data, status) {
         if (status == "success") {
-            var jsonData = data;
+            var jsonData = JSON.parse(data);
             if (jsonData.result == "00000000") {
                 //数据请求成功
                 successCallBack(jsonData.data, SJData, XData);

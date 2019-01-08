@@ -10,6 +10,12 @@
     <link rel="icon" type="image/x-icon" href="${ctx}/690/images/favicon.ico" />
     <title>小微分类升级驱动体系</title>
     <style>
+        .inputs_box>div>textarea {
+            font-size: 1rem;
+            margin-top: .8rem;
+            text-align: center;
+        }
+
         .btn_grounp {
             position: absolute;
             left: 1%;

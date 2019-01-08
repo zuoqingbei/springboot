@@ -150,18 +150,54 @@ $(function () {
             tooltip: {
                 show: false,
             },
-            xAxis: {
-                name: '月份',
-                nameGap: 2 * bodyScale,
-                axisLabel: { //标签名称
-                    margin: 2 * bodyScale,
-                    fontSize: 13 * bodyScale,
-                },
-            axisTick: {
-                show: true
-            },
-                data: xdata,
-            },
+            xAxis: [
+                {
+                    position: 'bottom',
+                    name: '月份',
+                    nameGap: 15 * bodyScale,
+                    boundaryGap: 0,
+                    axisLabel: { //标签名称
+                        margin: 2 * bodyScale,
+                        fontSize: 13 * bodyScale,
+                        interval: 0,
+                        formatter: function(data){
+                            if (parseInt(data) > parseInt(time.substr(0, 6))){
+                                return data.substr(4, 2) + "E";
+                            }
+                            return data.substr(4, 2);
+                        },
+                    },
+                    axisTick: {
+                        show: true,
+                        alignWithLabel: true
+                    },
+                    axisLine: {
+                        lineStyle: {
+                            color: '#0083b3'
+                        }
+                    },
+                    data: xdata,
+                }
+
+            ],
+            // xAxis: {
+                
+            //     name: '月份',
+            //     nameGap: 2 * bodyScale,
+            //     axisLabel: { //标签名称
+            //         margin: 2 * bodyScale,
+            //         fontSize: 13 * bodyScale,
+            //         interval: 0,
+            //         formatter: function(data){
+            //             return data.substr(4, 2);
+            //         },
+            //     },
+            //     axisTick: {
+            //         show: true,
+            //         alignWithLabel: true
+            //     },
+            //     data: xdata,
+            // },
             yAxis: {
                 show: false,
             },

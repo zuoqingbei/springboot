@@ -147,6 +147,9 @@
         .int{
             margin-left: 8px !important;
         }
+        .numbs{
+            font-family: Arial;
+        } 
         @media(max-width:1400px){
             .turnbox_s_n {
                 height: 27%;

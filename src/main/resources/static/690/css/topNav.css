@@ -33,6 +33,6 @@
     width: 2rem;
     height: 2rem;
     border: 0;
-    background: url("../images/home.png") no-repeat;
+    background: url("/690Project_web/images/home.png") no-repeat;
     background-size: 2rem 2rem;
 }
