@@ -240,12 +240,12 @@ function getNextMonth(date) {
 
 //将产业星级数据写入页面
 function levels(data) {
-    $('.column_1_goal').text("");
+    $('#CYZ').text("");
     $('.s_lin1_one').html("");
     $('.s_lin1_two').html("");
     $('.s_lin1_three').html("");
     var abledata = data['690_yhxw_015'];
-    $('.column_1_goal').text(abledata[0]['INDUSTRY_Z']);
+    $('#CYZ').text(abledata[0]['INDUSTRY_Z']);
     $('.s_lin1_one').html(levelStar(abledata[0]));
     $('.s_lin1_two').html(levelStar(abledata[2]));
     $('.s_lin1_three').html(levelStar(abledata[1]));
