@@ -696,6 +696,9 @@ function getSatrt(num) {
 function createTopOneBlock(value, index, needLine) {
     var htmls = [];
     var hz = [];
+    for (x = 0; x < 5; x++) {
+        $(".numsvalue_" + (index + 1) + "_" + (x + 1)).html('');
+    }
     //单条数据
     value.each(function (innerKey, innerValue, innerIndex) {
         var rate = "0/0";
@@ -770,9 +773,9 @@ function createTopOneBlock(value, index, needLine) {
                 var c = parseInt((max - min) / 5);
                 // console.log(max+","+min+","+c)
                 //从小到大
-                console.log(index)
+                // console.log(index)
                 for (x = 0; x < 5; x++) {
-                    $(".numsvalue_" + (index + 1) + "_" + (5 - x)).html('<span class="point_line"></span>' + parseInt(((max - x * c) / 10000)));
+                    $(".numsvalue_" + (index + 1) + "_" + (5 - x)).html(parseInt(((max - x * c) / 10000)));
                 }
             } else {
                 //融速  要求写死  25 -0
@@ -790,7 +793,7 @@ function createTopOneBlock(value, index, needLine) {
                 var c = 5;
                 // console.log(index)
                 for (x = 0; x < 5; x++) {
-                    $(".numsvalue_" + (index + 1) + "_" + (x + 1)).html('<span class="point_line"></span>' + (max - x * c));
+                    $(".numsvalue_" + (index + 1) + "_" + (x + 1)).html((max - x * c));
                 }
             }
         };
