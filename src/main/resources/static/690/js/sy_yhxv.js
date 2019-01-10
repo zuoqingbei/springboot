@@ -116,8 +116,8 @@ $(function () {
     //封装平台柱状图数据
     function setPTBar(data) {
         // console.log(data)
-        MBData = [data['690_yhxw_yj_018'][0]['MB_SRZF'], data['690_yhxw_yj_018'][0]['MB_LRZF'], data['690_yhxw_yj_018'][0]['MB_LRL']];
-        SJData = [data['690_yhxw_yj_018'][0]['SJ_SRZF'], data['690_yhxw_yj_018'][0]['SJ_LRZF'], data['690_yhxw_yj_018'][0]['SJ_LRL']];
+        MBData = [Number(data['690_yhxw_yj_018'][0]['MB_SRZF']).toFixed(1), Number(data['690_yhxw_yj_018'][0]['MB_LRZF']).toFixed(2), Number(data['690_yhxw_yj_018'][0]['MB_LRL']).toFixed(3)];
+        SJData = [Number(data['690_yhxw_yj_018'][0]['SJ_SRZF']).toFixed(1), Number(data['690_yhxw_yj_018'][0]['SJ_LRZF']).toFixed(2), Number(data['690_yhxw_yj_018'][0]['SJ_LRL']).toFixed(3)];
         createChart2(MBData, SJData, `#ec00_bar`);
     }
     function setPTData(data) {
