@@ -608,7 +608,7 @@
                             <span>
                                 <span class="point_line"></span>
                                 1.5倍目标
-                                <div class="jdyl">&gt;1.5倍GDP目标</div>
+                                <#--  <div class="jdyl">&gt;1.5倍GDP目标</div>  -->
                             </span>
                         </div>
                     </div>
@@ -753,7 +753,7 @@
                             <span>
                                 <span class="point_line"></span>
                                 1.5倍目标
-                                <div class="jdyl">&gt;1.5倍GDP目标</div>
+                                <#--  <div class="jdyl">&gt;1.5倍GDP目标</div>  -->
                             </span>
                         </div>
                     </div>
@@ -885,7 +885,7 @@
                                     <span>
                                         <span class="point_line"></span>
                                         1.5倍目标
-                                        <div class="jdyl">&gt;1.5倍GDP目标</div>
+                                        <#--  <div class="jdyl">&gt;1.5倍GDP目标</div>  -->
                                     </span>
                                 </div>
                             </div>
@@ -960,7 +960,7 @@
                                     <span>
                                         <span class="point_line"></span>
                                         1.5倍目标
-                                        <div class="jdyl">&gt;1.5倍GDP目标</div>
+                                        <#--  <div class="jdyl">&gt;1.5倍GDP目标</div>  -->
                                     </span>
                                 </div>
                             </div>
@@ -1035,7 +1035,7 @@
                                     <span>
                                         <span class="point_line"></span>
                                         1.5倍目标
-                                        <div class="jdyl">&gt;1.5倍GDP目标</div>
+                                        <#--  <div class="jdyl">&gt;1.5倍GDP目标</div>  -->
                                     </span>
                                 </div>
                             </div>
@@ -1110,7 +1110,7 @@
                                     <span>
                                         <span class="point_line"></span>
                                         1.5倍目标
-                                        <div class="jdyl">&gt;1.5倍GDP目标</div>
+                                        <#--  <div class="jdyl">&gt;1.5倍GDP目标</div>  -->
                                     </span>
                                 </div>
                             </div>
