@@ -477,11 +477,11 @@ main>div {
     background: transparent;
     color: #e1e1e6;
     font-size: .875rem;
+    margin-left: 8px;
 }
 
 .int input.next_year {
     width: 80%;
-    margin-left: 2%;
 }
 
 .m_right_scroll {
@@ -583,6 +583,8 @@ main>div {
     letter-spacing: 2px;
     font-size: .8rem;
     text-align: center;
+    line-height: 1rem;
+    padding-top: 5px;
 }
 
 .point_line {
@@ -1087,7 +1089,6 @@ div.addline3 {
     }
     .int input {
         width: 88%;
-        margin-left: 1%;
     }
     .m_left_top {
         margin-top: 11.5%;

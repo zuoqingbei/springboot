@@ -734,11 +734,10 @@ $(function () {
         var htmls = "";
         var isYes = true;
         if (selectdata.length == 0) {
-            htmls = `<option value="BCD">厨电</option>`;
             console.log('无产业下拉框数据');
         }else {
             $.each(data["690_cdwl_sw499"], function (index, item) {
-                if (item.INDUSTRY_CODE == 'BCD') {
+                if (item.INDUSTRY_CODE == 'BAA') {
                     //默认产业
                     htmls = `<option value=${item.INDUSTRY_CODE} selected="selected">${item.INDUSTRY_NAME}</option>`;
                     isYes = false;

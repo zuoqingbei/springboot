@@ -508,7 +508,7 @@
                 <div class="s_lin1_two">11月目标 :<span>★★★</span></div>
                 <div class="s_lin1_three">11月现状 :<span>★★★★★</span></div>-->
                 <!-- <div class="m_top_name">战略目标</div>-->
-                <div class="column_1_goal box_sp flex_center title_top"></div>
+                <div class="column_1_goal box_sp flex_center title_top" id="CYZ"></div>
                 <div class="m_top_content">
                     <div class="s_lin1 s_lin1_one"><span></span></div>
                     <div class="s_lin1 s_lin1_two"><span></span></div>
@@ -643,7 +643,7 @@
                             <span>
                                 <span class="point_line"></span>
                                 1.5倍目标
-                                <div class="jdyl">&gt;1.5倍GDP目标</div>
+                                <#--  <div class="jdyl">&gt;1.5倍GDP目标</div>  -->
                             </span>
                         </div>
                     </div>
@@ -788,7 +788,7 @@
                             <span>
                                 <span class="point_line"></span>
                                 1.5倍目标
-                                <div class="jdyl">&gt;1.5倍GDP目标</div>
+                                <#--  <div class="jdyl">&gt;1.5倍GDP目标</div>  -->
                             </span>
                         </div>
                     </div>
@@ -920,7 +920,7 @@
                                     <span>
                                         <span class="point_line"></span>
                                         1.5倍目标
-                                        <div class="jdyl">&gt;1.5倍GDP目标</div>
+                                        <#--  <div class="jdyl">&gt;1.5倍GDP目标</div>  -->
                                     </span>
                                 </div>
                             </div>
@@ -995,7 +995,7 @@
                                     <span>
                                         <span class="point_line"></span>
                                         1.5倍目标
-                                        <div class="jdyl">&gt;1.5倍GDP目标</div>
+                                        <#--  <div class="jdyl">&gt;1.5倍GDP目标</div>  -->
                                     </span>
                                 </div>
                             </div>
@@ -1070,7 +1070,7 @@
                                     <span>
                                         <span class="point_line"></span>
                                         1.5倍目标
-                                        <div class="jdyl">&gt;1.5倍GDP目标</div>
+                                        <#--  <div class="jdyl">&gt;1.5倍GDP目标</div>  -->
                                     </span>
                                 </div>
                             </div>
@@ -1145,7 +1145,7 @@
                                     <span>
                                         <span class="point_line"></span>
                                         1.5倍目标
-                                        <div class="jdyl">&gt;1.5倍GDP目标</div>
+                                        <#--  <div class="jdyl">&gt;1.5倍GDP目标</div>  -->
                                     </span>
                                 </div>
                             </div>

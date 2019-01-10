@@ -64,6 +64,8 @@ $(function () {
     getDateByCommonInterface("690_yhxw_yj_018", "time::" + time, setPTBar);
     //获取平台数据
     getDateByCommonInterface("690_yhxw_pt_cy", "time::" + time, setPTData);
+    //获取平台评论数据
+    getDateByCommonInterface("690_yhxw_pl", "time::" + time, setPTPLData);
     allInCode.forEach(function (item, i) {
         params = "inCode::" + item + ";;time::" + time;
         params1 = "inCode::" + item + ";;time::" + time + ";;xw_code::ALL"
@@ -116,8 +118,8 @@ $(function () {
     //封装平台柱状图数据
     function setPTBar(data) {
         // console.log(data)
-        MBData = [data['690_yhxw_yj_018'][0]['MB_SRZF'], data['690_yhxw_yj_018'][0]['MB_LRZF'], data['690_yhxw_yj_018'][0]['MB_LRL']];
-        SJData = [data['690_yhxw_yj_018'][0]['SJ_SRZF'], data['690_yhxw_yj_018'][0]['SJ_LRZF'], data['690_yhxw_yj_018'][0]['SJ_LRL']];
+        MBData = [Number(data['690_yhxw_yj_018'][0]['MB_SRZF']).toFixed(1), Number(data['690_yhxw_yj_018'][0]['MB_LRZF']).toFixed(2), Number(data['690_yhxw_yj_018'][0]['MB_LRL']).toFixed(3)];
+        SJData = [Number(data['690_yhxw_yj_018'][0]['SJ_SRZF']).toFixed(1), Number(data['690_yhxw_yj_018'][0]['SJ_LRZF']).toFixed(2), Number(data['690_yhxw_yj_018'][0]['SJ_LRL']).toFixed(3)];
         createChart2(MBData, SJData, `#ec00_bar`);
     }
     function setPTData(data) {
@@ -143,12 +145,17 @@ $(function () {
         });
         forHundred(a);
     }
+    function setPTPLData(data){
+        console.log(data)
+        ptpl = "升级: </span><input value=" + data['690_yhxw_pl'][0]['XWSJ'].replace(/[\r\n]/g, "") + ">";
+        $(".pinglun0").html(ptpl);
+    }
     //封装所有产业柱状图
     function allBar(data, dataIndex) {
         var MBData = []
         var SJData = []
-        var MBData = [data['690_yhxw_t0'][2]['SWD'], data['690_yhxw_t0'][2]['SR'], data['690_yhxw_t0'][2]['LRL']];
-        var SJData = [data['690_yhxw_t0'][0]['SWD'], data['690_yhxw_t0'][0]['SR'], data['690_yhxw_t0'][0]['LRL']];
+        var MBData = [Number(data['690_yhxw_t0'][2]['SWD']).toFixed(1), Number(data['690_yhxw_t0'][2]['SR']).toFixed(2), Number(data['690_yhxw_t0'][2]['LRL']).toFixed(3)];
+        var SJData = [Number(data['690_yhxw_t0'][0]['SWD']).toFixed(1), Number(data['690_yhxw_t0'][0]['SR']).toFixed(2), Number(data['690_yhxw_t0'][0]['LRL']).toFixed(3)];
         var index = dataIndex + 4
         if (index < 10) {
             createChart(MBData, SJData, "#ec0" + Number(index) + "_bar");

@@ -233,6 +233,10 @@
         .m_top>div {
             width: 85%;
         }
+        .numbs>span {
+            line-height: 1rem;
+            padding-top: 2px;
+        }
         @media screen and (max-height: 768px) and (min-width: 1400px){
             .turnup {
                 top: 1.5%;
@@ -482,7 +486,7 @@
                 </select>
             </div>
             <div class="industry choose_xw">
-                <label for="select_xwcode" class="lable">小微用户 :</label>
+                <label for="select_xwcode" class="lable">用户小微 :</label>
                 <select name="" id="select_xwcode" class="titleIpt industryIpt">
                     <!-- <option value="ALL">全部小微</option> -->
                 </select>

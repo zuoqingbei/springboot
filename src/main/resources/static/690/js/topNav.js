@@ -1,5 +1,6 @@
 $(function () {
     // 通过登录信息判断模块权限
+    console.log(userInfo.dim_access);
     userInfo.dim_access.forEach((item, i) => {
         $('.nav_btns .pt_btn').eq(item).css('display','block');
     })

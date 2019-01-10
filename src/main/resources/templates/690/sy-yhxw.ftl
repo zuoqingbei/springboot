@@ -483,7 +483,7 @@
                 <div class="column_top">
                     <h2 class="title1" data-xwcode="111111">智家定制平台</h2>
                     <div class="int charts" id="ec00_bar"></div>
-                    <div class="int">
+                    <div class="int pinglun0">
                     </div>
                 </div>
                 <div class="column_oth">
