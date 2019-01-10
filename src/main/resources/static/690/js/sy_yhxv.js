@@ -147,8 +147,8 @@ $(function () {
     function allBar(data, dataIndex) {
         var MBData = []
         var SJData = []
-        var MBData = [data['690_yhxw_t0'][2]['SWD'], data['690_yhxw_t0'][2]['SR'], data['690_yhxw_t0'][2]['LRL']];
-        var SJData = [data['690_yhxw_t0'][0]['SWD'], data['690_yhxw_t0'][0]['SR'], data['690_yhxw_t0'][0]['LRL']];
+        var MBData = [Number(data['690_yhxw_t0'][2]['SWD']).toFixed(1), Number(data['690_yhxw_t0'][2]['SR']).toFixed(2), Number(data['690_yhxw_t0'][2]['LRL']).toFixed(3)];
+        var SJData = [Number(data['690_yhxw_t0'][0]['SWD']).toFixed(1), Number(data['690_yhxw_t0'][0]['SR']).toFixed(2), Number(data['690_yhxw_t0'][0]['LRL']).toFixed(3)];
         var index = dataIndex + 4
         if (index < 10) {
             createChart(MBData, SJData, "#ec0" + Number(index) + "_bar");
