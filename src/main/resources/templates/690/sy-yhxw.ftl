@@ -14,6 +14,9 @@
     <script src="${ctx}/690/js/userInfo.js"></script>
     <title>小微分类升级驱动体系</title>
     <style>
+        .xAxis_numbs{
+            font-family: Arial;
+        }
         @media (min-width: 1910px) {
             .legend {
                 margin-left: 54.5%;
@@ -262,9 +265,8 @@
             }
 
             .line_bottom {
-                bottom: 4.5%;
+                bottom: 4.4%;
             }
-
             .xAxis_box {
                 height: 5.4%;
             }

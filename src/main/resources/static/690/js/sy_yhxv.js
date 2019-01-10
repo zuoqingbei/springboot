@@ -1,9 +1,17 @@
 var params = "";
 var inCode = "";
-//var time = formatDate(new Date() - 1000 * 60 * 60 * 24).replace(/-/g, "");
-var time = "20181231"
+var time
 var max
 var beilv
+ //设置默认日期
+ if (new Date().getDate() > 4) {
+    time = (formatDate(new Date() - 1000 * 60 * 60 * 24)).replace(/-/g, "");
+} else {
+    if(new Date().getMonth()==0){
+        time  = (getLastDay(new Date().getFullYear()-1,12)).replace(/-/g, "");
+    }
+    time  = (getLastDay(new Date().getFullYear(),new Date().getMonth())).replace(/-/g, "");
+}
 //化成百分数保留一位小数
 function toPercent(point) {
     var str = "-"
@@ -39,6 +47,17 @@ function setMAX(data) {
     max = data['690_yhxw_t6'][0]['MAX'];
     beilv = 5 / max;
 }
+ //获取当月最后一天
+ function getLastDay(year, month) {
+    var new_year = year;  //取当前的年份
+    var new_month = month;
+    if (month > 12) {
+        new_month -= 12;    //月份减
+        new_year++;      //年份增
+    }
+    var new_date = new Date(new_year, new_month, 1);   //取当年当月中的第一天
+    return formatDate(new Date(new_date.getTime() - 1000 * 60 * 60 * 24));//获取当月最后一天日期
+}
 $(function () {
     allInCode = ['BAA', 'ABA', 'BCB', 'FAB', 'BCD', 'BAA', 'ABA', 'BCB', 'FAB', 'BCD']
     //获取平台柱状图数据
@@ -65,28 +84,30 @@ $(function () {
     function setCommentData(data, dataIndex) {
         var pinglun = "";
         if (dataIndex == 0) {
-            pinglun = "<span>地位:</span><input value=" + data['690_yhxw_p3'][0]['SJ_HYDW'].replace(/[\r\n]/g, "") + "><span>升级:</span><input value=" + data['690_yhxw_p3'][0]['SJ_SJ'].replace(/[\r\n]/g, "") + ">";
+            pinglun = "<span>地位:</span><input value=" + data['690_yhxw_p3'][0]['SJ_HYDW'].replace(/[\r\n]/g, "").replace(/>/g,'＞') + "><span>升级:</span><input value=" + data['690_yhxw_p3'][0]['SJ_SJ'].replace(/[\r\n]/g, "") + ">";
             $(".pinglun1").html(pinglun);
         } else if (dataIndex == 1) {
-            pinglun = "<span>地位:</span><input value=" + data['690_yhxw_p3'][0]['SJ_HYDW'].replace(/[\r\n]/g, "") + "><span>升级:</span><input value=" + data['690_yhxw_p3'][0]['SJ_SJ'].replace(/[\r\n]/g, "") + ">";
+            pinglun = "<span>地位:</span><input value=" + data['690_yhxw_p3'][0]['SJ_HYDW'].replace(/[\r\n]/g, "").replace(/>/g,'＞') + "><span>升级:</span><input value=" + data['690_yhxw_p3'][0]['SJ_SJ'].replace(/[\r\n]/g, "") + ">";
             $(".pinglun2").html(pinglun);
         } else if (dataIndex == 2) {
-            pinglun = "<span>地位:</span><input value=" + data['690_yhxw_p3'][0]['SJ_HYDW'].replace(/[\r\n]/g, "") + "><span>升级:</span><input value=" + data['690_yhxw_p3'][0]['SJ_SJ'].replace(/[\r\n]/g, "") + ">";
+            pinglun = "<span>地位:</span><input value=" + data['690_yhxw_p3'][0]['SJ_HYDW'].replace(/[\r\n]/g, "").replace(/>/g,'＞') + "><span>升级:</span><input value=" + data['690_yhxw_p3'][0]['SJ_SJ'].replace(/[\r\n]/g, "") + ">";
             $(".pinglun3").html(pinglun);
         } else if (dataIndex == 3) {
-            pinglun = "<span>地位:</span><input value=" + data['690_yhxw_p3'][0]['SJ_HYDW'].replace(/[\r\n]/g, "") + "><span>升级:</span><input value=" + data['690_yhxw_p3'][0]['SJ_SJ'].replace(/[\r\n]/g, "") + ">";
+            pinglun = "<span>地位:</span><input value=" + data['690_yhxw_p3'][0]['SJ_HYDW'].replace(/[\r\n]/g, "").replace(/>/g,'＞') + "><span>升级:</span><input value=" + data['690_yhxw_p3'][0]['SJ_SJ'].replace(/[\r\n]/g, "") + ">";
             $(".pinglun4").html(pinglun);
         } else if (dataIndex == 4) {
-            pinglun = "<span>地位:</span><input value=" + data['690_yhxw_p3'][0]['SJ_HYDW'].replace(/[\r\n]/g, "") + "><span>升级:</span><input value=" + data['690_yhxw_p3'][0]['SJ_SJ'].replace(/[\r\n]/g, "") + ">";
+            pinglun = "<span>地位:</span><input value=" + data['690_yhxw_p3'][0]['SJ_HYDW'].replace(/[\r\n]/g, "").replace(/>/g,'＞') + "><span>升级:</span><input value=" + data['690_yhxw_p3'][0]['SJ_SJ'].replace(/[\r\n]/g, "") + ">";
             $(".pinglun5").html(pinglun);
         }
     }
     //写入产业星级和产业主
     function levels(data, dataIndex) {
-        let num = data['690_yhxw_015'][1]['XJ'];
+        // console.log(data)
+        
         tit = ".title" + Number(dataIndex + 2)
-        let name = data['690_yhxw_015'][1]['INDUSTRY_Z'];
+        let name = data['690_yhxw_015'][0]['INDUSTRY_Z'];
         $(tit).append(name + "&ensp;" + "&ensp;")
+        let num = data['690_yhxw_015'][1]['XJ'];
         for (i = 0; i < num; i++) {
             $(tit).append('<span class="star_cy"></span>')
         }
@@ -100,7 +121,6 @@ $(function () {
         createChart2(MBData, SJData, `#ec00_bar`);
     }
     function setPTData(data) {
-        console.log(data)
         var abledata = data['690_yhxw_pt_cy'];
         area = ".area_1"
         arr = grouping(abledata);
@@ -609,11 +629,6 @@ $(function () {
             paintEchartsImg(toId, `${toId}_img`);
         }
     }
-    //跳转点击事件
-    // $('body').on('click', '.tit', function () {
-    //     var incode = $(this).data("incode");
-    //     parent.location.href = "./yhxv.html?inCode=" + incode + "&&time=" + time + "&&xw_code=ALL"
-    // })
     //判断数据中是否有负数
     function negative(MBData, SJData) {
         var a = [3, 0]

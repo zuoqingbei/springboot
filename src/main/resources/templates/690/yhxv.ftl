@@ -16,6 +16,9 @@
     <script src="${ctx}/690/js/userInfo.js"></script>
     <title>小微分类升级驱动体系</title>
     <style>
+        .area_1 {
+            height: 90.9%;
+        }
         .turnup {
             height: 90.3%;
             margin-top: .3rem;
@@ -94,7 +97,8 @@
             white-space:nowrap;
         }
         .numbs>span {
-   		 width: 15%;
+   		    width: 13%;
+               margin-top: 1%;
         }
         .area_3{
             margin-left: -1%;
@@ -118,10 +122,10 @@
         .column_1 .column_oth {
             padding-top: 21%;
         }
-        .column_2 .s_3>div {
+        /* .column_2 .s_3>div {
             width: 32.6%;
             margin-right: 0.5%;
-        }
+        } */
         .choose_xw{
             margin-left: 0;
             margin-right: 2%;
@@ -196,10 +200,10 @@
 			color: #0abcf3;
 		}
         .line_bottom {
-            bottom: 4.5%;
+            bottom: 4.2%;
         }
         .numbs .point_line {
-            top: -0.2rem;
+            top: -0.4rem;
             left: 38%;
             width: 0.3rem;
             height: 0.3rem;
@@ -207,7 +211,7 @@
             border-radius: 50%;
         }
         .column_1 .column_mb {
-            height: 66.8%;
+            height: 66.9%;
             padding-top: 0;
             margin-top: 22%;
         }
@@ -238,7 +242,7 @@
                 margin-top: 1.2rem;
             }
             .line_bottom {
-                bottom: 3.4%;
+                bottom: 3%;
             }
             .oth_2 {
                 padding-top: 3.68rem;
@@ -323,7 +327,7 @@
                 /* border-bottom: 1px solid #0083b3; */
             }
             .line_bottom {
-                bottom: 2.7%;
+                bottom: 2%;
             }
             .area_2, .area_3, .area_4 {
                 height: 89%;
@@ -362,6 +366,35 @@
             .column_1 .column_mb {
                 height: 68%;
                 margin-top: 20.5%;
+            }
+        }
+        @media (max-width:1400px){
+            .turnbox_s {
+                margin: 1% 10px 0% 0;
+            }
+            .column_2 .numbs>span {
+                width: 14%;
+                margin-top: 1%;
+            }
+        }
+        @media (max-width: 1400px) and (max-height: 700px) {
+            .numbs {
+                margin-top: -1%;
+            }
+            .column_2 .numbs {
+                margin-top: -0.7%;
+            }
+            .turnbox_s {
+                margin: .5% 10px 0% 0;
+            }
+        }
+        @media (max-width: 1400px) and (min-height: 701px) {
+            .numbs {
+                margin-top: -2%;
+                line-height: 2rem;
+            }
+            .column_3 .numbs {
+                margin-top: -2.2%;
             }
         }
         @-moz-document url-prefix() {
@@ -613,7 +646,7 @@
                             <span><span class="point_line"></span>高于行业</span>
                             <span><span class="point_line"></span>预实零差</span>
                             <span><span class="point_line"></span>套圈</span>
-                            <span><span class="point_line"></span>套圈引领 </span>
+                            <span><span class="point_line"></span>套圈引领</span>
                             <span><span class="point_line"></span>换道引领</span>
                         </div>
                     </div>
@@ -700,11 +733,11 @@
                     </div>
                     <div class="column_oth_down up_s">
                         <div class="numbs">
-                            <span><span class="point_line"></span>高于行业</span>
-                            <span><span class="point_line"></span>预实零差</span>
-                            <span><span class="point_line"></span>套圈</span>
-                            <span><span class="point_line"></span>套圈引领</span>
-                            <span><span class="point_line"></span>换道引领</span>
+                            <span><span class="point_line"></span></span>
+                            <span><span class="point_line"></span></span>
+                            <span><span class="point_line"></span></span>
+                            <span><span class="point_line"></span></span>
+                            <span><span class="point_line"></span></span>
                         </div>
                     </div>
                 </div>
@@ -743,11 +776,11 @@
                     </div>
                     <div class="column_oth_down up_s">
                         <div class="numbs">
-                            <span><span class="point_line"></span></span>
-                            <span><span class="point_line"></span></span>
-                            <span><span class="point_line"></span></span>
-                            <span><span class="point_line"></span></span>
-                            <span><span class="point_line"></span></span>
+                            <span><span class="point_line"></span>高于行业</span>
+                            <span><span class="point_line"></span>预实零差</span>
+                            <span><span class="point_line"></span>套圈</span>
+                            <span><span class="point_line"></span>套圈引领</span>
+                            <span><span class="point_line"></span>换道引领</span>
                         </div>
                     </div>
                 </div>
@@ -864,11 +897,11 @@
                             </div>
                             <div class="column_oth_down up_s">
                                 <div class="numbs">
-                                    <span><span class="point_line"></span></span>
-                                    <span><span class="point_line"></span></span>
-                                    <span><span class="point_line"></span></span>
-                                    <span><span class="point_line"></span></span>
-                                    <span><span class="point_line"></span></span>
+                                    <span><span class="point_line"></span>高于行业</span>
+                                    <span><span class="point_line"></span>预实零差</span>
+                                    <span><span class="point_line"></span>套圈</span>
+                                    <span><span class="point_line"></span>套圈引领</span>
+                                    <span><span class="point_line"></span>换道引领</span>
                                 </div>
                             </div>
                         </div>
@@ -936,11 +969,11 @@
                             </div>
                             <div class="column_oth_down up_s">
                                 <div class="numbs">
-                                    <span><span class="point_line"></span></span>
-                                    <span><span class="point_line"></span></span>
-                                    <span><span class="point_line"></span></span>
-                                    <span><span class="point_line"></span></span>
-                                    <span><span class="point_line"></span></span>
+                                    <span><span class="point_line"></span>高于行业</span>
+                                    <span><span class="point_line"></span>预实零差</span>
+                                    <span><span class="point_line"></span>套圈</span>
+                                    <span><span class="point_line"></span>套圈引领</span>
+                                    <span><span class="point_line"></span>换道引领</span>
                                 </div>
                             </div>
                         </div>
@@ -1008,11 +1041,11 @@
                             </div>
                             <div class="column_oth_down up_s">
                                 <div class="numbs">
-                                    <span><span class="point_line"></span></span>
-                                    <span><span class="point_line"></span></span>
-                                    <span><span class="point_line"></span></span>
-                                    <span><span class="point_line"></span></span>
-                                    <span><span class="point_line"></span></span>
+                                    <span><span class="point_line"></span>高于行业</span>
+                                    <span><span class="point_line"></span>预实零差</span>
+                                    <span><span class="point_line"></span>套圈</span>
+                                    <span><span class="point_line"></span>套圈引领</span>
+                                    <span><span class="point_line"></span>换道引领</span>
                                 </div>
                             </div>
                         </div>
@@ -1080,11 +1113,11 @@
                             </div>
                             <div class="column_oth_down up_s">
                                 <div class="numbs">
-                                    <span><span class="point_line"></span></span>
-                                    <span><span class="point_line"></span></span>
-                                    <span><span class="point_line"></span></span>
-                                    <span><span class="point_line"></span></span>
-                                    <span><span class="point_line"></span></span>
+                                    <span><span class="point_line"></span>高于行业</span>
+                                    <span><span class="point_line"></span>预实零差</span>
+                                    <span><span class="point_line"></span>套圈</span>
+                                    <span><span class="point_line"></span>套圈引领</span>
+                                    <span><span class="point_line"></span>换道引领</span>
                                 </div>
                             </div>
                         </div>

@@ -1,5 +1,5 @@
-///var domain="/api/v1/common/interface";
-var domain = "/api/v1/common/interface";
+///var domain="http://localhost:9999/api/v1/common/interface";
+var domain = "http://10.135.26.216:9999/api/v1/common/interface";
 var clientUrl = domain + "/getByDataType";//接口地址
 var insetUrl = domain + "/insertDate";
 var userCode = "A0007773";//用户编码
@@ -33,7 +33,7 @@ function getDateByCommonInterface(dataType, params, successCallBack, failureCall
     };
     $.get(clientUrl, { "dataType": dataType, "params": params }, function (data, status) {
         if (status == "success") {
-            var jsonData = data;
+            var jsonData = JSON.parse(data);
             if (jsonData.result == "00000000") {
                 //数据请求成功
                 successCallBack(jsonData.data);
@@ -55,7 +55,7 @@ function getDateByCommonInterfaceByParam(dataType, params, successCallBack, fail
     };
     $.get(clientUrl, { "dataType": dataType, "params": params }, function (data, status) {
         if (status == "success") {
-            var jsonData = data;
+            var jsonData = JSON.parse(data);
             if (jsonData.result == "00000000") {
                 //数据请求成功
                 successCallBack(jsonData.data, callBackParams);
@@ -77,7 +77,7 @@ function insetDateToServer(dataType, params, callBack) {
     };
     $.post(insetUrl, { "dataType": dataType, "params": params }, function (data, status) {
         if (status == "success") {
-            var jsonData = data;
+            var jsonData = JSON.parse(data);
             // console.log(jsonData)
             if (jsonData.result == "00000000") {
                 //数据请求成功
@@ -130,11 +130,27 @@ function initBackParams() {
     industryCode = backIndustryCode;
     var mType = getQueryString("guZhiRongsu");
     backXW_CODE = getQueryString("xwset");
+    //默认时间
+    let date = new Date(new Date());    //当前时间
+    let year = date.getFullYear();
+    let month = date.getMonth() + 1;
+    let day = date.getDate();
+    if (day <= 4) {       // 天数小于4显示上月最后一天
+        month--;
+        if (month == 0) {
+            month = 12;
+            year--;
+        }
+        day = getLastDay(year, month);      //获取当月最后一天
+    } else {
+        day = day - 1;
+    }
     if (time) {
         $("#dateIpt").val(time);
     } else {
         // $("#dateIpt").val(formatDate(new Date() - 1000 * 60 * 60 * 24));
-        $("#dateIpt").val("2018-12-31");
+        //$("#dateIpt").val("2018-12-31");
+        $("#dateIpt").val(formatDate(`${year}-${month}-${day}`));
     };
     if (mType == "1") {
         $(".switch").find("div").eq(0).addClass("switch_1").removeClass("switch_2");
@@ -145,6 +161,22 @@ function initBackParams() {
         $('.left_arrow').hide();
         localStorage.setItem('cutArrow', '0');
     }
+}
+
+/**
+ * 获取当月最后一天
+ * @param year 当前年份
+ * @param month 当前月份
+ */
+function getLastDay(year, month) {
+    var new_year = year;  //取当前的年份
+    var new_month = month;  //取当前的月份
+    if (month > 12) {
+        new_month -= 12;    //月份减
+        new_year++;      //年份增
+    }
+    var new_date = new Date(new_year, new_month, 1);   //取当年当月中的第一天
+    return (new Date(new_date.getTime() - 1000 * 60 * 60 * 24)).getDate();//获取当月最后一天日期
 }
 
 /**
@@ -215,7 +247,11 @@ function searchFunction() {
         if (yu > 0) {
             n++;
         };
-        var nestJiduValue = n + 1;
+        if (month == 3 || month == 6 || month == 9 || month == 12) {
+            var nestJiduValue = n + 1;
+        } else {
+            var nestJiduValue = n;
+        }
         //下一个季度
         if (nestJiduValue == 5) {
             next1Jidu = (parseInt(year) + 1) + "年Q1";//下一个季度时间
@@ -734,6 +770,7 @@ function createTopOneBlock(value, index, needLine) {
                 var c = parseInt((max - min) / 5);
                 // console.log(max+","+min+","+c)
                 //从小到大
+                console.log(index)
                 for (x = 0; x < 5; x++) {
                     $(".numsvalue_" + (index + 1) + "_" + (5 - x)).html('<span class="point_line"></span>' + parseInt(((max - x * c) / 10000)));
                 }
@@ -751,6 +788,7 @@ function createTopOneBlock(value, index, needLine) {
                 var c=Math.floor((max-min)/5);*/
                 var max = 25;
                 var c = 5;
+                // console.log(index)
                 for (x = 0; x < 5; x++) {
                     $(".numsvalue_" + (index + 1) + "_" + (x + 1)).html('<span class="point_line"></span>' + (max - x * c));
                 }
@@ -1357,7 +1395,11 @@ function getJiduDate() {
     if (yu > 0) {
         n++;
     };
-    var nestJiduValue = n + 1;
+    if (month == 3 || month == 6 || month == 9 || month == 12) {
+        var nestJiduValue = n + 1;
+    } else {
+        var nestJiduValue = n;
+    }
     //下一个季度
     if (nestJiduValue == 5) {
         next1Jidu = (parseInt(year) + 1) + "年Q1";//下一个季度时间

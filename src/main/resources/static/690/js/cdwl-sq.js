@@ -21,6 +21,7 @@ $(function () {
     var nowDay = '';    //时间控件日期
     var wg_params = '';    //网格下拉框参数
     var sq_params = '';    //商圈下拉框参数
+    var xj_params = '';    //星级参数
     var industry_params = "UCode::" + userInfo.userID;    //产业下拉框参数
     
     //产业接口
@@ -148,6 +149,9 @@ $(function () {
     function getData() {
         params = "inCode::" + inCode + ";;time::" + dateIpt + ";;sqCode::" + sqCode;
         chartsParams = "inCode::" + inCode + ";;time::" + dateIpt;
+        xj_params = "inCode::" + inCode + ";;time::" + dateIpt + ";;xwCode::ALL";
+        //获取产业星级数据
+        getDateByCommonInterface("690_yhxw_yj_015", xj_params, levels);
         // 690触点网络-商圈-位置-年
         getDateByCommonInterface('690_cdwl_001', params, setYearData);
         // 690触点网络-商圈-位置-本月-目标
@@ -821,16 +825,26 @@ $(function () {
     function initSQ() {
         //默认参数，时间
         // let date = new Date(new Date() - 1000 * 60 * 60 * 24);
-        let date = new Date(new Date("2018/12/31"));
+        let date = new Date(new Date());
         let year = date.getFullYear();
         let month = date.getMonth() + 1;
         let day = date.getDate();
+        if(day <= 4){
+            month--;
+            if(month == 0){
+                month = 12;
+                year--;
+            }
+            day = getLastDay(year, month);
+        }else {
+            day -= 1;
+        }
         sqCode = "ALL";
         inCode = $("#select_indust").val();
         //下拉框参数sqCode
         //var wg_sqCode = 'ALL';
-        let selectTime = formatDate($("#dateIpt").val());
-        dateIpt = selectTime.replaceAll("-", "");
+        // let selectTime = formatDate($("#dateIpt").val());
+        // dateIpt = selectTime.replaceAll("-", "");
         if (localStorage.getItem('selectData')) {
             $("#dateIpt").val(selectData.dateIpt);
             havDate = selectData.dateIpt.split("-");
@@ -844,10 +858,10 @@ $(function () {
             //     $("#dateIpt").val(year + "-" + month + "-" + day);
             // }
             // $("#dateIpt").val(formatDate(date));
-            $("#dateIpt").val('2018-12-31');
+            $("#dateIpt").val(formatDate(`${year}-${month}-${day}`));
         }
         $('#thisMonth').text(`${month}月累计预实差`);
-        selectTime = formatDate($("#dateIpt").val());
+        let selectTime = formatDate($("#dateIpt").val());
         dateIpt = selectTime.replaceAll("-", "");
         //判断本地存储
         if (localStorage.getItem('selectData')) {

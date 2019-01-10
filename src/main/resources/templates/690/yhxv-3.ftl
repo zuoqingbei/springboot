@@ -10,6 +10,12 @@
     <link rel="icon" type="image/x-icon" href="${ctx}/690/images/favicon.ico" />
     <title>小微分类升级驱动体系</title>
     <style>
+        .inputs_box>div>textarea {
+            font-size: 1rem;
+            margin-top: 1.6rem;
+            text-align: center;
+        }
+
         .flex_center {
             display: flex;
             align-items: center;
@@ -52,9 +58,9 @@
         .axis_name {
             height: auto;
             margin-left: 1.85%;
-            margin-top: 2.55%;
-            padding: 5px 0;
-            font-size: 1.125rem;
+            margin-top: 1%;
+            padding: 5px 0 4px;
+            font-size: 1rem;
         }
 
         .yaxis_name {
@@ -82,11 +88,11 @@
         }
 
         .table_box {
-            height: 37.7%;
+            height: 41.9%;
         }
 
         .content_left_charts {
-            margin-top: 5%;
+            margin-top: 7%;
             width: 100%;
             height: 88%;
             font-size: 1.125rem;
@@ -182,17 +188,20 @@
         .arrow_on {
             background: url("${ctx}/690/images/on.gif") no-repeat center;
         }
-        .jieLun span{
+
+        .jieLun span {
             font-size: 1rem;
             line-height: 1.5;
         }
-        .jieLun .jieLun_cont{
+
+        .jieLun .jieLun_cont {
             color: #fff;
             margin-left: 6px;
         }
+
         @media screen and (max-height: 768px) and (min-width: 1400px) {
             .table_box {
-                height: 36.6%;
+                height: 41.3%;
                 margin-bottom: -.1rem;
             }
         }
@@ -205,6 +214,14 @@
             .inputs_box>div {
                 height: 98%;
             }
+
+            .axis_name {
+                padding: 5px 0 2px;
+            }
+
+            .yaxis_name {
+                padding: 9px 0 2px;
+            }
         }
 
         @media (max-width : 1400px) and (min-height: 701px) {
@@ -214,6 +231,14 @@
 
             .inputs_box>div {
                 height: 98%;
+            }
+
+            .axis_name {
+                padding: 5px 0 2px;
+            }
+
+            .yaxis_name {
+                padding: 5px 0 2px;
             }
         }
 
