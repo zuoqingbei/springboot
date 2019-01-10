@@ -6,7 +6,7 @@ let userInfo = {
 
 // 获取登陆人员权限信息
 var ajax = new XMLHttpRequest();
-ajax.open('get', 'http://10.135.26.216:9999/bigSreen/sys/v1/menuAuthority');
+ajax.open('get', '/bigSreen/sys/v1/menuAuthority');
 ajax.send();
 ajax.onreadystatechange = function () {
     if (ajax.readyState == 4 && ajax.status == 200) {
