@@ -584,6 +584,7 @@ main>div {
     font-size: .8rem;
     text-align: center;
     line-height: 1rem;
+    padding-top: 5px;
 }
 
 .point_line {

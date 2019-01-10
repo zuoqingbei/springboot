@@ -233,6 +233,10 @@
         .m_top>div {
             width: 85%;
         }
+        .numbs>span {
+            line-height: 1rem;
+            padding-top: 2px;
+        }
         @media screen and (max-height: 768px) and (min-width: 1400px){
             .turnup {
                 top: 1.5%;

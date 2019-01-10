@@ -64,6 +64,8 @@ $(function () {
     getDateByCommonInterface("690_yhxw_yj_018", "time::" + time, setPTBar);
     //获取平台数据
     getDateByCommonInterface("690_yhxw_pt_cy", "time::" + time, setPTData);
+    //获取平台评论数据
+    getDateByCommonInterface("690_yhxw_pl", "time::" + time, setPTPLData);
     allInCode.forEach(function (item, i) {
         params = "inCode::" + item + ";;time::" + time;
         params1 = "inCode::" + item + ";;time::" + time + ";;xw_code::ALL"
@@ -142,6 +144,11 @@ $(function () {
             }
         });
         forHundred(a);
+    }
+    function setPTPLData(data){
+        console.log(data)
+        ptpl = "升级: </span><input value=" + data['690_yhxw_pl'][0]['XWSJ'].replace(/[\r\n]/g, "") + ">";
+        $(".pinglun0").html(ptpl);
     }
     //封装所有产业柱状图
     function allBar(data, dataIndex) {
