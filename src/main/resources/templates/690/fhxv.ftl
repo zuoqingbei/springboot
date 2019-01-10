@@ -240,7 +240,7 @@
                 </select>
             </div>
             <div class="industry choose_xw">
-                <label for="select_xwcode" class="lable">小微用户 :</label>
+                <label for="select_xwcode" class="lable">用户小微 :</label>
                 <select id="select_xwcode" class="titleIpt">
                     <!-- <option value="ALL">全部小微</option> -->
                 </select>
