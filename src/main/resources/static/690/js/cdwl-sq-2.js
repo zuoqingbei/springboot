@@ -271,9 +271,8 @@ $(function () {
         var xdata = [];
         var ydata = [];
         for (let i = 1; i <= 5; i++) {
-            let ZB = abledata[`ZB${i}`] * 100 + '';
             xdata.push(abledata[`XJ${i}`]);
-            ydata.push(ZB.substr(0, 2));
+            ydata.push(abledata[`ZB${i}`]);
         }
         //console.log(xdata)
         let ec003_line = echarts.init($("#ec04_bar")[0]);
@@ -335,7 +334,7 @@ $(function () {
                             if (data.data === 0) {
                                 return ''
                             }
-                                return data.data + '%'
+                                return toPercent(data.data)
                             },
                     }
                 },
