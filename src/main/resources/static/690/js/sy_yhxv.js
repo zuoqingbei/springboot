@@ -279,7 +279,7 @@ $(function () {
                             <span class=`+ starColor(item) + `></span>
                             <div class="p_on_tit" style="display:inline-block;margin-left:1rem;">` + item['INDUSTRY_NAME'] + `<span class="rise_ico ` + rise(item) + `"></span></div>
                             <div class=`+ centerTxt(xJudge(item)) + `>目标 ：` + toPercent3(item['MB_SWD']) + `/` + toPercent2(item['MB_SR']) + `/` + toPercent(item['MB_LRL']) +
-                `，实际 ：<span style="color:` + (toPercent3(item['SJ_SWD']) < toPercent3(item['MB_SWD']) ? 'red' : '') + `;">` + toPercent3(item['SJ_SWD']) + `</span>/<span style="color:` + (toPercent2(item['SJ_SR']) < toPercent2(item['MB_SR']) ? 'red' : '') + `;">` + toPercent2(item['SJ_SR']) + `</span>/<span style="color:` + (toPercent(item['SJ_LRL']) < toPercent(item['MB_LRL']) ? 'red' : '') + `;">` + toPercent(item['SJ_LRL']) + `</span></div>
+                            `，实际 ：<span style="color:` + (toPercent3(item['SJ_SWD']) < toPercent3(item['MB_SWD']) ? 'red' : '') + `;">` + toPercent3(item['SJ_SWD']) + `</span>/<span style="color:` + (parseFloat(toPercent2(item['SJ_SR'])) < parseFloat(toPercent2(item['MB_SR'])) ? 'red' : '') + `;">` + toPercent2(item['SJ_SR']) + `</span>/<span style="color:` + (parseFloat(toPercent(item['SJ_LRL'])) < parseFloat(toPercent(item['MB_LRL'])) ? 'red' : '') + `;">` + toPercent(item['SJ_LRL']) + `</span></div>
                         </div>
                     </div>
                 </div>`;

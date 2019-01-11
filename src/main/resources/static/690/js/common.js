@@ -369,7 +369,7 @@ function getEchartsData() {
     time = time.replaceAll("-", "");
     var industry = $("#industryIpt").val();
     if (!industry) {
-        industry = "ALL";
+        industry = "";
     }
     //查询数据
     var params = "";
@@ -534,7 +534,7 @@ function getRzlcData() {
         weidu = "rz";
     };
     if (!industry) {
-        industry = "ALL";
+        industry = "";
     }
     var xwCode = backXW_CODE;
     if (!xwCode) {
