@@ -11,6 +11,7 @@
     <link rel="stylesheet" href="${ctx}/690/css/sy.css">
     <link rel="stylesheet" href="${ctx}/690/css/index.css">
     <link rel="icon" type="image/x-icon" href="${ctx}/690/images/favicon.ico" />
+    <script src="${ctx}/690/js/jquery-3.3.1.min.js"></script>
     <script src="${ctx}/690/js/userInfo.js"></script>
     <title>小微分类升级驱动体系</title>
     <style>
@@ -1171,7 +1172,7 @@
     <div class="submitbox_btn flex_center">◀</div>
 </div> -->
 
-    <script src="${ctx}/690/js/jquery-3.3.1.min.js"></script>
+    
     <script src="${ctx}/690/js/echarts-4.2.0.js"></script>
     <script src="${ctx}/690/js/common.js"></script>
     <script src="${ctx}/690/js/UEcommon.js"></script>
