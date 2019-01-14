@@ -14,6 +14,7 @@
             font-size: 1rem;
             margin-top: .8rem;
             text-align: center;
+ 	        font-family: "微软雅黑";
         }
 
         .btn_grounp {
@@ -55,7 +56,8 @@
             margin-left: 1.85%;
             margin-top: 3%;
             padding: 5px 0;
-            font-size: 1.125rem;
+            font-size: .95rem;
+            line-height: 1.125rem;
         }
 
         .yaxis_name {
@@ -72,9 +74,18 @@
 
         .inputs_box {
             width: 98.8%;
-            height: 5%;
+            height: 5.5%;
             margin: 0;
-            padding-left: 10.1%;
+            padding-left: 13.5%;
+        }
+
+        .inputs_box>div:first-of-type,
+        .inputs_box>div:last-of-type {
+            flex: 0 0 28.5%;
+        }
+
+        .inputs_box>div {
+            flex: 0 0 42%;
         }
 
         .table_box {
@@ -85,9 +96,17 @@
             height: 37.5%;
         }
 
+        .star_box span {
+            color: #fff;
+        }
+
         @media (max-width:1400px) and (max-height:750px) {
             .yaxis_name {
                 margin-top: -15px;
+            }
+            
+            .inputs_box {
+                height: 6%;
             }
         }
     </style>
@@ -206,7 +225,7 @@
                             <th rowspan="2" colspan="1" class="td_border_bold">并联节点</th>
                             <th rowspan="2" colspan="1">人员</th>
                             <th colspan="2" class="td_border_bold">单</th>
-                            <th colspan="5">预案承接预实差</th>
+                            <th colspan="4">预案承接预实差</th>
                         </tr>
                         <tr>
                             <th>目标</th>
@@ -217,7 +236,7 @@
                             <th class="td_border_bold">承接差</th>
                             <!-- <th>实际</th>
                             <th>差</th> -->
-                            <th>关差预案</th>
+                            <#--  <th>关差预案</th>  -->
                         </tr>
                         <tr id="tr0">
                             <td class="td_border_bold">用户小微</td>
@@ -230,7 +249,7 @@
                             <td class="td_border_bold">-</td>
                             <!-- <td>-</td>
                             <td>-</td> -->
-                            <td class="gccj">-</td>
+                            <#--  <td class="gccj">-</td>  -->
                         </tr>
                         <tr id="tr1">
                             <td class="td_border_bold">设计</td>
@@ -243,7 +262,7 @@
                             <td class="td_border_bold">-</td>
                             <!-- <td>-</td>
                             <td>-</td> -->
-                            <td class="gccj">-</td>
+                            <#--  <td class="gccj">-</td>  -->
                         </tr>
                         <tr id="tr2">
                             <td class="td_border_bold">模块采购</td>
@@ -256,7 +275,7 @@
                             <td class="td_border_bold">-</td>
                             <!-- <td>-</td>
                             <td>-</td> -->
-                            <td class="gccj">-</td>
+                            <#--  <td class="gccj">-</td>  -->
                         </tr>
                         <tr id="tr3">
                             <td class="td_border_bold">销售</td>
@@ -269,7 +288,7 @@
                             <td class="td_border_bold">-</td>
                             <!-- <td>-</td>
                             <td>-</td> -->
-                            <td class="gccj">-</td>
+                            <#--  <td class="gccj">-</td>  -->
                         </tr>
                         <tr id="tr4">
                             <td class="td_border_bold">供应链</td>
@@ -282,7 +301,7 @@
                             <td class="td_border_bold">-</td>
                             <!-- <td>-</td>
                             <td>-</td> -->
-                            <td class="gccj">-</td>
+                            <#--  <td class="gccj">-</td>  -->
                         </tr>
                         <tr id="tr5">
                             <td class="td_border_bold">服务</td>
@@ -295,7 +314,7 @@
                             <td class="td_border_bold">-</td>
                             <!-- <td>-</td>
                             <td>-</td> -->
-                            <td class="gccj">-</td>
+                            <#--  <td class="gccj">-</td>  -->
                         </tr>
                     </table>
                 </div>
