@@ -200,6 +200,12 @@
             margin-left: 6px;
         }
 
+        @media (max-width: 1400px) {
+            .charts_legend {
+                transform: scale(.95);
+            }
+        }
+        
         @media screen and (max-height: 768px) and (min-width: 1400px) {
             .table_box {
                 height: 41.3%;
