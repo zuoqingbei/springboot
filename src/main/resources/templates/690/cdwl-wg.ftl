@@ -319,7 +319,7 @@
                 height: 93.1%;
             }
             .column_scroll .column_oth {
-                height: 76.5%;
+                height: 76.63%;
                 padding-top: 21.5%;
             }
             div.addline3 {

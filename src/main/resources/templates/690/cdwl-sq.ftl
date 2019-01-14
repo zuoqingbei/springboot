@@ -314,7 +314,7 @@
                 padding-top: 5.4%;
             }
             .column_scroll .column_oth {
-                height: 66.4%;
+                height: 66.2%;
             }
             .column_scroll .numbs .point_line {
                 top: 0;
