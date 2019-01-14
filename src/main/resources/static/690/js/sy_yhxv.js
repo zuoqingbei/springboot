@@ -273,7 +273,7 @@ $(function () {
         if (item['PT_NAME']) {
             // console.log(item)
             str +=
-                `<div class="roll flex_center" style="height:` + diced(item) + `%;">
+            `<div class="roll flex_center" style=` + diced(item) + `>
                     <div class="pointer pointer_year" data-id="`+ countScroll + `" data-xwcode="` + item.XW_CODE + `"data-xwname="` + item['XW_NAME'] + `"data-xwz="` + item['XWZ'] + `"data-year="` + item['YEAR'] + `">
                         <div class="p_on `+ xJudge(item) + `" >
                             <span class=`+ starColor(item) + `></span>
@@ -346,17 +346,20 @@ $(function () {
      * 判断产业数量决定高度（平台产业展示）
      */
     function diced(item) {
-        if (document.body.clientWidth > 1400) {
-            return 17;
-        }else{
-            return 25;
-        }
+        var style = '';
+        style = 'height:'
         switch (item['XJ']) {
-            case '1': return 50 / item['SL5'];
-            case '2': return 50 / item['SL4'];
-            case '3': return 50 / item['SL3'];
-            case '4': return 50 / item['SL2'];
-            case '5': return 50 / item['SL1'];
+            case '1': style += (50 / item['SL5']) + '%;';break;
+            case '2': style += (50 / item['SL4']) + '%;';break;
+            case '3': style += (50 / item['SL3']) + '%;';break;
+            case '4': style += (50 / item['SL2']) + '%;';break;
+            case '5': style += (50 / item['SL1']) + '%;';break;
+        }
+        if (document.body.clientWidth > 1400) {
+            return style;
+        }else{
+            style += 'transform:scale(.8);'
+            return style;
         }
     }
     /**
