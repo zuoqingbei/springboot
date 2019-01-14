@@ -436,8 +436,8 @@ $(function () {
                                 `<span class="` + (item['HQ_FLAG'] == '1' ? 'p_on_img' : '') + `"></span>
                                 <span class="` + rise(item) + `"></span>
                             </div>
-                            <div>目标：横 
-                                <span>` + 
+                            <div>目标 : 横` + 
+                                `<span>` + 
                                     (item['MB_SWD'] - 0).toFixed(1) + 
                                 `</span>/` + 
                                 `<span>` + 
@@ -446,8 +446,8 @@ $(function () {
                                 `<span>` + 
                                     toPercent(item['MB_LSZF']) + 
                                 `</span>` + 
-                                `，纵 
-                                <span>` + 
+                                `，纵` + 
+                                `<span>` + 
                                     (item['MB_CYFGL'] ? toPercent(item['MB_CYFGL']) : '') + 
                                 `</span>/` + 
                                 `<span>` + 
@@ -457,8 +457,8 @@ $(function () {
                                     (item['MB_FIVE_STAR_RATE_PRO'] ? toPercent(item['MB_FIVE_STAR_RATE_PRO']) : '') + 
                                 `</span>
                             </div>
-                            <div>承接：横 
-                                <span style="color:` + ((item['SWD'] - 0).toFixed(1) < (item['MB_SWD'] - 0).toFixed(1) ? 'red' : '') + `;">` + 
+                            <div>承接 : 横` + 
+                                `<span style="color:` + ((item['SWD'] - 0).toFixed(1) < (item['MB_SWD'] - 0).toFixed(1) ? 'red' : '') + `;">` + 
                                     (item['SWD'] - 0).toFixed(1) + 
                                 `</span>/` + 
                                 `<span style="color:` + (toPercent(item['SRZF']) < toPercent(item['MB_SRZF']) ? 'red' : '') + `;">` + 
@@ -467,8 +467,8 @@ $(function () {
                                 `<span style="color:` + (toPercent(item['LSZF']) < toPercent(item['MB_LSZF']) ? 'red' : '') + `;">` + 
                                     toPercent(item['LSZF']) + 
                                 `</span>` + 
-                                `，纵 
-                                <span style="color:` + (toPercent(item['CYFGL']) < toPercent(item['MB_CYFGL']) ? 'red' : '') + `;">` + 
+                                `，纵` + 
+                                `<span style="color:` + (toPercent(item['CYFGL']) < toPercent(item['MB_CYFGL']) ? 'red' : '') + `;">` + 
                                     toPercent(item['FGL']) + 
                                 `</span>/` + 
                                 `<span style="color:` + (toPercent(item['DBL']) < toPercent(item['MB_DBL']) ? 'red' : '') + `;">` + 
@@ -495,8 +495,8 @@ $(function () {
                                 `<span class="` + (item['HQ_FLAG'] == '1' ? 'p_on_img' : '') + `"></span>
                                 <span class="` + rise(item) + `"></span>
                             </div>
-                            <div>目标：横 
-                                <span>` + 
+                            <div>目标 : 横` + 
+                                `<span>` + 
                                     (item['SWD'] - 0).toFixed(1) + 
                                 `</span>/` + 
                                 `<span>` + 
@@ -505,8 +505,8 @@ $(function () {
                                 `<span>` + 
                                     toPercent(item['LSZF']) + 
                                 `</span>` + 
-                                `，纵 
-                                <span>` + 
+                                `，纵` + 
+                                `<span>` + 
                                     toPercent(item['FGL']) + 
                                 `</span>/` + 
                                 `<span>` + 
@@ -516,8 +516,8 @@ $(function () {
                                     (item['MB_FIVE_STAR_RATE_PRO'] ? toPercent(item['MB_FIVE_STAR_RATE_PRO']) : '') + 
                                 `</span>
                             </div>
-                            <div>承接：横 
-                                <span>` + 
+                            <div>承接 : 横` + 
+                                `<span>` + 
                                     (item['SWD'] - 0).toFixed(1) + 
                                 `</span>/` + 
                                 `<span>` + 
@@ -526,8 +526,8 @@ $(function () {
                                 `<span>` + 
                                     toPercent(item['LSZF']) + 
                                 `</span>` + 
-                                `，纵 
-                                <span>` + 
+                                `，纵` + 
+                                `<span>` + 
                                     toPercent(item['FGL']) + 
                                 `</span>/` + 
                                 `<span>` + 
@@ -554,17 +554,17 @@ $(function () {
                                 `<span class="` + (item['HQ_FLAG'] == '1' ? 'p_on_img' : '') + `"></span>
                             </div>
                             <div>
-                                目标 : 横 ` + 
+                                目标 : 横` + 
                                 (item['MB_SWD'] - 0).toFixed(1) + `/` + 
                                 toPercent(item['MB_SRZF']) + `/` + 
                                 toPercent(item['MB_LSZF']) + 
-                                `，纵 ` + 
+                                `，纵` + 
                                 toPercent(item['MB_CYFGL']) + `/` + 
                                 toPercent(item['MB_DBL']) + `/` + 
                                 toPercent(item['MB_FIVE_STAR_RATE_PRO']) + 
                             `</div>
-                            <div>承接 : 横 
-                                <span style="color:` + ((item['YS_SWD'] - 0).toFixed(1) < (item['MB_SWD'] - 0).toFixed(1) ? 'red' : '') + `;"> ` + 
+                            <div>承接 : 横` + 
+                                `<span style="color:` + ((item['YS_SWD'] - 0).toFixed(1) < (item['MB_SWD'] - 0).toFixed(1) ? 'red' : '') + `;">` + 
                                     (item['YS_SWD'] - 0).toFixed(1) + 
                                 `</span>/` + 
                                 `<span style="color:` + (toPercent(item['YS_SRZF']) < toPercent(item['MB_SRZF']) ? 'red' : '') + `;">` + 
@@ -573,7 +573,7 @@ $(function () {
                                 `<span style="color:` + (toPercent(item['YS_LSZF']) < toPercent(item['MB_LSZF']) ? 'red' : '') + `;">` + 
                                     toPercent(item['YS_LSZF']) + 
                                 `</span>，` + 
-                                `纵 <span style="color:` + (toPercent(item['YS_CYFGL']) < toPercent(item['MB_CYFGL']) ? 'red' : '') + `;">` + 
+                                `纵<span style="color:` + (toPercent(item['YS_CYFGL']) < toPercent(item['MB_CYFGL']) ? 'red' : '') + `;">` + 
                                     toPercent(item['YS_CYFGL']) + 
                                 `</span>/` + 
                                 `<span style="color:` + (toPercent(item['YS_DBL']) < toPercent(item['MB_DBL']) ? 'red' : '') + `;">` + 
@@ -600,7 +600,7 @@ $(function () {
                                 `<span class="` + (item['HQ_FLAG'] == '1' ? 'p_on_img' : '') + `"></span>
                                 <span class="` + rise(item) + `"></span>
                             </div>
-                            <div>横 
+                            <div>横 : 
                                 <span style="color:` + ((item['SWD'] - 0).toFixed(1) < (item['MB_SWD'] - 0).toFixed(1) ? 'red' : '') + `;">` + 
                                     (item['SWD'] - 0).toFixed(1) + 
                                 `</span>/
@@ -611,7 +611,7 @@ $(function () {
                                     toPercent(item['LSZF']) + 
                                 `</span>
                             </div>
-                            <div>纵 
+                            <div>纵 : 
                                 <span style="color:` + (toPercent(item['CYFGL']) < toPercent(item['MB_CYFGL']) ? 'red' : '') + `;">` + 
                                     toPercent(item['CYFGL']) + 
                                 `</span>/
@@ -639,7 +639,7 @@ $(function () {
                             `<span class="` + (item['HQ_FLAG'] == '1' ? 'p_on_img' : '') + `"></span>
                             <span class="` + rise(item) + `"></span>
                         </div>
-                            <div>横 
+                            <div>横 : 
                                 <span style="color:` + ((item['SWD'] - 0).toFixed(1)  < (item['MB_SWD'] - 0).toFixed(1)  ? 'red' : '') + `;">` + 
                                     (item['SWD'] - 0).toFixed(1) + 
                                 `</span>/
@@ -649,7 +649,7 @@ $(function () {
                                 <span style="color:` + (toPercent(item['LSZF']) < toPercent(item['MB_LSZF']) ? 'red' : '') + `;">` + 
                                     toPercent(item['LSZF']) + 
                                 `</span></div>
-                            <div>纵 
+                            <div>纵 : 
                                 <span style="color:` + (item['CYFGL'] < item['MB_CYFGL'] ? 'red' : '') + `;">` + 
                                     (item['CYFGL'] ? toPercent(item['CYFGL']) : '') + 
                                 `</span>/
@@ -677,7 +677,7 @@ $(function () {
                                 `<span class="` + (item['HQ_FLAG'] == '1' ? 'p_on_img' : '') + `"></span>
                                 <span class="` + rise(item) + `"></span>
                             </div>
-                            <div>横 
+                            <div>横 : 
                                 <span>` + 
                                     (item['SWD'] - 0).toFixed(1) + 
                                 `</span>/
@@ -688,7 +688,7 @@ $(function () {
                                     toPercent(item['LSZF']) + 
                                 `</span>
                             </div>
-                            <div>纵 
+                            <div>纵 : 
                                 <span>` + 
                                     (item['CYFGL'] ? toPercent(item['CYFGL']) : '') + 
                                 `</span>/
