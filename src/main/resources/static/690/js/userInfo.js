@@ -10,8 +10,8 @@ ajax.open('get', '/bigSreen/sys/v1/menuAuthority');
 ajax.send();
 ajax.onreadystatechange = function () {
     if (ajax.readyState == 4 && ajax.status == 200) {
-        var ableDate_user = ajax.responseText['690_yhxw_pt_cy'];
-        console.log(ableDate_user);
+        var data = JSON.parse(ajax.responseText);
+        var ableDate_user = data['data'];
         ableDate_user.map((item) => {
             userInfo.userID = item.user_code;
             userInfo.dim_access.push(Number(item.dim_value_code));
