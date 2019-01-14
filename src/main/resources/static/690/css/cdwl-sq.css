@@ -695,22 +695,22 @@ main>div {
 
 .p_on_img {
     width: 1rem;
-    background: url('/690Project_web/images/medal.png') no-repeat;
+    background: url('/690/images/medal.png') no-repeat;
 }
 
 .sheng {
     width: 1.5rem;
-    background: url('/690Project_web/images/up.gif') no-repeat;
+    background: url('/690/images/up.gif') no-repeat;
 }
 
 .ping {
     width: 2rem;
-    background: url('/690Project_web/images/on.gif') no-repeat;
+    background: url('/690/images/on.gif') no-repeat;
 }
 
 .jiang {
     width: 1.5rem;
-    background: url('/690Project_web/images/down.gif') no-repeat;
+    background: url('/690/images/down.gif') no-repeat;
 }
 
 .p_on_2 {
@@ -871,7 +871,7 @@ main>div {
 .line_bottom {
     width: 100%;
     height: 16px;
-    background: url(/690Project_web/images/xAxis.png) no-repeat;
+    background: url(/690/images/xAxis.png) no-repeat;
     position: absolute;
     bottom: 4.7%;
     background-size: 100% 70%;
@@ -883,7 +883,7 @@ div.addline {
     height: 96%;
     top: 6%;
     right: -4.9%;
-    background: url(/690Project_web/images/yAxis.png) no-repeat;
+    background: url(/690/images/yAxis.png) no-repeat;
     background-size: 75% 100%;
 }
 
