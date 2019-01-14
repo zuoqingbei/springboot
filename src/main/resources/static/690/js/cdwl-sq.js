@@ -705,7 +705,7 @@ $(function () {
 
     //获取所有产业收入增幅和零售增幅的最大值
     function setMAX(data) {
-        max = data['690_cdwl_yhxw'][0]['MAX'];
+        max = (data['690_cdwl_yhxw'][0]['MAX'] - 0).toFixed(2);
         beilv = 5 / max;
         //顶部柱状图
         getDateByCommonInterface('690_cdwl_z006', chartsParams, nextYear);
