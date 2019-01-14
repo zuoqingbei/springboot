@@ -23,6 +23,8 @@ $(function () {
     var sq_params = '';    //商圈下拉框参数
     var xj_params = '';    //星级参数
     var industry_params = "UCode::" + userInfo.userID;    //产业下拉框参数
+    var max = '';     //柱状图最大值
+    var beilv = '';     //柱状图倍率
     
     //产业接口
     getDateByCommonInterface("690_cdwl_499", industry_params, setIndustryData);
@@ -193,14 +195,8 @@ $(function () {
         // getDateByCommonInterface('690_cdwl_009', 'inCode::001;;time::20181126;;sqCode::sq001', yearinsert);
         // 690触点网络-商圈-弹出窗-月
         // getDateByCommonInterface('690_cdwl_010', 'inCode::001;;time::20181126;;sqCode::sq001', yearinsert);
-        //顶部柱状图
-        getDateByCommonInterface('690_cdwl_z006', chartsParams, nextYear);
-        getDateByCommonInterface('690_cdwl_z001', chartsParams, muBiao);
-        //轮播柱状图
-        getDateByCommonInterface('690_cdwl_z004', chartsParams, t1Month);
-        getDateByCommonInterface('690_cdwl_z005', chartsParams, t2Month);
-        getDateByCommonInterface('690_cdwl_z007', chartsParams, quarter1);
-        getDateByCommonInterface('690_cdwl_z008', chartsParams, quarter2);
+        //柱状图最大值
+        getDateByCommonInterface("690_cdwl+yhxw", chartsParams, setMAX);
         //行业地位
         getDateByCommonInterface('690_cdwl_030', chartsParams, setUpgrade);
     }
@@ -707,6 +703,19 @@ $(function () {
         }
     }
 
+    //获取所有产业收入增幅和零售增幅的最大值
+    function setMAX(data) {
+        max = data['690_cdwl_yhxw'][0]['MAX'];
+        beilv = 5 / max;
+        //顶部柱状图
+        getDateByCommonInterface('690_cdwl_z006', chartsParams, nextYear);
+        getDateByCommonInterface('690_cdwl_z001', chartsParams, muBiao);
+        //轮播柱状图
+        getDateByCommonInterface('690_cdwl_z004', chartsParams, t1Month);
+        getDateByCommonInterface('690_cdwl_z005', chartsParams, t2Month);
+        getDateByCommonInterface('690_cdwl_z007', chartsParams, quarter1);
+        getDateByCommonInterface('690_cdwl_z008', chartsParams, quarter2);
+    }
     /**
      * 绘制柱状图，并转为图片
      * @param   data     请求得到的数据
@@ -717,25 +726,19 @@ $(function () {
     function createChart(data, dataType, oDiv, str) {
         let abledata = data[dataType];
         let barWidth = "30%";
-        let max = 10;
         $(oDiv).empty();
         $(`${oDiv}_img`).css('background', 'none');
         if (!abledata[0]) {
             console.log(`${oDiv}无轮播图数据`);
         }else{
             var xdata = ['首位度', '收入增幅', '零售增幅'];
-            var ydata = [abledata[0][`${str}_SWD`], abledata[0][`${str}_SRZF`] * 10, abledata[0][`${str}_LSZF`] * 10];
+            var ydata = [abledata[0][`${str}_SWD`] / beilv, abledata[0][`${str}_SRZF`], abledata[0][`${str}_LSZF`]];
             if (dataType == '690_cdwl_331') {
                 muBiaoData = [].concat(ydata);
             };            
             if (dataType == '690_cdwl_331' || dataType == '690_cdwl_332' || dataType == '690_cdwl_333') {
                 barWidth = '35%';
             };
-            $.each(ydata, function(i, item){
-                if(item >= 10){
-                    max = item;
-                }
-            })
             $(oDiv).removeAttr('_echarts_instance_');
             let ec0001_bar = echarts.init($(oDiv)[0]);
             ec0001_bar.clear();
@@ -787,10 +790,9 @@ $(function () {
                                 formatter: function (data) {
                                     let dataValue = data.data;
                                     if (data.dataIndex === 0) {
-                                        dataValue = (dataValue - 0).toFixed(1);
+                                        dataValue = (dataValue * beilv).toFixed(1);
                                     }
                                     if (data.dataIndex != 0) {
-                                        dataValue /= 10;
                                         dataValue = toPercent(dataValue);
                                     }
                                     if (dataType == '690_cdwl_332' || dataType == '690_cdwl_333') {
@@ -820,6 +822,7 @@ $(function () {
             paintEchartsImg(oDiv, `${oDiv}_img`);
         }
     }
+
 
     //初始化 
     function initSQ() {
