@@ -973,6 +973,9 @@ div.addline3 {
 .back_3{
     margin-left: -315%;
 }
+.pinglun0 {
+    padding-left: 4px;
+}
 @media screen and (min-height: 801px) and (min-width: 1400px) {
     .turnup {
         height: 90.9%;
