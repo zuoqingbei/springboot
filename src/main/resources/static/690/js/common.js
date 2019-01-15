@@ -18,6 +18,7 @@ var y;
 var backIndustryCode;
 var backXW_CODE;
 var countScroll = 0;
+var echarts_max;//柱状图最大值
 
 /**
  * 通过统一接口请求接口数据
@@ -369,25 +370,32 @@ function getEchartsData() {
     time = time.replaceAll("-", "");
     var industry = $("#industryIpt").val();
     if (!industry) {
-        industry = "";
+        industry = "ALL";
     }
     //查询数据
     var params = "";
     params = joinParams(params, "inCode", industry);
     params = joinParams(params, "time", time);
     // console.log(params)
-    // 年柱状图、结论
-    getDateByCommonInterface('690_fhxw_z006', params, paintEcharts);
-    // 本月柱状图、结论
-    getDateByCommonInterface('690_fhxw_z001', params, paintEcharts2);
-    // T+1月柱状图、结论
-    getDateByCommonInterface('690_fhxw_z002', params, paintEcharts);
-    // T+2月柱状图、结论
-    getDateByCommonInterface('690_fhxw_z003', params, paintEcharts);
-    // Q+1季度柱状图、结论
-    getDateByCommonInterface('690_fhxw_z004', params, paintEcharts);
-    // Q+1季度柱状图、结论
-    getDateByCommonInterface('690_fhxw_z005', params, paintEcharts);
+    getDateByCommonInterface('690_fhxw_zxt_max', params, queryChartData);
+    function queryChartData(data) {
+        var abledata = data['690_fhxw_max_1'][0]
+        if (abledata) {
+            echarts_max = parseFloat(abledata['MAX']).toFixed(2);
+        }
+        // 年柱状图、结论
+        getDateByCommonInterface('690_fhxw_z006', params, paintEcharts);
+        // 本月柱状图、结论
+        getDateByCommonInterface('690_fhxw_z001', params, paintEcharts2);
+        // T+1月柱状图、结论
+        getDateByCommonInterface('690_fhxw_z002', params, paintEcharts);
+        // T+2月柱状图、结论
+        getDateByCommonInterface('690_fhxw_z003', params, paintEcharts);
+        // Q+1季度柱状图、结论
+        getDateByCommonInterface('690_fhxw_z004', params, paintEcharts);
+        // Q+1季度柱状图、结论
+        getDateByCommonInterface('690_fhxw_z005', params, paintEcharts);
+    }
 }
 /**
  * 绘制柱状图区域、写入结论
@@ -455,6 +463,7 @@ function createChart(data, dataType, oDiv, str) {
                 },
                 yAxis: {
                     show: false,
+                    max: echarts_max
                 },
                 series: [{
                     data: ydata,
@@ -782,12 +791,12 @@ function createTopOneBlock(value, index, needLine) {
                     return num1 - num2 < 0
                 });
                 //console.log(hz);
-                var max=hz[0];
-                var min=hz[hz.length-1];
-                if(max==min){
-                    min=0;
+                var max = hz[0];
+                var min = hz[hz.length - 1];
+                if (max == min) {
+                    min = 0;
                 };
-                var c=Math.floor((max-min)/5);
+                var c = Math.floor((max - min) / 5);
                 //融速  要求写死  25 -0
                 // var max = 25;
                 // var c = 5;
