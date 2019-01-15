@@ -778,8 +778,7 @@ function createTopOneBlock(value, index, needLine) {
                     $(".numsvalue_" + (index + 1) + "_" + (5 - x)).html(parseInt(((max - x * c) / 10000)));
                 }
             } else {
-                //融速  要求写死  25 -0
-                /*hz.sort((num1, num2) => {
+                hz.sort((num1, num2) => {
                     return num1 - num2 < 0
                 });
                 //console.log(hz);
@@ -788,9 +787,10 @@ function createTopOneBlock(value, index, needLine) {
                 if(max==min){
                     min=0;
                 };
-                var c=Math.floor((max-min)/5);*/
-                var max = 25;
-                var c = 5;
+                var c=Math.floor((max-min)/5);
+                //融速  要求写死  25 -0
+                // var max = 25;
+                // var c = 5;
                 // console.log(index)
                 for (x = 0; x < 5; x++) {
                     $(".numsvalue_" + (index + 1) + "_" + (x + 1)).html((max - x * c));

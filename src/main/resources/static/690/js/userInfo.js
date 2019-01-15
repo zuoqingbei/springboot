@@ -12,10 +12,16 @@ ajax.onreadystatechange = function () {
     if (ajax.readyState == 4 && ajax.status == 200) {
         var data = JSON.parse(ajax.responseText);
         var ableDate_user = data['data'];
+//        console.log(ableDate_user);
         ableDate_user.map((item) => {
             userInfo.userID = item.user_code;
             userInfo.dim_access.push(Number(item.dim_value_code));
         });
+     // 通过登录信息判断模块权限
+//        console.log(userInfo.dim_access);
+        userInfo.dim_access.forEach((item, i) => {
+            $('.nav_btns .pt_btn').eq(item).css('display','block');
+        })
     }
 }
 

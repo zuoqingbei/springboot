@@ -12,6 +12,7 @@
     <link rel="stylesheet" href="${ctx}/690/css/fhxv.css">
     <link rel="stylesheet" href="${ctx}/690/css/datepiker.css">
     <link rel="icon" type="image/x-icon" href="${ctx}/690/images/favicon.ico" />
+    <script src="${ctx}/690/js/jquery-3.3.1.min.js"></script>
     <script src="${ctx}/690/js/userInfo.js"></script>
     <title>小微分类升级驱动体系</title>
     <style>
@@ -1272,7 +1273,7 @@
         <div id="submit" class="flex_center">提交</div>
         <div class="submitbox_btn flex_center">◀</div>
     </div> -->
-    <script src="${ctx}/690/js/jquery-3.3.1.min.js"></script>
+    
     <script src="${ctx}/690/js/echarts-4.2.0.js"></script>
     <script src="${ctx}/690/js/jquery.date_input.pack.js"></script>
     <script src="${ctx}/690/js/chartsCom.js"></script>
