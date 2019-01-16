@@ -122,11 +122,11 @@
 			<artifactId>spring-boot-starter-data-elasticsearch</artifactId>
 		</dependency> -->
 
-		<dependency>
+		<!-- <dependency>
 			<groupId>org.jon.lv</groupId>
 			<artifactId>mybatis-pageplugin</artifactId>
 			<version>1.0-SNAPSHOT</version>
-		</dependency>
+		</dependency> -->
 
 		<dependency>
 			<groupId>com.alibaba</groupId>
@@ -207,11 +207,11 @@
 		    <version>2.0</version>
 		</dependency>
 		<!-- 多数据源读写分离 -->
-		<dependency>
+		<!-- <dependency>
 			<groupId>org.jon.lv</groupId>
 			<artifactId>Mybatis-DynamicDataSource</artifactId>
 			<version>1.0-SNAPSHOT</version>
-		</dependency>
+		</dependency> -->
 		<dependency>
 			<groupId>org.jodd</groupId>
 			<artifactId>jodd</artifactId>
@@ -442,11 +442,11 @@
 		</dependency>
 		<!-- https://mvnrepository.com/artifact/com.aspose.words/aspose-words-jdk16 -->
 		<!-- 处理word2pdf -->
-		<dependency>
+		<!-- <dependency>
 		    <groupId>com.aspose.words</groupId>
 		    <artifactId>aspose-words-jdk16</artifactId>
 		    <version>14.6.0.0</version>
-		</dependency>
+		</dependency> -->
 
 
 

@@ -669,7 +669,7 @@ public class EtaxFileUtils {
 				}
 			}
 		}
-		cellValue=StringUtils.deleteWhitespace(cellValue.trim()).replaceAll(",", "").replaceAll("-", "").replaceAll("，", "").replaceAll("—", "");
+		cellValue=StringUtils.deleteWhitespace(cellValue.trim()).replaceAll(",", "").replaceAll("，", "").replaceAll("—", "");
 		if(StringUtils.isBlank(cellValue)){
 			cellValue="0";
 		}
