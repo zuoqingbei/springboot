@@ -1,4 +1,4 @@
-/*package com.enterise.web.htmlgen.doc;
+package com.enterise.web.htmlgen.doc;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -13,12 +13,12 @@ import com.aspose.words.License;
 import com.aspose.words.SaveFormat;
  
  
-*//**
+/**
  * @author Administrator
  * @version $Id$
  * @since
  * @see
- *//*
+ */
 public class Word2PdfUtil {
  
     public static void main(String[] args) {
@@ -65,4 +65,3 @@ public class Word2PdfUtil {
         return false;
     }
 }
-*/
