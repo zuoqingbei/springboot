@@ -28,7 +28,6 @@
 		</attributes>
 	</classpathentry>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/jdk1.8"/>
-	<classpathentry kind="lib" path="src/main/webapps/WEB-INF/lib/aspose-words-jdk16-14.6.0.0.jar"/>
 	<classpathentry kind="lib" path="src/main/webapps/WEB-INF/lib/Mybatis-DynamicDataSource-1.0-SNAPSHOT.jar"/>
 	<classpathentry kind="lib" path="src/main/webapps/WEB-INF/lib/mybatis-pageplugin-1.0-SNAPSHOT.jar"/>
 	<classpathentry kind="output" path="target/classes"/>

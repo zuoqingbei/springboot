@@ -34,7 +34,6 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.baomidou.mybatisplus.mapper.EntityWrapper;
 import com.baomidou.mybatisplus.plugins.pagination.PageHelper;
-import com.enterise.web.htmlgen.doc.Word2PdfUtil;
 import com.enterise.web.htmlgen.pdf.PdfToImage;
 import com.enterise.web.htmlgen.ppt.Ppt2PdfUtils;
 import com.enterise.web.htmlgen.xls.ExcelToHtml;
@@ -129,18 +128,18 @@ public class DocUploadFileController extends BaseController {
 						htmlName=WordToHtml.Word2007ToHtml(filePath+ File.separator, uploadName,fileName);
 						break;*/
 					case "doc":
-						String outNameDoc=fileName+"("+dateStr+").pdf";
+						/*String outNameDoc=fileName+"("+dateStr+").pdf";
 						boolean successDoc=Word2PdfUtil.doc2pdf(filePath+ File.separator+uploadName, filePath+ File.separator+outNameDoc);
 						if(successDoc){
 							htmlName=PdfToImage.pdfToImage(filePath+ File.separator, outNameDoc,fileName);
-						}
+						}*/
 						break;
 					case "docx":
 						String outName=fileName+"("+dateStr+").pdf";
-						boolean success=Word2PdfUtil.doc2pdf(filePath+ File.separator+uploadName, filePath+ File.separator+outName);
+						/*boolean success=Word2PdfUtil.doc2pdf(filePath+ File.separator+uploadName, filePath+ File.separator+outName);
 						if(success){
 							htmlName=PdfToImage.pdfToImage(filePath+ File.separator, outName,fileName);
-						}
+						}*/
 						break;
 					case "pdf":
 						/*PdfToHtml pdf2Html = new PdfToHtml(filePath+ File.separator,uploadName);
