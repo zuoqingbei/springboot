@@ -6,7 +6,7 @@ var countScroll = 0;
 //化成百分数保留一位小数
 function toPercent(point) {
     var str = "-"
-    if (point != "-") {
+    if (point != "-"&&point != null) {
         str = Number(point * 100).toFixed(1);
         str += "%";
     }
@@ -16,7 +16,7 @@ function toPercent(point) {
 //化成百分数，不保留小数位
 function toPercent2(point) {
     var str = "-"
-    if (point != "-") {
+    if (point != "-"&&point != null) {
         str = Number(point * 100).toFixed(0);
         str += "%";
     }
@@ -26,7 +26,7 @@ function toPercent2(point) {
 //将数据保留一位小数
 function toPercent3(point) {
     var str = "-"
-    if (point != "-") {
+    if (point != "-"&&point != null) {
         str = Number(point).toFixed(1);
     }
     return str;
@@ -55,7 +55,7 @@ function setXWdata(data) {
     $.each(data["690_yhxw_yj_017"], function (index, item) {
         $("#select_xwcode").append("<option value=" + item.YHXW_CODE + " >" + item.YHXW_NAME + "</option>")
     })
-    if(localStorage.getItem('yhxwData')){
+    if (localStorage.getItem('yhxwData')) {
         $("#select_xwcode").val(JSON.parse(localStorage.getItem('yhxwData')).selectXwCode);
     }
 }
@@ -85,9 +85,15 @@ $(function () {
     //获取url将小微主小微名称时间写入页面
     function GetRequest() {
         if (time == "" || time == null) {
-            //设置默认日期：当前天-1
-            //$("#chanyeTime").val(formatDate(new Date() - 1000 * 60 * 60 * 24));
-            $("#chanyeTime").val('2018-12-31');
+            //设置默认日期
+            if (new Date().getDate() > 4) {
+                $("#chanyeTime").val(formatDate(new Date() - 1000 * 60 * 60 * 24));
+            } else {
+                if(new Date().getMonth()==0){
+                    $("#chanyeTime").val(getLastDay(new Date().getFullYear()-1,12));
+                }
+                $("#chanyeTime").val(getLastDay(new Date().getFullYear(),new Date().getMonth()));
+            }
             var chanyeTime = formatDate($("#chanyeTime").val()).replace(/-/g, "");
             year = chanyeTime.substring(0, 4);
             month = chanyeTime.substring(4, 6);
@@ -143,7 +149,7 @@ $(function () {
 
     function ALLfunction(params) {
         //获取所有产业收入增幅和利润率的最大值
-        getDateByCommonInterface("690_yhxw_l0012", "time::" + params.substring(19, 27) + ";;inCode::" + params.substring(8, 12), setMAX);
+        getDateByCommonInterface("690_cdwl+yhxw", "time::" + params.substring(19, 27) + ";;inCode::" + params.substring(8, 12), setMAX);
         //获取产业星级数据
         getDateByCommonInterface("690_yhxw_yj_015", params, levels);
         //获取年目标数据
@@ -230,7 +236,12 @@ $(function () {
         if (yu > 0) {
             n++;
         };
-        var nestJiduValue = n + 1;
+        if(month ==3 ||month ==6 ||month ==9 ||month ==12 ){
+            var nestJiduValue = n + 1;
+        }else{
+            var nestJiduValue = n;
+        }
+        
         //下一个季度
         if (nestJiduValue == 5) {
             next1Jidu = (parseInt(year) + 1) + "年Q1";//下一个季度时间
@@ -924,10 +935,21 @@ $(function () {
         }
 
     }
+    //获取当月最后一天
+    function getLastDay(year, month) {
+        var new_year = year;  //取当前的年份
+        var new_month = month;
+        if (month > 12) {
+            new_month -= 12;    //月份减
+            new_year++;      //年份增
+        }
+        var new_date = new Date(new_year, new_month, 1);   //取当年当月中的第一天
+        return formatDate(new Date(new_date.getTime() - 1000 * 60 * 60 * 24));//获取当月最后一天日期
+    }
     //年-跳转点击事件
     $('body').on('click', '.column_1 .pointer', function () {
         localStorage.setItem('yhxwData', JSON.stringify({
-            selectXwCode:$("#select_xwcode option:selected").val(),
+            selectXwCode: $("#select_xwcode option:selected").val(),
             left_arrow: $('.left_arrow').css('display'),
             fromClick: true
         }));
@@ -946,7 +968,7 @@ $(function () {
     //月-跳转点击事件
     $('body').on('click', '.column_2 .pointer', function () {
         localStorage.setItem('yhxwData', JSON.stringify({
-            selectXwCode:$("#select_xwcode option:selected").val(),
+            selectXwCode: $("#select_xwcode option:selected").val(),
             left_arrow: $('.left_arrow').css('display'),
             fromClick: true
         }));
@@ -1003,7 +1025,7 @@ function allBar(data) {
 }
 //获取所有产业收入增幅和利润率的最大值
 function setMAX(data) {
-    max = data['690_yhxw_t6'][0]['MAX'];
+    max = (data['690_cdwl_yhxw'][0]['MAX'] - 0).toFixed(2);
     beilv = 5 / max;
 }
 function ec_00(data, bar_n) {

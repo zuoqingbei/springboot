@@ -360,7 +360,7 @@ main>div {
 .line_2 {
     top: 62%;
     height: 36%;
-    background-image: url('../images/A.png');
+    background-image: url('/690/images/A.png');
     border-top: .05rem solid var(--fontColor);
     border-bottom: .1rem solid var(--fontColor);
 }
@@ -477,11 +477,11 @@ main>div {
     background: transparent;
     color: #e1e1e6;
     font-size: .875rem;
+    margin-left: 8px;
 }
 
 .int input.next_year {
     width: 80%;
-    margin-left: 2%;
 }
 
 .m_right_scroll {
@@ -583,11 +583,13 @@ main>div {
     letter-spacing: 2px;
     font-size: .8rem;
     text-align: center;
+    line-height: 1rem;
+    padding-top: 5px;
 }
 
 .point_line {
     position: absolute;
-    top: -0.2rem;
+    top: -0.4rem;
     left: 44%;
     width: 0.3rem;
     height: 0.3rem;
@@ -893,7 +895,7 @@ div.addline {
     height: 120%;
     top: 1.3%;
     right: -4.9%;
-    background: url(../images/yAxis.png) no-repeat;
+    background: url(/690/images/yAxis.png) no-repeat;
     background-size: 75% 100%;
 }
 
@@ -912,9 +914,9 @@ div.addline3 {
 .line_bottom {
     width: 100%;
     height: 16px;
-    background: url(../images/xAxis.png) no-repeat;
+    background: url(/690/images/xAxis.png) no-repeat;
     position: absolute;
-    bottom: 4.3%;
+    bottom: 4.2%;
     background-size: 100% 70%;
 }
 
@@ -970,6 +972,9 @@ div.addline3 {
 }
 .back_3{
     margin-left: -315%;
+}
+.pinglun0 {
+    padding-left: 4px;
 }
 @media screen and (min-height: 801px) and (min-width: 1400px) {
     .turnup {
@@ -1087,7 +1092,6 @@ div.addline3 {
     }
     .int input {
         width: 88%;
-        margin-left: 1%;
     }
     .m_left_top {
         margin-top: 11.5%;
@@ -1095,6 +1099,9 @@ div.addline3 {
     }
     .m_left_top>.m_left_top_item {
         line-height: 2.85rem;
+    }
+    .xAxis_box {
+        bottom: 0.5%;
     }
 }
 
@@ -1109,7 +1116,7 @@ div.addline3 {
         height: 74%;
     }
     .xAxis_box {
-        bottom: 1%;
+        bottom: 1.5%;
     }
     .boxcnt_small {
         top: -4%;

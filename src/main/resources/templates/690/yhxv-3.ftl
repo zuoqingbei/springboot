@@ -10,6 +10,13 @@
     <link rel="icon" type="image/x-icon" href="${ctx}/690/images/favicon.ico" />
     <title>小微分类升级驱动体系</title>
     <style>
+        .inputs_box>div>textarea {
+            font-size: 1rem;
+            margin-top: 1.6rem;
+            text-align: center;
+            font-family: "微软雅黑";
+        }
+
         .flex_center {
             display: flex;
             align-items: center;
@@ -52,9 +59,9 @@
         .axis_name {
             height: auto;
             margin-left: 1.85%;
-            margin-top: 2.55%;
-            padding: 5px 0;
-            font-size: 1.125rem;
+            margin-top: 1%;
+            padding: 5px 0 4px;
+            font-size: 1rem;
         }
 
         .yaxis_name {
@@ -70,10 +77,10 @@
         }
 
         .inputs_box {
-            width: 98%;
+            width: 97.9%;
             height: 9%;
             margin-top: 1%;
-            padding-left: 9.1%;
+            padding-left: 10.1%;
 
         }
 
@@ -82,11 +89,11 @@
         }
 
         .table_box {
-            height: 37.7%;
+            height: 41.9%;
         }
 
         .content_left_charts {
-            margin-top: 5%;
+            margin-top: 7%;
             width: 100%;
             height: 88%;
             font-size: 1.125rem;
@@ -182,17 +189,26 @@
         .arrow_on {
             background: url("${ctx}/690/images/on.gif") no-repeat center;
         }
-        .jieLun span{
+
+        .jieLun span {
             font-size: 1rem;
             line-height: 1.5;
         }
-        .jieLun .jieLun_cont{
+
+        .jieLun .jieLun_cont {
             color: #fff;
             margin-left: 6px;
         }
+
+        @media (max-width: 1400px) {
+            .charts_legend {
+                transform: scale(.95);
+            }
+        }
+        
         @media screen and (max-height: 768px) and (min-width: 1400px) {
             .table_box {
-                height: 36.6%;
+                height: 41.3%;
                 margin-bottom: -.1rem;
             }
         }
@@ -205,6 +221,14 @@
             .inputs_box>div {
                 height: 98%;
             }
+
+            .axis_name {
+                padding: 5px 0 2px;
+            }
+
+            .yaxis_name {
+                padding: 9px 0 2px;
+            }
         }
 
         @media (max-width : 1400px) and (min-height: 701px) {
@@ -214,6 +238,14 @@
 
             .inputs_box>div {
                 height: 98%;
+            }
+
+            .axis_name {
+                padding: 5px 0 2px;
+            }
+
+            .yaxis_name {
+                padding: 5px 0 2px;
             }
         }
 
@@ -228,9 +260,9 @@
             top: -4%;
             display: flex;
             justify-content: flex-end;
-            line-height: 1rem;
+            line-height: 1.1rem;
             align-items: center;
-            font-size: 1rem;
+            font-size: .95rem;
         }
 
         .charts_legend .charts_legend_line {
@@ -247,6 +279,21 @@
 
         .charts_legend .text_sj {
             color: #fff;
+        }
+        .star_box span {
+            color: #fff;
+        }
+        
+        .inputs_box>div:first-of-type {
+            flex: 0 0 33%;
+        }
+
+        .inputs_box>div:last-of-type {
+            flex: 0 0 22%;
+        }
+
+        .inputs_box>div {
+            flex: 0 0 43.2%;
         }
     </style>
 
@@ -336,7 +383,7 @@
                             <th rowspan="2" colspan="1" class="td_border_bold">并联节点</th>
                             <th rowspan="2" colspan="1">人员</th>
                             <th colspan="2" class="td_border_bold">单</th>
-                            <th colspan="7">预案承接预实差</th>
+                            <th colspan="6">预案承接预实差</th>
                         </tr>
                         <tr>
                             <th>目标</th>
@@ -347,7 +394,7 @@
                             <th class="td_border_bold">承接差</th>
                             <th>实际</th>
                             <th>差</th>
-                            <th>关差预案</th>
+                            <#--  <th>关差预案</th>  -->
                         </tr>
                         <tr id="tr0">
                             <td class="td_border_bold yh_jiedian">用户小微</td>
@@ -360,7 +407,7 @@
                             <td class="td_border_bold">-</td>
                             <td>-</td>
                             <td>-</td>
-                            <td class="gccj">-</td>
+                            <#--  <td class="gccj">-</td>  -->
                         </tr>
                         <tr id="tr1">
                             <td class="td_border_bold yh_jiedian">设计</td>
@@ -373,7 +420,7 @@
                             <td class="td_border_bold">-</td>
                             <td>-</td>
                             <td>-</td>
-                            <td class="gccj">-</td>
+                            <#--  <td class="gccj">-</td>  -->
                         </tr>
                         <tr id="tr2">
                             <td class="td_border_bold yh_jiedian">模块采购</td>
@@ -386,7 +433,7 @@
                             <td class="td_border_bold">-</td>
                             <td>-</td>
                             <td>-</td>
-                            <td class="gccj">-</td>
+                            <#--  <td class="gccj">-</td>  -->
                         </tr>
                         <tr id="tr3">
                             <td class="td_border_bold yh_jiedian">销售</td>
@@ -399,7 +446,7 @@
                             <td class="td_border_bold">-</td>
                             <td>-</td>
                             <td>-</td>
-                            <td class="gccj">-</td>
+                            <#--  <td class="gccj">-</td>  -->
                         </tr>
                         <tr id="tr4">
                             <td class="td_border_bold yh_jiedian">供应链</td>
@@ -412,7 +459,7 @@
                             <td class="td_border_bold">-</td>
                             <td>-</td>
                             <td>-</td>
-                            <td class="gccj">-</td>
+                            <#--  <td class="gccj">-</td>  -->
                         </tr>
                         <tr id="tr5">
                             <td class="td_border_bold yh_jiedian">服务</td>
@@ -425,7 +472,7 @@
                             <td class="td_border_bold">-</td>
                             <td>-</td>
                             <td>-</td>
-                            <td class="gccj">-</td>
+                            <#--  <td class="gccj">-</td>  -->
                         </tr>
                     </table>
                 </div>

@@ -3,7 +3,6 @@
     position: relative;
 }
 .main_content{
-    height: 88%;
     display: inline;
     font-size: 1.5rem;
 }
@@ -45,13 +44,13 @@ box-shadow: 0 0 10px #00cdfe inset; */
     background-size: 100% 100%;
 }
 .arrow_up{
-    background: url("../images/up.gif") no-repeat;
+    background: url("/690/images/up.gif") no-repeat;
 }
 .arrow_down{
-    background: url("../images/down.gif") no-repeat;
+    background: url("/690/images/down.gif") no-repeat;
 }
 .arrow_on{
-    background: url("../images/on.gif") no-repeat;
+    background: url("/690/images/on.gif") no-repeat;
 }
 .swd_arrow{
     left: 21%;

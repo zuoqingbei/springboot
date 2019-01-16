@@ -12,7 +12,8 @@
     <link rel="stylesheet" href="${ctx}/690/css/cdwl-sq.css">
     <link rel="stylesheet" href="${ctx}/690/css/datepiker.css">
     <link rel="stylesheet" href="${ctx}/690/css/consumer_micro.css">
-    <link rel="icon" type="image/x-icon" href="${ctx}/690/js/images/favicon.ico" />
+    <link rel="icon" type="image/x-icon" href="${ctx}/690/images/favicon.ico" />
+    <script src="${ctx}/690/js/jquery-3.3.1.min.js"></script>
     <script src="${ctx}/690/js/userInfo.js"></script>
     <title>小微分类升级驱动体系</title>
     <style>
@@ -169,8 +170,8 @@
         .column_scroll .column_2_short.t_s.s_3{
             margin-top: .4rem;
         }
-        .line_bottom{
-            bottom: 4.4%;
+        .line_bottom {
+            bottom: 4.2%;
         }
         .submit {
             left: 57%;
@@ -199,7 +200,17 @@
             height: 91.5%;
         }
         .column_screen .column_oth {
-            height: 75.2%;
+            height: 75.5%;
+        }
+        @media (max-width:1400px){
+            .column_2 .numbs{
+                width: 120%;
+                margin-left: -6%;
+            }
+            .column_scroll .numbs{
+                width: 105%;
+                margin-left: -5%;
+            }
         }
         @media screen and (max-height: 768px) and (min-width: 1400px){
             .turnup {
@@ -207,7 +218,7 @@
                 margin-top: .2rem;
             }
             .line_bottom {
-                bottom: 3.9%;
+                bottom: 3.3%;
             }
             .turnbox_s {
                 margin: 3% 7px 0% 0;
@@ -220,10 +231,10 @@
                 height: 67%;
                 padding-left: .1rem;            }
             .column_oth {
-                height: 75.5%;
+                height: 75.6%;
             }
             .column_screen .column_oth {
-                height: 75.2%;
+                height: 75.4%;
                 padding-top: 4.7rem;
             }
             .oth_2 {
@@ -295,21 +306,21 @@
          }
         @media (max-height: 700px){
             .line_bottom {
-                bottom: 3%;
+                bottom: 2.5%;
             }
             .oth_2 {
                 height: 76.3%;
                 padding-top: 5.2%;
             }
             .jdyl {
-                bottom: .1%;
+                bottom: -390%;
             }
             .turnup {
                 top: 1rem;
                 height: 93.1%;
             }
             .column_scroll .column_oth {
-                height: 76.5%;
+                height: 76.63%;
                 padding-top: 21.5%;
             }
             div.addline3 {
@@ -331,6 +342,46 @@
         @media (max-width: 1400px) and (max-height: 700px) {
             .area_2, .area_3, .area_4 {
                 height: 87% !important;
+            }
+        }
+        @media (max-width: 1400px) {
+            .numbs > span{
+                line-height: 2rem;
+            }
+        }
+        @media (max-width: 1400px) and (max-height: 700px) {
+            .numbs {
+                margin-top: -1%;
+            }
+            .column_3 .numbs {
+                margin-top: -2.4%;
+            }
+            .column_2 .numbs {
+                margin-top: -1.3%;
+            }
+            .column_3 .jdyl {
+                bottom: -420%;
+            }
+            .turnbox_s {
+                margin: 4% 10px 0% 0;
+            }
+        }
+
+        @media (max-width: 1400px) and (min-height: 701px) {
+            .numbs {
+                margin-top: -1.3%;
+            }
+            .column_3 .numbs {
+                margin-top: -2.5%;
+            }
+            .column_2 .numbs {
+                margin-top: -1.8%;
+            }
+            .jdyl {
+                bottom: -330%;
+            }
+            .column_2 .jdyl {
+                bottom: -310%;
             }
         }
         @-moz-document url-prefix() {
@@ -458,11 +509,11 @@
                 <div class="s_lin1_two">11月目标 :<span>★★★</span></div>
                 <div class="s_lin1_three">11月现状 :<span>★★★★★</span></div>-->
                 <!-- <div class="m_top_name">战略目标</div>-->
-                <div class="column_1_goal box_sp flex_center title_top">
-                    战略目标
-                </div>
+                <div class="column_1_goal box_sp flex_center title_top" id="CYZ"></div>
                 <div class="m_top_content">
-                    <textarea disabled="disabled" name="" id="ZLMB" style="width: 100%;height: 100%"></textarea>
+                    <div class="s_lin1 s_lin1_one"><span></span></div>
+                    <div class="s_lin1 s_lin1_two"><span></span></div>
+                    <div class="s_lin1 s_lin1_three"><span></span></div>
                 </div>
             </div>
             <div class="m_oth">
@@ -590,7 +641,11 @@
                             <span><span class="point_line"></span>行业增长</span>
                             <span><span class="point_line"></span>达成目标</span>
                             <span><span class="point_line"></span>达成1.2倍</span>
-                            <span><span class="point_line"></span>绝对引领</span>
+                            <span>
+                                <span class="point_line"></span>
+                                1.5倍目标
+                                <#--  <div class="jdyl">&gt;1.5倍GDP目标</div>  -->
+                            </span>
                         </div>
                     </div>
                 </div>
@@ -728,10 +783,14 @@
                     </div>
                     <div class="column_oth_down up_s">
                         <div class="numbs">
-                            <span><span class="point_line"></span></span>
-                            <span><span class="point_line"></span></span>
-                            <span><span class="point_line"></span></span>
-                            <span><span class="point_line"></span></span>
+                            <span><span class="point_line"></span>行业增长</span>
+                            <span><span class="point_line"></span>达成目标</span>
+                            <span><span class="point_line"></span>达成1.2倍</span>
+                            <span>
+                                <span class="point_line"></span>
+                                1.5倍目标
+                                <#--  <div class="jdyl">&gt;1.5倍GDP目标</div>  -->
+                            </span>
                         </div>
                     </div>
                 </div>
@@ -856,10 +915,14 @@
 
                             <div class="column_oth_down up_s">
                                 <div class="numbs">
-                                    <span><span class="point_line"></span></span>
-                                    <span><span class="point_line"></span></span>
-                                    <span><span class="point_line"></span></span>
-                                    <span><span class="point_line"></span></span>
+                                    <span><span class="point_line"></span>行业增长</span>
+                                    <span><span class="point_line"></span>达成目标</span>
+                                    <span><span class="point_line"></span>达成1.2倍</span>
+                                    <span>
+                                        <span class="point_line"></span>
+                                        1.5倍目标
+                                        <#--  <div class="jdyl">&gt;1.5倍GDP目标</div>  -->
+                                    </span>
                                 </div>
                             </div>
                         </div>
@@ -927,10 +990,14 @@
 
                             <div class="column_oth_down up_s">
                                 <div class="numbs">
-                                    <span><span class="point_line"></span></span>
-                                    <span><span class="point_line"></span></span>
-                                    <span><span class="point_line"></span></span>
-                                    <span><span class="point_line"></span></span>
+                                    <span><span class="point_line"></span>行业增长</span>
+                                    <span><span class="point_line"></span>达成目标</span>
+                                    <span><span class="point_line"></span>达成1.2倍</span>
+                                    <span>
+                                        <span class="point_line"></span>
+                                        1.5倍目标
+                                        <#--  <div class="jdyl">&gt;1.5倍GDP目标</div>  -->
+                                    </span>
                                 </div>
                             </div>
                         </div>
@@ -942,7 +1009,7 @@
                             </div>
                             <div class="column_2_short_all">
                                 <div class="column_2_short box_sp s_3 title_top">
-                                    承接
+                                    目标
                                 </div>
                             </div>
                             <div class="column_2_long tittable s_3" id="ec06_bar"></div>
@@ -998,10 +1065,14 @@
 
                             <div class="column_oth_down up_s">
                                 <div class="numbs">
-                                    <span><span class="point_line"></span></span>
-                                    <span><span class="point_line"></span></span>
-                                    <span><span class="point_line"></span></span>
-                                    <span><span class="point_line"></span></span>
+                                    <span><span class="point_line"></span>行业增长</span>
+                                    <span><span class="point_line"></span>达成目标</span>
+                                    <span><span class="point_line"></span>达成1.2倍</span>
+                                    <span>
+                                        <span class="point_line"></span>
+                                        1.5倍目标
+                                        <#--  <div class="jdyl">&gt;1.5倍GDP目标</div>  -->
+                                    </span>
                                 </div>
                             </div>
                         </div>
@@ -1013,7 +1084,7 @@
                             </div>
                             <div class="column_2_short_all">
                                 <div class="column_2_short box_sp s_3 title_top">
-                                    承接
+                                    目标
                                 </div>
                             </div>
                             <div class="column_2_long tittable s_3" id="ec07_bar"></div>
@@ -1069,10 +1140,14 @@
 
                             <div class="column_oth_down up_s">
                                 <div class="numbs">
-                                    <span><span class="point_line"></span></span>
-                                    <span><span class="point_line"></span></span>
-                                    <span><span class="point_line"></span></span>
-                                    <span><span class="point_line"></span></span>
+                                    <span><span class="point_line"></span>行业增长</span>
+                                    <span><span class="point_line"></span>达成目标</span>
+                                    <span><span class="point_line"></span>达成1.2倍</span>
+                                    <span>
+                                        <span class="point_line"></span>
+                                        1.5倍目标
+                                        <#--  <div class="jdyl">&gt;1.5倍GDP目标</div>  -->
+                                    </span>
                                 </div>
                             </div>
                         </div>
@@ -1080,7 +1155,6 @@
                 </div>
             </div>
         </div>
-        <div class="jdyl">&gt;1.5倍GDP目标</div>
     </main>
 
     <!-- 其他项 -->
@@ -1133,7 +1207,7 @@
         </div>
     </div> -->
 
-    <script src="${ctx}/690/js/jquery-3.3.1.min.js"></script>
+
     <script src="${ctx}/690/js/echarts-4.2.0.js"></script>
     <script src="${ctx}/690/js/jquery.date_input.pack.js"></script>
     <script src="${ctx}/690/js/common.js"></script>
@@ -1154,7 +1228,7 @@
                     left_arrow: $('.left_arrow').css('display'),
                     fromClick: true
                 }));
-                location.href = 'http://10.135.26.216:9999/bigSreen/sys/v1/cdwl-sq';
+                location.href = '/bigSreen/sys/v1/cdwl-sq';
             })
             rightScroll();
         })

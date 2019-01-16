@@ -1,9 +1,17 @@
 var params = "";
 var inCode = "";
-//var time = formatDate(new Date() - 1000 * 60 * 60 * 24).replace(/-/g, "");
-var time = "20181231"
+var time
 var max
 var beilv
+ //设置默认日期
+ if (new Date().getDate() > 4) {
+    time = (formatDate(new Date() - 1000 * 60 * 60 * 24)).replace(/-/g, "");
+} else {
+    if(new Date().getMonth()==0){
+        time  = (getLastDay(new Date().getFullYear()-1,12)).replace(/-/g, "");
+    }
+    time  = (getLastDay(new Date().getFullYear(),new Date().getMonth())).replace(/-/g, "");
+}
 //化成百分数保留一位小数
 function toPercent(point) {
     var str = "-"
@@ -39,12 +47,25 @@ function setMAX(data) {
     max = data['690_yhxw_t6'][0]['MAX'];
     beilv = 5 / max;
 }
+ //获取当月最后一天
+ function getLastDay(year, month) {
+    var new_year = year;  //取当前的年份
+    var new_month = month;
+    if (month > 12) {
+        new_month -= 12;    //月份减
+        new_year++;      //年份增
+    }
+    var new_date = new Date(new_year, new_month, 1);   //取当年当月中的第一天
+    return formatDate(new Date(new_date.getTime() - 1000 * 60 * 60 * 24));//获取当月最后一天日期
+}
 $(function () {
     allInCode = ['BAA', 'ABA', 'BCB', 'FAB', 'BCD', 'BAA', 'ABA', 'BCB', 'FAB', 'BCD']
     //获取平台柱状图数据
     getDateByCommonInterface("690_yhxw_yj_018", "time::" + time, setPTBar);
     //获取平台数据
     getDateByCommonInterface("690_yhxw_pt_cy", "time::" + time, setPTData);
+    //获取平台评论数据
+    getDateByCommonInterface("690_yhxw_pl", "time::" + time, setPTPLData);
     allInCode.forEach(function (item, i) {
         params = "inCode::" + item + ";;time::" + time;
         params1 = "inCode::" + item + ";;time::" + time + ";;xw_code::ALL"
@@ -65,28 +86,30 @@ $(function () {
     function setCommentData(data, dataIndex) {
         var pinglun = "";
         if (dataIndex == 0) {
-            pinglun = "<span>地位:</span><input value=" + data['690_yhxw_p3'][0]['SJ_HYDW'].replace(/[\r\n]/g, "") + "><span>升级:</span><input value=" + data['690_yhxw_p3'][0]['SJ_SJ'].replace(/[\r\n]/g, "") + ">";
+            pinglun = "<span>地位:</span><input value=" + data['690_yhxw_p3'][0]['SJ_HYDW'].replace(/[\r\n]/g, "").replace(/>/g,'＞') + "><span>升级:</span><input value=" + data['690_yhxw_p3'][0]['SJ_SJ'].replace(/[\r\n]/g, "") + ">";
             $(".pinglun1").html(pinglun);
         } else if (dataIndex == 1) {
-            pinglun = "<span>地位:</span><input value=" + data['690_yhxw_p3'][0]['SJ_HYDW'].replace(/[\r\n]/g, "") + "><span>升级:</span><input value=" + data['690_yhxw_p3'][0]['SJ_SJ'].replace(/[\r\n]/g, "") + ">";
+            pinglun = "<span>地位:</span><input value=" + data['690_yhxw_p3'][0]['SJ_HYDW'].replace(/[\r\n]/g, "").replace(/>/g,'＞') + "><span>升级:</span><input value=" + data['690_yhxw_p3'][0]['SJ_SJ'].replace(/[\r\n]/g, "") + ">";
             $(".pinglun2").html(pinglun);
         } else if (dataIndex == 2) {
-            pinglun = "<span>地位:</span><input value=" + data['690_yhxw_p3'][0]['SJ_HYDW'].replace(/[\r\n]/g, "") + "><span>升级:</span><input value=" + data['690_yhxw_p3'][0]['SJ_SJ'].replace(/[\r\n]/g, "") + ">";
+            pinglun = "<span>地位:</span><input value=" + data['690_yhxw_p3'][0]['SJ_HYDW'].replace(/[\r\n]/g, "").replace(/>/g,'＞') + "><span>升级:</span><input value=" + data['690_yhxw_p3'][0]['SJ_SJ'].replace(/[\r\n]/g, "") + ">";
             $(".pinglun3").html(pinglun);
         } else if (dataIndex == 3) {
-            pinglun = "<span>地位:</span><input value=" + data['690_yhxw_p3'][0]['SJ_HYDW'].replace(/[\r\n]/g, "") + "><span>升级:</span><input value=" + data['690_yhxw_p3'][0]['SJ_SJ'].replace(/[\r\n]/g, "") + ">";
+            pinglun = "<span>地位:</span><input value=" + data['690_yhxw_p3'][0]['SJ_HYDW'].replace(/[\r\n]/g, "").replace(/>/g,'＞') + "><span>升级:</span><input value=" + data['690_yhxw_p3'][0]['SJ_SJ'].replace(/[\r\n]/g, "") + ">";
             $(".pinglun4").html(pinglun);
         } else if (dataIndex == 4) {
-            pinglun = "<span>地位:</span><input value=" + data['690_yhxw_p3'][0]['SJ_HYDW'].replace(/[\r\n]/g, "") + "><span>升级:</span><input value=" + data['690_yhxw_p3'][0]['SJ_SJ'].replace(/[\r\n]/g, "") + ">";
+            pinglun = "<span>地位:</span><input value=" + data['690_yhxw_p3'][0]['SJ_HYDW'].replace(/[\r\n]/g, "").replace(/>/g,'＞') + "><span>升级:</span><input value=" + data['690_yhxw_p3'][0]['SJ_SJ'].replace(/[\r\n]/g, "") + ">";
             $(".pinglun5").html(pinglun);
         }
     }
     //写入产业星级和产业主
     function levels(data, dataIndex) {
-        let num = data['690_yhxw_015'][1]['XJ'];
+        // console.log(data)
+        
         tit = ".title" + Number(dataIndex + 2)
-        let name = data['690_yhxw_015'][1]['INDUSTRY_Z'];
+        let name = data['690_yhxw_015'][0]['INDUSTRY_Z'];
         $(tit).append(name + "&ensp;" + "&ensp;")
+        let num = data['690_yhxw_015'][1]['XJ'];
         for (i = 0; i < num; i++) {
             $(tit).append('<span class="star_cy"></span>')
         }
@@ -95,12 +118,11 @@ $(function () {
     //封装平台柱状图数据
     function setPTBar(data) {
         // console.log(data)
-        MBData = [data['690_yhxw_yj_018'][0]['MB_SRZF'], data['690_yhxw_yj_018'][0]['MB_LRZF'], data['690_yhxw_yj_018'][0]['MB_LRL']];
-        SJData = [data['690_yhxw_yj_018'][0]['SJ_SRZF'], data['690_yhxw_yj_018'][0]['SJ_LRZF'], data['690_yhxw_yj_018'][0]['SJ_LRL']];
+        MBData = [Number(data['690_yhxw_yj_018'][0]['MB_SRZF']).toFixed(1), Number(data['690_yhxw_yj_018'][0]['MB_LRZF']).toFixed(2), Number(data['690_yhxw_yj_018'][0]['MB_LRL']).toFixed(3)];
+        SJData = [Number(data['690_yhxw_yj_018'][0]['SJ_SRZF']).toFixed(1), Number(data['690_yhxw_yj_018'][0]['SJ_LRZF']).toFixed(2), Number(data['690_yhxw_yj_018'][0]['SJ_LRL']).toFixed(3)];
         createChart2(MBData, SJData, `#ec00_bar`);
     }
     function setPTData(data) {
-        console.log(data)
         var abledata = data['690_yhxw_pt_cy'];
         area = ".area_1"
         arr = grouping(abledata);
@@ -123,12 +145,17 @@ $(function () {
         });
         forHundred(a);
     }
+    function setPTPLData(data){
+        console.log(data)
+        ptpl = "升级: </span><input value=" + data['690_yhxw_pl'][0]['XWSJ'].replace(/[\r\n]/g, "") + ">";
+        $(".pinglun0").html(ptpl);
+    }
     //封装所有产业柱状图
     function allBar(data, dataIndex) {
         var MBData = []
         var SJData = []
-        var MBData = [data['690_yhxw_t0'][2]['SWD'], data['690_yhxw_t0'][2]['SR'], data['690_yhxw_t0'][2]['LRL']];
-        var SJData = [data['690_yhxw_t0'][0]['SWD'], data['690_yhxw_t0'][0]['SR'], data['690_yhxw_t0'][0]['LRL']];
+        var MBData = [Number(data['690_yhxw_t0'][2]['SWD']).toFixed(1), Number(data['690_yhxw_t0'][2]['SR']).toFixed(2), Number(data['690_yhxw_t0'][2]['LRL']).toFixed(3)];
+        var SJData = [Number(data['690_yhxw_t0'][0]['SWD']).toFixed(1), Number(data['690_yhxw_t0'][0]['SR']).toFixed(2), Number(data['690_yhxw_t0'][0]['LRL']).toFixed(3)];
         var index = dataIndex + 4
         if (index < 10) {
             createChart(MBData, SJData, "#ec0" + Number(index) + "_bar");
@@ -246,13 +273,13 @@ $(function () {
         if (item['PT_NAME']) {
             // console.log(item)
             str +=
-                `<div class="roll flex_center" style="height:` + diced(item) + `%;">
+            `<div class="roll flex_center" style=` + diced(item) + `>
                     <div class="pointer pointer_year" data-id="`+ countScroll + `" data-xwcode="` + item.XW_CODE + `"data-xwname="` + item['XW_NAME'] + `"data-xwz="` + item['XWZ'] + `"data-year="` + item['YEAR'] + `">
                         <div class="p_on `+ xJudge(item) + `" >
                             <span class=`+ starColor(item) + `></span>
                             <div class="p_on_tit" style="display:inline-block;margin-left:1rem;">` + item['INDUSTRY_NAME'] + `<span class="rise_ico ` + rise(item) + `"></span></div>
                             <div class=`+ centerTxt(xJudge(item)) + `>目标 ：` + toPercent3(item['MB_SWD']) + `/` + toPercent2(item['MB_SR']) + `/` + toPercent(item['MB_LRL']) +
-                `，实际 ：<span style="color:` + (toPercent3(item['SJ_SWD']) < toPercent3(item['MB_SWD']) ? 'red' : '') + `;">` + toPercent3(item['SJ_SWD']) + `</span>/<span style="color:` + (toPercent2(item['SJ_SR']) < toPercent2(item['MB_SR']) ? 'red' : '') + `;">` + toPercent2(item['SJ_SR']) + `</span>/<span style="color:` + (toPercent(item['SJ_LRL']) < toPercent(item['MB_LRL']) ? 'red' : '') + `;">` + toPercent(item['SJ_LRL']) + `</span></div>
+                            `，实际 ：<span style="color:` + (toPercent3(item['SJ_SWD']) < toPercent3(item['MB_SWD']) ? 'red' : '') + `;">` + toPercent3(item['SJ_SWD']) + `</span>/<span style="color:` + (parseFloat(toPercent2(item['SJ_SR'])) < parseFloat(toPercent2(item['MB_SR'])) ? 'red' : '') + `;">` + toPercent2(item['SJ_SR']) + `</span>/<span style="color:` + (parseFloat(toPercent(item['SJ_LRL'])) < parseFloat(toPercent(item['MB_LRL'])) ? 'red' : '') + `;">` + toPercent(item['SJ_LRL']) + `</span></div>
                         </div>
                     </div>
                 </div>`;
@@ -319,17 +346,20 @@ $(function () {
      * 判断产业数量决定高度（平台产业展示）
      */
     function diced(item) {
-        if (document.body.clientWidth > 1400) {
-            return 17;
-        }else{
-            return 25;
-        }
+        var style = '';
+        style = 'height:'
         switch (item['XJ']) {
-            case '1': return 50 / item['SL5'];
-            case '2': return 50 / item['SL4'];
-            case '3': return 50 / item['SL3'];
-            case '4': return 50 / item['SL2'];
-            case '5': return 50 / item['SL1'];
+            case '1': style += (50 / item['SL5']) + '%;';break;
+            case '2': style += (50 / item['SL4']) + '%;';break;
+            case '3': style += (50 / item['SL3']) + '%;';break;
+            case '4': style += (50 / item['SL2']) + '%;';break;
+            case '5': style += (50 / item['SL1']) + '%;';break;
+        }
+        if (document.body.clientWidth > 1400) {
+            return style;
+        }else{
+            style += 'transform:scale(.8);'
+            return style;
         }
     }
     /**
@@ -609,11 +639,6 @@ $(function () {
             paintEchartsImg(toId, `${toId}_img`);
         }
     }
-    //跳转点击事件
-    // $('body').on('click', '.tit', function () {
-    //     var incode = $(this).data("incode");
-    //     parent.location.href = "./yhxv.html?inCode=" + incode + "&&time=" + time + "&&xw_code=ALL"
-    // })
     //判断数据中是否有负数
     function negative(MBData, SJData) {
         var a = [3, 0]

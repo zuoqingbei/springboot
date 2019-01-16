@@ -195,13 +195,13 @@
 }
 .btn_box span.left_arrow{
     display: none;
-    background: url("../images/left_month.png") no-repeat;
+    background: url("/690/images/left_month.png") no-repeat;
     background-size: 100% 100%;
     left: 2%;
 }
 .btn_box span.right_arrow{
     display: none;
-    background: url("../images/right_month.png") no-repeat;
+    background: url("/690/images/right_month.png") no-repeat;
     background-size: 100% 100%;
     right: 2%;
 }
@@ -230,7 +230,7 @@
     width: 74%;
     height: 44%;
     float: right;
-    margin: 2% 10px 0% 0;
+    margin: 4% 10px 0% 0;
     background: #250922;
     box-shadow: 0 0 15px #b7767c inset;
     color: #f2726f;

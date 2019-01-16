@@ -5,6 +5,7 @@ import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import com.hailian.annotation.AuthPower;
@@ -27,7 +28,8 @@ import io.swagger.annotations.ApiOperation;
 	 	@AuthPower(avoidVersion = false, avoidPower = true, avoidSign = true, avoidLogin = true, avoidPlatform = true)
 	  	@ApiOperation(value = "转发视图", notes = "转发视图", httpMethod = "GET")
 		@RequestMapping(value = "/bigSreen/sys/v1/index", method = RequestMethod.GET)
-		public String  getIndex(HttpServletRequest request,HttpServletResponse response) {
+		public String  getIndex(HttpServletRequest request,HttpServletResponse response,Model model) {
+	 		
 	    	return "690/sy-yhxw";
 	    }
 	

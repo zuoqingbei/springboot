@@ -22,6 +22,7 @@ $(function () {
     var nowDay = '';    //时间控件日期
     var sq_params = '';    //商圈下拉框参数
     var wg_params = '';    //商圈下拉框参数
+    var xj_params = '';    //星级参数
     var xd_incode = false;
     var industry_params = "UCode::" + userInfo.userID;    //产业下拉框参数
 
@@ -147,6 +148,9 @@ $(function () {
     function getData() {
         params = "inCode::" + inCode + ";;time::" + dateIpt + ";;wgCode::" + wgCode + ";;sqCode::" + sqCode;
         chartsParams = "inCode::" + inCode + ";;time::" + dateIpt;
+        xj_params = "inCode::" + inCode + ";;time::" + dateIpt + ";;xwCode::ALL";
+        //获取产业星级数据
+        getDateByCommonInterface("690_yhxw_yj_015", xj_params, levels);
         // 触点网络-网格-位置-年
         getDateByCommonInterface('690_cdwl_02', params, setYearData);
         // 触点网络-网格-位置-本月-目标
@@ -398,14 +402,14 @@ $(function () {
                                 `<span class="` + (item['HQ_FLAG'] == '1' ? 'p_on_img' : '') + `"></span>
                                 <span class="` + rise(item) + `"></span>
                             </div>
-                            <div>目标：横` + 
+                            <div>目标 : 横` + 
                                 toPercent(item['MB_LSZF']) + 
                                 `, 纵` + 
                                 toPercent(item['MB_CYFGL']) + `/` + 
                                 toPercent(item['MB_DBL']) + `/` + 
                                 toPercent(item['MB_WXZB']) + 
                             `</div>
-                            <div>承接：横` + 
+                            <div>承接 : 横` + 
                                 `<span style="color:` + (toPercent(item['LSZF']) < toPercent(item['MB_LSZF']) ? 'red' : '') + `;">` + 
                                     toPercent(item['LSZF']) + 
                                 `</span>, 纵` + 
@@ -436,14 +440,14 @@ $(function () {
                                 `<span class="` + (item['HQ_FLAG'] == '1' ? 'p_on_img' : '') + `"></span>
                                 <span class="` + rise(item) + `"></span>
                             </div>
-                            <div>目标：横` + 
+                            <div>目标 : 横` + 
                                 toPercent(item['LSZF']) + 
                                 `, 纵` + 
                                 toPercent(item['CYFGL']) + `/` + 
                                 toPercent(item['DBL']) + `/` + 
                                 toPercent(item['WXZB']) + 
                             `</div>
-                            <div>承接：横` + 
+                            <div>承接 : 横` + 
                                 `<span>` + 
                                     toPercent(item['LSZF']) + 
                                 `</span>, 纵` + 
@@ -474,14 +478,14 @@ $(function () {
                                 `<span class="` + (item['HQ_FLAG'] == '1' ? 'p_on_img' : '') + `"></span>
                                 <span class="` + rise(item) + `"></span>
                             </div>
-                            <div>目标：横` + 
+                            <div>目标 : 横` + 
                                 toPercent(item['MB_LSZF']) + 
                                 `, 纵` + 
                                 toPercent(item['MB_CYFGL']) + `/` + 
                                 toPercent(item['MB_DBL']) + `/` + 
                                 toPercent(item['MB_WXZB']) + 
                             `</div>
-                            <div>承接：横` + 
+                            <div>承接 : 横` + 
                                 `<span style="color:` + ((item['YS_LSZF']) < (item['MB_LSZF']) ? 'red' : '') + `;">` + 
                                     toPercent(item['YS_LSZF'] - 0) + 
                                 `</span>, 纵` + 
@@ -652,12 +656,22 @@ $(function () {
     function initWG() {
         //默认参数，时间
         // let date = new Date(new Date() - 1000 * 60 * 60 * 24);
-        let date = new Date(new Date("2018/12/31"));
+        let date = new Date(new Date());
         let year = date.getFullYear();
         let month = date.getMonth() + 1;
         let day = date.getDate();
-        let selectTime = formatDate($("#dateIpt").val());
-        dateIpt = selectTime.replaceAll("-", "");
+        if(day <= 4){
+            month--;
+            if(month == 0){
+                month = 12;
+                year--;
+            }
+            day = getLastDay(year, month);
+        }else {
+            day -= 1;
+        }
+        // let selectTime = formatDate($("#dateIpt").val());
+        // dateIpt = selectTime.replaceAll("-", "");
         if (localStorage.getItem('selectData')) {
             $("#dateIpt").val(selectData.dateIpt);
             havDate = selectData.dateIpt.split("-");
@@ -672,7 +686,7 @@ $(function () {
             //     $("#dateIpt").val(year + "-" + month + "-" + day);
             // }
             // $("#dateIpt").val(formatDate(date));
-            $("#dateIpt").val('2018-12-31');
+            $("#dateIpt").val(formatDate(`${year}-${month}-${day}`));
         }
         month = parseInt(month);
         $('#thisMonth').text(`${month}月累计预实差`);
@@ -682,7 +696,7 @@ $(function () {
         wgCode = "ALL";
         //下拉框参数sqCode
         var wg_sqCode = "ALL";
-        selectTime = formatDate($("#dateIpt").val());
+        let selectTime = formatDate($("#dateIpt").val());
         dateIpt = selectTime.replaceAll("-", "");
         if (localStorage.getItem('selectData')) {
             inCode = selectData.select_indust;
@@ -720,11 +734,10 @@ $(function () {
         var htmls = "";
         var isYes = true;
         if (selectdata.length == 0) {
-            htmls = `<option value="BCD">厨电</option>`;
             console.log('无产业下拉框数据');
         }else {
             $.each(data["690_cdwl_sw499"], function (index, item) {
-                if (item.INDUSTRY_CODE == 'BCD') {
+                if (item.INDUSTRY_CODE == 'BAA') {
                     //默认产业
                     htmls = `<option value=${item.INDUSTRY_CODE} selected="selected">${item.INDUSTRY_NAME}</option>`;
                     isYes = false;

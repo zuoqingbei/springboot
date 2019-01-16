@@ -188,7 +188,11 @@ function getJiduDate(year, month) {
     if (yu > 0) {
         n++;
     }
-    var nestJiduValue = n + 1;
+    if(month ==3 ||month ==6 ||month ==9 ||month ==12 ){
+        var nestJiduValue = n + 1;
+    }else{
+        var nestJiduValue = n;
+    }
     //下一个季度
     if (nestJiduValue == 5) {
         next1Jidu = (parseInt(year) + 1) + "年Q1";//下一个季度时间
@@ -234,3 +238,27 @@ function getNextMonth(date) {
     return t2;
 }
 
+//将产业星级数据写入页面
+function levels(data) {
+    $('#CYZ').text("");
+    $('.s_lin1_one').html("");
+    $('.s_lin1_two').html("");
+    $('.s_lin1_three').html("");
+    var abledata = data['690_yhxw_015'];
+    $('#CYZ').text(abledata[0]['INDUSTRY_Z']);
+    $('.s_lin1_one').html(levelStar(abledata[0]));
+    $('.s_lin1_two').html(levelStar(abledata[2]));
+    $('.s_lin1_three').html(levelStar(abledata[1]));
+}
+// 星级评价
+function levelStar(data) {
+    var str = '';
+    var stars = '';
+    if (data) {
+        for (let i = 0; i < data['XJ']; i++) {
+            stars += '★';
+        }
+        str = data['PROJECT'] + '&nbsp:<span>' + stars + '</span>';
+    }
+    return str;
+}

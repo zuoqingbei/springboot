@@ -53,7 +53,7 @@ body {
 .line_2 {
     top: 62%;
     height: 36%;
-    background-image: url(../images/A.png);
+    background-image: url(/690/images/A.png);
     border-top: .05rem solid var(--fontColor);
     border-bottom: .1rem solid var(--fontColor);
 }
@@ -284,7 +284,7 @@ nav {
     display: flex;
     flex-direction: row;
     justify-content: space-around;
-    background-image: url('../images/line.png');
+    background-image: url('/690/images/line.png');
     background-size: 100% 85.1%;
     background-position: top;
     background-repeat: no-repeat;
@@ -386,7 +386,7 @@ p.left_title {
     border-top: 0.1rem solid #00ccff;
     border-bottom: .05rem solid #00ccff;
     position: relative;
-    background-image: url('../images/A.png');
+    background-image: url('/690/images/A.png');
     background-repeat: no-repeat;
     background-size: 33% 100%;
     background-position: 60%;
@@ -409,7 +409,7 @@ p.left_title {
     height: 61%;
     border-bottom: .1rem solid #00ccff;
     border-top: .05rem solid #00ccff;
-    background-image: url('../images/A.png');
+    background-image: url('/690/images/A.png');
     background-repeat: no-repeat;
     background-size: 33% 100%;
     background-position: 60%;
@@ -421,7 +421,7 @@ p.left_title {
     ;
     border-top: .1rem solid #00ccff;
     border-bottom: .1rem solid #00ccff;
-    background-image: url('../images/LeftArrow.png');
+    background-image: url('/690/images/LeftArrow.png');
     background-repeat: no-repeat;
     background-size: 33% 100%;
     background-position: 60%;
@@ -509,7 +509,7 @@ p.left_title {
     height: 65%;
     border-top: .1rem solid var(--fontColor);
     border-bottom: .05rem solid var(--fontColor);
-    background-image: url(../images/LeftArrow2.png);
+    background-image: url(/690/images/LeftArrow2.png);
 }
 
 .line_4 {

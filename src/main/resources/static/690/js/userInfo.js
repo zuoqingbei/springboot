@@ -10,11 +10,18 @@ ajax.open('get', '/bigSreen/sys/v1/menuAuthority');
 ajax.send();
 ajax.onreadystatechange = function () {
     if (ajax.readyState == 4 && ajax.status == 200) {
-        var ableDate_user = ajax.responseText['data'];
+        var data = JSON.parse(ajax.responseText);
+        var ableDate_user = data['data'];
+//        console.log(ableDate_user);
         ableDate_user.map((item) => {
             userInfo.userID = item.user_code;
             userInfo.dim_access.push(Number(item.dim_value_code));
         });
+     // 通过登录信息判断模块权限
+//        console.log(userInfo.dim_access);
+        userInfo.dim_access.forEach((item, i) => {
+            $('.nav_btns .pt_btn').eq(item).css('display','block');
+        })
     }
 }
 
@@ -45,7 +52,7 @@ ajax.onreadystatechange = function () {
 //         "dim_value": "孵化小微"
 //     }
 // ];
-// // 对数据进行筛选
+// 对数据进行筛选
 // ableDate_user.map((item) => {
 //     userInfo.userID = item.user_code;
 //     userInfo.dim_access.push(Number(item.dim_value_code));

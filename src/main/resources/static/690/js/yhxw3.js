@@ -220,7 +220,7 @@ $(function () {
         trs[6].innerHTML = data['YSC_CJC'];
         trs[7].innerHTML = data['YSC_SJ'];
         trs[8].innerHTML = data['YSC_DIFF'];
-        trs[9].innerHTML = data['YSC_GCYS'];
+        //trs[9].innerHTML = data['YSC_GCYS'];
     }
 
 
@@ -302,6 +302,7 @@ function createChart(data, dataType, oDiv) {
                 data: xdata,
             },
             yAxis: {
+                max: 5,
                 show: false,
             },
             series: [{
@@ -629,7 +630,7 @@ function getDateByCommonInterface2(dataType, params, successCallBack, SJData, XD
     };
     $.get(clientUrl, { "dataType": dataType, "params": params }, function (data, status) {
         if (status == "success") {
-            var jsonData = data;
+            var jsonData = JSON.parse(data);
             if (jsonData.result == "00000000") {
                 //数据请求成功
                 successCallBack(jsonData.data, SJData, XData);

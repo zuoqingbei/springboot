@@ -11,9 +11,13 @@
     <link rel="stylesheet" href="${ctx}/690/css/sy.css">
     <link rel="stylesheet" href="${ctx}/690/css/index.css">
     <link rel="icon" type="image/x-icon" href="${ctx}/690/images/favicon.ico" />
+    <script src="${ctx}/690/js/jquery-3.3.1.min.js"></script>
     <script src="${ctx}/690/js/userInfo.js"></script>
     <title>小微分类升级驱动体系</title>
     <style>
+        .xAxis_numbs{
+            font-family: Arial;
+        }
         @media (min-width: 1910px) {
             .legend {
                 margin-left: 54.5%;
@@ -262,9 +266,8 @@
             }
 
             .line_bottom {
-                bottom: 4.5%;
+                bottom: 4.4%;
             }
-
             .xAxis_box {
                 height: 5.4%;
             }
@@ -481,7 +484,7 @@
                 <div class="column_top">
                     <h2 class="title1" data-xwcode="111111">智家定制平台</h2>
                     <div class="int charts" id="ec00_bar"></div>
-                    <div class="int">
+                    <div class="int pinglun0">
                     </div>
                 </div>
                 <div class="column_oth">
@@ -1169,7 +1172,7 @@
     <div class="submitbox_btn flex_center">◀</div>
 </div> -->
 
-    <script src="${ctx}/690/js/jquery-3.3.1.min.js"></script>
+    
     <script src="${ctx}/690/js/echarts-4.2.0.js"></script>
     <script src="${ctx}/690/js/common.js"></script>
     <script src="${ctx}/690/js/UEcommon.js"></script>

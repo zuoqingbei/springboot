@@ -21,7 +21,10 @@ $(function () {
     var nowDay = '';    //时间控件日期
     var wg_params = '';    //网格下拉框参数
     var sq_params = '';    //商圈下拉框参数
+    var xj_params = '';    //星级参数
     var industry_params = "UCode::" + userInfo.userID;    //产业下拉框参数
+    var max = '';     //柱状图最大值
+    var beilv = '';     //柱状图倍率
     
     //产业接口
     getDateByCommonInterface("690_cdwl_499", industry_params, setIndustryData);
@@ -148,6 +151,9 @@ $(function () {
     function getData() {
         params = "inCode::" + inCode + ";;time::" + dateIpt + ";;sqCode::" + sqCode;
         chartsParams = "inCode::" + inCode + ";;time::" + dateIpt;
+        xj_params = "inCode::" + inCode + ";;time::" + dateIpt + ";;xwCode::ALL";
+        //获取产业星级数据
+        getDateByCommonInterface("690_yhxw_yj_015", xj_params, levels);
         // 690触点网络-商圈-位置-年
         getDateByCommonInterface('690_cdwl_001', params, setYearData);
         // 690触点网络-商圈-位置-本月-目标
@@ -189,14 +195,8 @@ $(function () {
         // getDateByCommonInterface('690_cdwl_009', 'inCode::001;;time::20181126;;sqCode::sq001', yearinsert);
         // 690触点网络-商圈-弹出窗-月
         // getDateByCommonInterface('690_cdwl_010', 'inCode::001;;time::20181126;;sqCode::sq001', yearinsert);
-        //顶部柱状图
-        getDateByCommonInterface('690_cdwl_z006', chartsParams, nextYear);
-        getDateByCommonInterface('690_cdwl_z001', chartsParams, muBiao);
-        //轮播柱状图
-        getDateByCommonInterface('690_cdwl_z004', chartsParams, t1Month);
-        getDateByCommonInterface('690_cdwl_z005', chartsParams, t2Month);
-        getDateByCommonInterface('690_cdwl_z007', chartsParams, quarter1);
-        getDateByCommonInterface('690_cdwl_z008', chartsParams, quarter2);
+        //柱状图最大值
+        getDateByCommonInterface("690_cdwl+yhxw", chartsParams, setMAX);
         //行业地位
         getDateByCommonInterface('690_cdwl_030', chartsParams, setUpgrade);
     }
@@ -432,8 +432,8 @@ $(function () {
                                 `<span class="` + (item['HQ_FLAG'] == '1' ? 'p_on_img' : '') + `"></span>
                                 <span class="` + rise(item) + `"></span>
                             </div>
-                            <div>目标：横 :
-                                <span>` + 
+                            <div>目标 : 横` + 
+                                `<span>` + 
                                     (item['MB_SWD'] - 0).toFixed(1) + 
                                 `</span>/` + 
                                 `<span>` + 
@@ -442,8 +442,8 @@ $(function () {
                                 `<span>` + 
                                     toPercent(item['MB_LSZF']) + 
                                 `</span>` + 
-                                `，纵 :
-                                <span>` + 
+                                `，纵` + 
+                                `<span>` + 
                                     (item['MB_CYFGL'] ? toPercent(item['MB_CYFGL']) : '') + 
                                 `</span>/` + 
                                 `<span>` + 
@@ -453,8 +453,8 @@ $(function () {
                                     (item['MB_FIVE_STAR_RATE_PRO'] ? toPercent(item['MB_FIVE_STAR_RATE_PRO']) : '') + 
                                 `</span>
                             </div>
-                            <div>承接：横 :
-                                <span style="color:` + ((item['SWD'] - 0).toFixed(1) < (item['MB_SWD'] - 0).toFixed(1) ? 'red' : '') + `;">` + 
+                            <div>承接 : 横` + 
+                                `<span style="color:` + ((item['SWD'] - 0).toFixed(1) < (item['MB_SWD'] - 0).toFixed(1) ? 'red' : '') + `;">` + 
                                     (item['SWD'] - 0).toFixed(1) + 
                                 `</span>/` + 
                                 `<span style="color:` + (toPercent(item['SRZF']) < toPercent(item['MB_SRZF']) ? 'red' : '') + `;">` + 
@@ -463,8 +463,8 @@ $(function () {
                                 `<span style="color:` + (toPercent(item['LSZF']) < toPercent(item['MB_LSZF']) ? 'red' : '') + `;">` + 
                                     toPercent(item['LSZF']) + 
                                 `</span>` + 
-                                `，纵 :
-                                <span style="color:` + (toPercent(item['CYFGL']) < toPercent(item['MB_CYFGL']) ? 'red' : '') + `;">` + 
+                                `，纵` + 
+                                `<span style="color:` + (toPercent(item['CYFGL']) < toPercent(item['MB_CYFGL']) ? 'red' : '') + `;">` + 
                                     toPercent(item['FGL']) + 
                                 `</span>/` + 
                                 `<span style="color:` + (toPercent(item['DBL']) < toPercent(item['MB_DBL']) ? 'red' : '') + `;">` + 
@@ -491,8 +491,8 @@ $(function () {
                                 `<span class="` + (item['HQ_FLAG'] == '1' ? 'p_on_img' : '') + `"></span>
                                 <span class="` + rise(item) + `"></span>
                             </div>
-                            <div>目标：横 :
-                                <span>` + 
+                            <div>目标 : 横` + 
+                                `<span>` + 
                                     (item['SWD'] - 0).toFixed(1) + 
                                 `</span>/` + 
                                 `<span>` + 
@@ -501,8 +501,8 @@ $(function () {
                                 `<span>` + 
                                     toPercent(item['LSZF']) + 
                                 `</span>` + 
-                                `，纵 :
-                                <span>` + 
+                                `，纵` + 
+                                `<span>` + 
                                     toPercent(item['FGL']) + 
                                 `</span>/` + 
                                 `<span>` + 
@@ -512,8 +512,8 @@ $(function () {
                                     (item['MB_FIVE_STAR_RATE_PRO'] ? toPercent(item['MB_FIVE_STAR_RATE_PRO']) : '') + 
                                 `</span>
                             </div>
-                            <div>承接：横 :
-                                <span>` + 
+                            <div>承接 : 横` + 
+                                `<span>` + 
                                     (item['SWD'] - 0).toFixed(1) + 
                                 `</span>/` + 
                                 `<span>` + 
@@ -522,8 +522,8 @@ $(function () {
                                 `<span>` + 
                                     toPercent(item['LSZF']) + 
                                 `</span>` + 
-                                `，纵 :
-                                <span>` + 
+                                `，纵` + 
+                                `<span>` + 
                                     toPercent(item['FGL']) + 
                                 `</span>/` + 
                                 `<span>` + 
@@ -550,7 +550,7 @@ $(function () {
                                 `<span class="` + (item['HQ_FLAG'] == '1' ? 'p_on_img' : '') + `"></span>
                             </div>
                             <div>
-                                目标 : 横 ` + 
+                                目标 : 横` + 
                                 (item['MB_SWD'] - 0).toFixed(1) + `/` + 
                                 toPercent(item['MB_SRZF']) + `/` + 
                                 toPercent(item['MB_LSZF']) + 
@@ -559,8 +559,8 @@ $(function () {
                                 toPercent(item['MB_DBL']) + `/` + 
                                 toPercent(item['MB_FIVE_STAR_RATE_PRO']) + 
                             `</div>
-                            <div>承接 : 横 
-                                <span style="color:` + ((item['YS_SWD'] - 0).toFixed(1) < (item['MB_SWD'] - 0).toFixed(1) ? 'red' : '') + `;"> ` + 
+                            <div>承接 : 横` + 
+                                `<span style="color:` + ((item['YS_SWD'] - 0).toFixed(1) < (item['MB_SWD'] - 0).toFixed(1) ? 'red' : '') + `;">` + 
                                     (item['YS_SWD'] - 0).toFixed(1) + 
                                 `</span>/` + 
                                 `<span style="color:` + (toPercent(item['YS_SRZF']) < toPercent(item['MB_SRZF']) ? 'red' : '') + `;">` + 
@@ -596,7 +596,7 @@ $(function () {
                                 `<span class="` + (item['HQ_FLAG'] == '1' ? 'p_on_img' : '') + `"></span>
                                 <span class="` + rise(item) + `"></span>
                             </div>
-                            <div>横 :
+                            <div>横 : 
                                 <span style="color:` + ((item['SWD'] - 0).toFixed(1) < (item['MB_SWD'] - 0).toFixed(1) ? 'red' : '') + `;">` + 
                                     (item['SWD'] - 0).toFixed(1) + 
                                 `</span>/
@@ -607,7 +607,7 @@ $(function () {
                                     toPercent(item['LSZF']) + 
                                 `</span>
                             </div>
-                            <div>纵 :
+                            <div>纵 : 
                                 <span style="color:` + (toPercent(item['CYFGL']) < toPercent(item['MB_CYFGL']) ? 'red' : '') + `;">` + 
                                     toPercent(item['CYFGL']) + 
                                 `</span>/
@@ -635,7 +635,7 @@ $(function () {
                             `<span class="` + (item['HQ_FLAG'] == '1' ? 'p_on_img' : '') + `"></span>
                             <span class="` + rise(item) + `"></span>
                         </div>
-                            <div>横 :
+                            <div>横 : 
                                 <span style="color:` + ((item['SWD'] - 0).toFixed(1)  < (item['MB_SWD'] - 0).toFixed(1)  ? 'red' : '') + `;">` + 
                                     (item['SWD'] - 0).toFixed(1) + 
                                 `</span>/
@@ -645,7 +645,7 @@ $(function () {
                                 <span style="color:` + (toPercent(item['LSZF']) < toPercent(item['MB_LSZF']) ? 'red' : '') + `;">` + 
                                     toPercent(item['LSZF']) + 
                                 `</span></div>
-                            <div>纵 :
+                            <div>纵 : 
                                 <span style="color:` + (item['CYFGL'] < item['MB_CYFGL'] ? 'red' : '') + `;">` + 
                                     (item['CYFGL'] ? toPercent(item['CYFGL']) : '') + 
                                 `</span>/
@@ -673,7 +673,7 @@ $(function () {
                                 `<span class="` + (item['HQ_FLAG'] == '1' ? 'p_on_img' : '') + `"></span>
                                 <span class="` + rise(item) + `"></span>
                             </div>
-                            <div>横 :
+                            <div>横 : 
                                 <span>` + 
                                     (item['SWD'] - 0).toFixed(1) + 
                                 `</span>/
@@ -684,7 +684,7 @@ $(function () {
                                     toPercent(item['LSZF']) + 
                                 `</span>
                             </div>
-                            <div>纵 :
+                            <div>纵 : 
                                 <span>` + 
                                     (item['CYFGL'] ? toPercent(item['CYFGL']) : '') + 
                                 `</span>/
@@ -703,6 +703,19 @@ $(function () {
         }
     }
 
+    //获取所有产业收入增幅和零售增幅的最大值
+    function setMAX(data) {
+        max = (data['690_cdwl_yhxw'][0]['MAX'] - 0).toFixed(2);
+        beilv = 5 / max;
+        //顶部柱状图
+        getDateByCommonInterface('690_cdwl_z006', chartsParams, nextYear);
+        getDateByCommonInterface('690_cdwl_z001', chartsParams, muBiao);
+        //轮播柱状图
+        getDateByCommonInterface('690_cdwl_z004', chartsParams, t1Month);
+        getDateByCommonInterface('690_cdwl_z005', chartsParams, t2Month);
+        getDateByCommonInterface('690_cdwl_z007', chartsParams, quarter1);
+        getDateByCommonInterface('690_cdwl_z008', chartsParams, quarter2);
+    }
     /**
      * 绘制柱状图，并转为图片
      * @param   data     请求得到的数据
@@ -713,25 +726,19 @@ $(function () {
     function createChart(data, dataType, oDiv, str) {
         let abledata = data[dataType];
         let barWidth = "30%";
-        let max = 10;
         $(oDiv).empty();
         $(`${oDiv}_img`).css('background', 'none');
         if (!abledata[0]) {
             console.log(`${oDiv}无轮播图数据`);
         }else{
             var xdata = ['首位度', '收入增幅', '零售增幅'];
-            var ydata = [abledata[0][`${str}_SWD`], abledata[0][`${str}_SRZF`] * 10, abledata[0][`${str}_LSZF`] * 10];
+            var ydata = [abledata[0][`${str}_SWD`] / beilv, abledata[0][`${str}_SRZF`], abledata[0][`${str}_LSZF`]];
             if (dataType == '690_cdwl_331') {
                 muBiaoData = [].concat(ydata);
             };            
             if (dataType == '690_cdwl_331' || dataType == '690_cdwl_332' || dataType == '690_cdwl_333') {
                 barWidth = '35%';
             };
-            $.each(ydata, function(i, item){
-                if(item >= 10){
-                    max = item;
-                }
-            })
             $(oDiv).removeAttr('_echarts_instance_');
             let ec0001_bar = echarts.init($(oDiv)[0]);
             ec0001_bar.clear();
@@ -783,10 +790,9 @@ $(function () {
                                 formatter: function (data) {
                                     let dataValue = data.data;
                                     if (data.dataIndex === 0) {
-                                        dataValue = (dataValue - 0).toFixed(1);
+                                        dataValue = (dataValue * beilv).toFixed(1);
                                     }
                                     if (data.dataIndex != 0) {
-                                        dataValue /= 10;
                                         dataValue = toPercent(dataValue);
                                     }
                                     if (dataType == '690_cdwl_332' || dataType == '690_cdwl_333') {
@@ -817,20 +823,31 @@ $(function () {
         }
     }
 
+
     //初始化 
     function initSQ() {
         //默认参数，时间
         // let date = new Date(new Date() - 1000 * 60 * 60 * 24);
-        let date = new Date(new Date("2018/12/31"));
+        let date = new Date(new Date());
         let year = date.getFullYear();
         let month = date.getMonth() + 1;
         let day = date.getDate();
+        if(day <= 4){
+            month--;
+            if(month == 0){
+                month = 12;
+                year--;
+            }
+            day = getLastDay(year, month);
+        }else {
+            day -= 1;
+        }
         sqCode = "ALL";
         inCode = $("#select_indust").val();
         //下拉框参数sqCode
         //var wg_sqCode = 'ALL';
-        let selectTime = formatDate($("#dateIpt").val());
-        dateIpt = selectTime.replaceAll("-", "");
+        // let selectTime = formatDate($("#dateIpt").val());
+        // dateIpt = selectTime.replaceAll("-", "");
         if (localStorage.getItem('selectData')) {
             $("#dateIpt").val(selectData.dateIpt);
             havDate = selectData.dateIpt.split("-");
@@ -844,10 +861,10 @@ $(function () {
             //     $("#dateIpt").val(year + "-" + month + "-" + day);
             // }
             // $("#dateIpt").val(formatDate(date));
-            $("#dateIpt").val('2018-12-31');
+            $("#dateIpt").val(formatDate(`${year}-${month}-${day}`));
         }
         $('#thisMonth').text(`${month}月累计预实差`);
-        selectTime = formatDate($("#dateIpt").val());
+        let selectTime = formatDate($("#dateIpt").val());
         dateIpt = selectTime.replaceAll("-", "");
         //判断本地存储
         if (localStorage.getItem('selectData')) {
@@ -881,11 +898,10 @@ $(function () {
         var htmls = "";
         var isYes = true;
         if (selectdata.length == 0) {
-            htmls = `<option value="BCD">厨电</option>`;
             console.log('无产业下拉框数据');
         }else {
             $.each(data["690_cdwl_sw499"], function (index, item) {
-                if (item.INDUSTRY_CODE == 'BCD') {
+                if (item.INDUSTRY_CODE == 'BAA') {
                     //默认产业
                     htmls = `<option value=${item.INDUSTRY_CODE} selected="selected">${item.INDUSTRY_NAME}</option>`;
                     isYes = false;
