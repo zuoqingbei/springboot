@@ -31,5 +31,7 @@
 	<classpathentry kind="lib" path="src/main/webapps/WEB-INF/lib/Mybatis-DynamicDataSource-1.0-SNAPSHOT.jar"/>
 	<classpathentry kind="lib" path="src/main/webapps/WEB-INF/lib/mybatis-pageplugin-1.0-SNAPSHOT.jar"/>
 	<classpathentry kind="lib" path="src/main/webapps/WEB-INF/lib/aspose-words-jdk16-14.6.0.0.jar"/>
+	<classpathentry kind="lib" path="src/main/webapps/WEB-INF/lib/ojdbc14-10.2.0.4.0.jar"/>
+	<classpathentry kind="lib" path="src/main/webapps/WEB-INF/lib/java-unrar-1.7.0-3.jar"/>
 	<classpathentry kind="output" path="target/classes"/>
 </classpath>

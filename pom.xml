@@ -273,18 +273,18 @@
 			<systemPath>${JAVA_HOME}/lib/tools.jar</systemPath>
 		</dependency>
 		<!-- Impala Hive -->
-		<dependency>
+	<!-- 	<dependency>
 		    <groupId>com.oracle</groupId>
 		    <artifactId>ojdbc14</artifactId>
 		    <version>10.2.0.4.0</version>
-		</dependency>
+		</dependency> -->
 		
 		<!-- postgresql -->
-		<dependency>
+		<!-- <dependency>
 		    <groupId>postgresql</groupId>
 		    <artifactId>postgresql</artifactId>
 		    <version>9.0-801.jdbc4</version>
-		</dependency>
+		</dependency> -->
 		
 		<!-- sqlserver -->
 		<dependency>
@@ -455,11 +455,11 @@
 			<artifactId>spring-boot-starter-jta-narayana</artifactId>
 		</dependency>
 		<!-- https://mvnrepository.com/artifact/com.github.axet/java-unrar -->
-		<dependency>
+		<!-- <dependency>
 		    <groupId>com.github.axet</groupId>
 		    <artifactId>java-unrar</artifactId>
 		    <version>1.7.0-3</version>
-		</dependency>
+		</dependency> -->
 
 		<dependency>
 			<groupId>org.apache.hive</groupId>
