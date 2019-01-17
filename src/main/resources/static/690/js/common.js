@@ -1,5 +1,5 @@
 ///var domain="http://localhost:9999/api/v1/common/interface";
-var domain = "http://10.135.26.216:9999/api/v1/common/interface";
+var domain = "http://${ctx}/api/v1/common/interface";
 var clientUrl = domain + "/getByDataType";//接口地址
 var insetUrl = domain + "/insertDate";
 var userCode = "A0007773";//用户编码
