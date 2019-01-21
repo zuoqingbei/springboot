@@ -320,13 +320,13 @@
                 </div>
                 <div class="inputs_box">
                     <div>
-                        <textarea id="txt1"></textarea>
+                        <textarea id="txt1" disabled></textarea>
                     </div>
                     <div>
-                        <textarea id="txt2"></textarea>
+                        <textarea id="txt2" disabled></textarea>
                     </div>
                     <div>
-                        <textarea id="txt3"></textarea>
+                        <textarea id="txt3" disabled></textarea>
                     </div>
                 </div>
             </div>
