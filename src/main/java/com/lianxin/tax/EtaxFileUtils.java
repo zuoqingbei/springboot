@@ -150,9 +150,28 @@ public class EtaxFileUtils {
 			if(yearMonthDateList==null){
 				yearMonthDateList=new ArrayList<TaxFilesModel>();
 			}
-			List<TaxFilesModel> currentSixMonthTaxs=getPreSixMonthData(maxYear, yearMonthDateList,null);
-			if(currentSixMonthTaxs==null){
-				currentSixMonthTaxs=new ArrayList<TaxFilesModel>();
+			List<TaxFilesModel> currentSixMonthTaxs=new ArrayList<TaxFilesModel>();
+			
+			List<TaxFilesModel> currentSixMonthTaxs0=getPreSixMonthData(maxYear, yearMonthDateList,null);
+			if(currentSixMonthTaxs0==null){
+				currentSixMonthTaxs0=new ArrayList<TaxFilesModel>();
+			}
+			if(currentSixMonthTaxs0.size()<6){
+				//本年不足个月 取上一年数据填充
+				int num=6-currentSixMonthTaxs0.size();
+				List<TaxFilesModel> yearMonthDateList2=mapTax.get(String.valueOf(Integer.parseInt(maxYear)-1));
+				if(yearMonthDateList2!=null&&yearMonthDateList2.size()>0){
+					if(num<yearMonthDateList2.size()){
+						currentSixMonthTaxs=yearMonthDateList2.subList(num, yearMonthDateList2.size());
+						currentSixMonthTaxs.addAll(currentSixMonthTaxs0);
+					}else{
+						currentSixMonthTaxs.addAll(yearMonthDateList2);
+						currentSixMonthTaxs.addAll(currentSixMonthTaxs0);
+					}
+				}else{
+					currentSixMonthTaxs.addAll(currentSixMonthTaxs0);
+				}
+				
 			}
 			for(TaxFilesModel t:currentSixMonthTaxs){
 				System.out.println("最大年份："+t.getStartYear()+"-----"+t.getStartMonth());
