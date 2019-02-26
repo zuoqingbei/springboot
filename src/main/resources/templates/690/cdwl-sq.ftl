@@ -206,10 +206,10 @@
             }
         }
         @media screen and (max-height: 768px) and (min-width: 1400px){
-            .block_scroll {
+            /*.block_scroll {
                 width: 109%;
                 left: 16%;
-            }
+            }*/
             .turnup {
                 top: .15rem;
                 height: 92.7%;
