@@ -72,7 +72,7 @@ public class AppInterceptors extends WebMvcConfigurerAdapter{
             }
         }).addPathPatterns("/*","/user/**");*/
         registry.addInterceptor(new ApiInterceptor()).addPathPatterns("/api/**");
-        registry.addInterceptor(new TokenInterceptor()).addPathPatterns("/bigSreen/**");
+       // registry.addInterceptor(new TokenInterceptor()).addPathPatterns("/bigSreen/**");
     }
 
     /**

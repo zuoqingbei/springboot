@@ -11,6 +11,9 @@
     <link rel="stylesheet" href="${ctx}/690/css/sy.css">
     <link rel="stylesheet" href="${ctx}/690/css/index.css">
     <link rel="icon" type="image/x-icon" href="${ctx}/690/images/favicon.ico" />
+    <script>
+        	let ctx = '${ctx}';
+        </script>
     <script src="${ctx}/690/js/jquery-3.3.1.min.js"></script>
     <script src="${ctx}/690/js/userInfo.js"></script>
     <title>小微分类升级驱动体系</title>

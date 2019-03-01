@@ -9,6 +9,9 @@
     <link rel="stylesheet" href="${ctx}/690/css/consumer_micro.css">
     <link rel="stylesheet" href="${ctx}/690/css/cdwl-sq-2.css">
     <link rel="icon" type="image/x-icon" href="${ctx}/690/images/favicon.ico" />
+    <script>
+        	let ctx = '${ctx}';
+        </script>
     <title>小微分类升级驱动体系</title>
 </head>
 <body>

@@ -1,5 +1,5 @@
 ///var domain="http://localhost:9999/api/v1/common/interface";
-var domain = "http://${ctx}/api/v1/common/interface";
+var domain = "http://10.135.26.216:8667"+ctx+"/api/v1/common/interface";
 var clientUrl = domain + "/getByDataType";//接口地址
 var insetUrl = domain + "/insertDate";
 var userCode = "A0007773";//用户编码
@@ -34,7 +34,7 @@ function getDateByCommonInterface(dataType, params, successCallBack, failureCall
     };
     $.get(clientUrl, { "dataType": dataType, "params": params }, function (data, status) {
         if (status == "success") {
-            var jsonData = JSON.parse(data);
+            var jsonData = data;
             if (jsonData.result == "00000000") {
                 //数据请求成功
                 successCallBack(jsonData.data);
@@ -56,7 +56,7 @@ function getDateByCommonInterfaceByParam(dataType, params, successCallBack, fail
     };
     $.get(clientUrl, { "dataType": dataType, "params": params }, function (data, status) {
         if (status == "success") {
-            var jsonData = JSON.parse(data);
+            var jsonData = data;
             if (jsonData.result == "00000000") {
                 //数据请求成功
                 successCallBack(jsonData.data, callBackParams);
@@ -78,7 +78,7 @@ function insetDateToServer(dataType, params, callBack) {
     };
     $.post(insetUrl, { "dataType": dataType, "params": params }, function (data, status) {
         if (status == "success") {
-            var jsonData = JSON.parse(data);
+            var jsonData = data;
             // console.log(jsonData)
             if (jsonData.result == "00000000") {
                 //数据请求成功

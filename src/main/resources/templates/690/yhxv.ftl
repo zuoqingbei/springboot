@@ -1305,7 +1305,10 @@
     </div>
 </div> -->
 
-    
+        <script>
+        	let ctx = '${ctx}';
+        </script>
+
     <script src="${ctx}/690/js/echarts-4.2.0.js"></script>
     <script src="${ctx}/690/js/jquery.date_input.pack.js"></script>
     <script src="${ctx}/690/js/UEcommon.js"></script>

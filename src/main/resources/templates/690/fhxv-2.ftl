@@ -10,6 +10,9 @@
     <link rel="stylesheet" href="${ctx}/690/css/fhxv-2.css">
     <script src="${ctx}/690/js/echarts-4.2.0.js"></script>
     <link rel="icon" type="image/x-icon" href="${ctx}/690/images/favicon.ico" />
+    <script>
+        	let ctx = '${ctx}';
+        </script>
     <title>小微分类升级驱动体系</title>
     <style>
         #nav_top_btn {

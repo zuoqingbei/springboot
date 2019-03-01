@@ -499,6 +499,9 @@
         <div id="alertbox" class="line_chart"></div>
     </div>
 </body>
+<script>
+        	let ctx = '${ctx}';
+        </script>
 <script src="${ctx}/690/js/jquery-3.3.1.min.js"></script>
 <script src="${ctx}/690/js/echarts-4.2.0.js"></script>
 <script src="${ctx}/690/js/jquery.raty.min.js"></script>
