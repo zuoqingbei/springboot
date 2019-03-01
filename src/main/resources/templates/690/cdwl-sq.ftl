@@ -13,6 +13,7 @@
     <link rel="stylesheet" href="${ctx}/690/css/datepiker.css">
     <link rel="stylesheet" href="${ctx}/690/css/consumer_micro.css">
     <link rel="icon" type="image/x-icon" href="${ctx}/690/images/favicon.ico" />
+    <script src="${ctx}/690/js/jquery-3.3.1.min.js"></script>
     <script src="${ctx}/690/js/userInfo.js"></script>
     <title>小微分类升级驱动体系</title>
     <style>
@@ -205,10 +206,10 @@
             }
         }
         @media screen and (max-height: 768px) and (min-width: 1400px){
-            .block_scroll {
+            /*.block_scroll {
                 width: 109%;
                 left: 16%;
-            }
+            }*/
             .turnup {
                 top: .15rem;
                 height: 92.7%;
@@ -314,7 +315,7 @@
                 padding-top: 5.4%;
             }
             .column_scroll .column_oth {
-                height: 66.4%;
+                height: 66.2%;
             }
             .column_scroll .numbs .point_line {
                 top: 0;
@@ -1171,7 +1172,7 @@
         </div>
     </div>-->
 
-    <script src="${ctx}/690/js/jquery-3.3.1.min.js"></script>
+
     <script src="${ctx}/690/js/echarts-4.2.0.js"></script>
     <script src="${ctx}/690/js/jquery.date_input.pack.js"></script>
     <script src="${ctx}/690/js/common.js"></script>

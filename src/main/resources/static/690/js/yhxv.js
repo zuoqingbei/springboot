@@ -149,7 +149,7 @@ $(function () {
 
     function ALLfunction(params) {
         //获取所有产业收入增幅和利润率的最大值
-        getDateByCommonInterface("690_yhxw_l0012", "time::" + params.substring(19, 27) + ";;inCode::" + params.substring(8, 12), setMAX);
+        getDateByCommonInterface("690_cdwl+yhxw", "time::" + params.substring(19, 27) + ";;inCode::" + params.substring(8, 12), setMAX);
         //获取产业星级数据
         getDateByCommonInterface("690_yhxw_yj_015", params, levels);
         //获取年目标数据
@@ -1025,7 +1025,7 @@ function allBar(data) {
 }
 //获取所有产业收入增幅和利润率的最大值
 function setMAX(data) {
-    max = data['690_yhxw_t6'][0]['MAX'];
+    max = (data['690_cdwl_yhxw'][0]['MAX'] - 0).toFixed(2);
     beilv = 5 / max;
 }
 function ec_00(data, bar_n) {

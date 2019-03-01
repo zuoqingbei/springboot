@@ -360,7 +360,7 @@ main>div {
 .line_2 {
     top: 62%;
     height: 36%;
-    background-image: url('/690Project_web/images/A.png');
+    background-image: url('/690/images/A.png');
     border-top: .05rem solid var(--fontColor);
     border-bottom: .1rem solid var(--fontColor);
 }
@@ -895,7 +895,7 @@ div.addline {
     height: 120%;
     top: 1.3%;
     right: -4.9%;
-    background: url(/690Project_web/images/yAxis.png) no-repeat;
+    background: url(/690/images/yAxis.png) no-repeat;
     background-size: 75% 100%;
 }
 
@@ -914,7 +914,7 @@ div.addline3 {
 .line_bottom {
     width: 100%;
     height: 16px;
-    background: url(/690Project_web/images/xAxis.png) no-repeat;
+    background: url(/690/images/xAxis.png) no-repeat;
     position: absolute;
     bottom: 4.2%;
     background-size: 100% 70%;
@@ -972,6 +972,9 @@ div.addline3 {
 }
 .back_3{
     margin-left: -315%;
+}
+.pinglun0 {
+    padding-left: 4px;
 }
 @media screen and (min-height: 801px) and (min-width: 1400px) {
     .turnup {

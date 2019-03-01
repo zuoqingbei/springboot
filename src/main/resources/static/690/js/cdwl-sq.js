@@ -1,7 +1,7 @@
 $(function () {
-    setTimeout(() => {
-        setScroll();
-    }, 3000);
+    // setTimeout(() => {
+    //     setScroll();
+    // }, 3000);
     let selectData = localStorage.getItem('selectData') ? JSON.parse(localStorage.getItem('selectData')) : '';
     if (!selectData.fromClick) {
         console.log("手动刷新");
@@ -23,12 +23,24 @@ $(function () {
     var sq_params = '';    //商圈下拉框参数
     var xj_params = '';    //星级参数
     var industry_params = "UCode::" + userInfo.userID;    //产业下拉框参数
-    
+    var max = '';     //柱状图最大值
+    var beilv = '';     //柱状图倍率
+    var sqDataOpts = '';     //商圈下拉框选项组
+    var rotate_index = 2;     //商圈下拉框index
+    var rotate_timer;     //商圈轮播timer
+    var rotate_control = 1;     //控制是否结束轮播(通过选择具体商圈),0:停止轮播,1:继续轮播,2:触发轮播
     //产业接口
     getDateByCommonInterface("690_cdwl_499", industry_params, setIndustryData);
 
     //查询
     $('#select').click(function () {
+        if (!rotate_control) {
+            clearInterval(rotate_timer);
+            rotate_control = 2;
+        } else if (rotate_control == 2) {
+            rotate_control = 1;
+            rotate_timer = setInterval(rotate_interval, 4000);
+        }
         $(".block_tit").text("");
         let selectTime = formatDate($("#dateIpt").val());
         dateIpt = selectTime.replaceAll("-", "");
@@ -39,6 +51,11 @@ $(function () {
         sqCode = $("#select_sq option:selected").val();
         setMonth(nowMonth, nowYear, nowDay);
         getData();
+        if (sqCode == 'ALL') {
+            setTimeout(() => {
+                setScroll();
+            }, 3000);
+        }
     })
     //后一个月
     $('.right_arrow').click(function () {
@@ -56,8 +73,8 @@ $(function () {
         }
         //获取日期
         //let day = nowDay;
-        $('.right_arrow').css({'display': 'none'});
-        $('.left_arrow').css({'display': 'block'});
+        $('.right_arrow').css({ 'display': 'none' });
+        $('.left_arrow').css({ 'display': 'block' });
         $('#thisMonth').text(`${month}月累计预实差`);
         $("#dateIpt").val(year + '-' + month + '-' + day);
         inCode = $("#select_indust option:selected").val();
@@ -68,7 +85,7 @@ $(function () {
         getData();
     })
     //前一个月
-    $('.left_arrow').click(function(){
+    $('.left_arrow').click(function () {
         let selectTime = formatDate($("#dateIpt").val());
         dateIpt = selectTime.replaceAll("-", "");
         let year = dateIpt.substr(0, 4);
@@ -80,8 +97,8 @@ $(function () {
         let lastDay = getLastDay(year, month);
         //记录日期
         nowDay = dateIpt.substr(6, 2);        
-        $('.left_arrow').css({'display': 'none'});
-        $('.right_arrow').css({'display': 'block'});
+        $('.left_arrow').css({ 'display': 'none' });
+        $('.right_arrow').css({ 'display': 'block' });
         // $('#thisMonth').text(`${month}月${lastDay}日累计预实差`);
         $("#dateIpt").val(year + '-' + month + '-' + lastDay);
         inCode = $("#select_indust option:selected").val();
@@ -104,20 +121,23 @@ $(function () {
     // $('#submit').on('click', function () {
     //     $('.upgrade .comment').attr('disabled', 'disabled');
     // })
-
-    //网格级联
-    $('#select_sq').change(function(){
+    // 控制用户是否需要停止轮播
+    $('#select_sq').click(function () {
+        rotate_control = 0;
+    })
+    // 网格级联
+    $('#select_sq').change(function () {
         sqCode = $(this).val();
         wg_params = `inCode::ALL;;sqCode::${sqCode}`;
         getDateByCommonInterface('690_cdwl_wg', wg_params, setWGIndustryData);
     })
-    $('#select_wg').change(function(){
+    $('#select_wg').change(function () {
         localStorage.setItem('selectData', JSON.stringify({
             select_indust: $("#select_indust").val(),
             select_sq: $("#select_sq").val(),
             select_wg: $("#select_wg").val(),
             dateIpt: $("#dateIpt").val(),
-            fromClick:true
+            fromClick: true
         }));
         location.href = '/bigSreen/sys/v1/cdwl-wg';
     })
@@ -130,10 +150,10 @@ $(function () {
             select_wg: $("#select_wg").val(),
             dateIpt: formatDate($("#dateIpt").val()),
             left_arrow: $('.left_arrow').css('display'),
-            fromClick:true
+            fromClick: true
         }));
-        let sqname =  $(this).data("sqname");
-        let sqz =  $(this).data("sqz");
+        let sqname = $(this).data("sqname");
+        let sqz = $(this).data("sqz");
         let sqcode = $(this).data("sqcode");
         let incode = $("#select_indust").val();        
         let selectTime = formatDate($("#dateIpt").val());
@@ -193,14 +213,9 @@ $(function () {
         // getDateByCommonInterface('690_cdwl_009', 'inCode::001;;time::20181126;;sqCode::sq001', yearinsert);
         // 690触点网络-商圈-弹出窗-月
         // getDateByCommonInterface('690_cdwl_010', 'inCode::001;;time::20181126;;sqCode::sq001', yearinsert);
-        //顶部柱状图
-        getDateByCommonInterface('690_cdwl_z006', chartsParams, nextYear);
-        getDateByCommonInterface('690_cdwl_z001', chartsParams, muBiao);
-        //轮播柱状图
-        getDateByCommonInterface('690_cdwl_z004', chartsParams, t1Month);
-        getDateByCommonInterface('690_cdwl_z005', chartsParams, t2Month);
-        getDateByCommonInterface('690_cdwl_z007', chartsParams, quarter1);
-        getDateByCommonInterface('690_cdwl_z008', chartsParams, quarter2);
+
+        //柱状图最大值
+        getDateByCommonInterface("690_cdwl+yhxw", chartsParams, setMAX);
         //行业地位
         getDateByCommonInterface('690_cdwl_030', chartsParams, setUpgrade);
     }
@@ -324,15 +339,15 @@ $(function () {
         setSLZB('.area_8', abledata);
     }
     //690触点网络-商圈-升级+行业地位
-    function setUpgrade (data){
+    function setUpgrade(data) {
         var abledata = [];
         let abledataArr = ['690_cdwl_t0', '690_cdwl_t2', '690_cdwl_t3', '690_cdwl_t1', '690_cdwl_t4', '690_cdwl_t5', '690_cdwl_t6', '690_cdwl_t7'];
-        $('.upgrade').each(function(i, item){
+        $('.upgrade').each(function (i, item) {
                 $(item).html('');
         })
         $('#ZLMB').val('');
-        $.each(abledataArr, function(i, item){
-            let obj = {HYDW: '', SJ: ''};
+        $.each(abledataArr, function (i, item) {
+            let obj = { HYDW: '', SJ: '' };
             if (data[item].length != 0) {
                 obj.HYDW = data[item][0].HYDW;
                 obj.SJ = data[item][0].SJ;
@@ -422,7 +437,7 @@ $(function () {
 
     // 拼接字符串
     function creatStr(item, i) {
-        if (item['MON1'] || item['MON2']){
+        if (item['MON1'] || item['MON2']) {
             str +=
                 `<div class="roll flex_center">
                     <div class="pointer pointer_month" data-sqname=${item['SQ_NAME']} data-sqz=${item['SQZ']} data-sqcode=${item['SQ_CODE']} >
@@ -436,8 +451,8 @@ $(function () {
                                 `<span class="` + (item['HQ_FLAG'] == '1' ? 'p_on_img' : '') + `"></span>
                                 <span class="` + rise(item) + `"></span>
                             </div>
-                            <div>目标：横 :
-                                <span>` + 
+                            <div>目标 : 横` + 
+                                `<span>` + 
                                     (item['MB_SWD'] - 0).toFixed(1) + 
                                 `</span>/` + 
                                 `<span>` + 
@@ -446,8 +461,8 @@ $(function () {
                                 `<span>` + 
                                     toPercent(item['MB_LSZF']) + 
                                 `</span>` + 
-                                `，纵 :
-                                <span>` + 
+                                `，纵` + 
+                                `<span>` + 
                                     (item['MB_CYFGL'] ? toPercent(item['MB_CYFGL']) : '') + 
                                 `</span>/` + 
                                 `<span>` + 
@@ -457,8 +472,8 @@ $(function () {
                                     (item['MB_FIVE_STAR_RATE_PRO'] ? toPercent(item['MB_FIVE_STAR_RATE_PRO']) : '') + 
                                 `</span>
                             </div>
-                            <div>承接：横 :
-                                <span style="color:` + ((item['SWD'] - 0).toFixed(1) < (item['MB_SWD'] - 0).toFixed(1) ? 'red' : '') + `;">` + 
+                            <div>承接 : 横` + 
+                                `<span style="color:` + ((item['SWD'] - 0).toFixed(1) < (item['MB_SWD'] - 0).toFixed(1) ? 'red' : '') + `;">` + 
                                     (item['SWD'] - 0).toFixed(1) + 
                                 `</span>/` + 
                                 `<span style="color:` + (toPercent(item['SRZF']) < toPercent(item['MB_SRZF']) ? 'red' : '') + `;">` + 
@@ -467,8 +482,8 @@ $(function () {
                                 `<span style="color:` + (toPercent(item['LSZF']) < toPercent(item['MB_LSZF']) ? 'red' : '') + `;">` + 
                                     toPercent(item['LSZF']) + 
                                 `</span>` + 
-                                `，纵 :
-                                <span style="color:` + (toPercent(item['CYFGL']) < toPercent(item['MB_CYFGL']) ? 'red' : '') + `;">` + 
+                                `，纵` + 
+                                `<span style="color:` + (toPercent(item['CYFGL']) < toPercent(item['MB_CYFGL']) ? 'red' : '') + `;">` + 
                                     toPercent(item['FGL']) + 
                                 `</span>/` + 
                                 `<span style="color:` + (toPercent(item['DBL']) < toPercent(item['MB_DBL']) ? 'red' : '') + `;">` + 
@@ -481,7 +496,7 @@ $(function () {
                         </div>
                     </div>
                 </div>`;
-        }else if (item['Q1'] || item['Q2']){
+        } else if (item['Q1'] || item['Q2']) {
             str +=
                 `<div class="roll flex_center">
                     <div class="pointer pointer_month" data-sqname=${item['SQ_NAME']} data-sqz=${item['SQZ']} data-sqcode=${item['SQ_CODE']} >
@@ -495,8 +510,8 @@ $(function () {
                                 `<span class="` + (item['HQ_FLAG'] == '1' ? 'p_on_img' : '') + `"></span>
                                 <span class="` + rise(item) + `"></span>
                             </div>
-                            <div>目标：横 :
-                                <span>` + 
+                            <div>目标 : 横` + 
+                                `<span>` + 
                                     (item['SWD'] - 0).toFixed(1) + 
                                 `</span>/` + 
                                 `<span>` + 
@@ -505,8 +520,8 @@ $(function () {
                                 `<span>` + 
                                     toPercent(item['LSZF']) + 
                                 `</span>` + 
-                                `，纵 :
-                                <span>` + 
+                                `，纵` + 
+                                `<span>` + 
                                     toPercent(item['FGL']) + 
                                 `</span>/` + 
                                 `<span>` + 
@@ -516,8 +531,8 @@ $(function () {
                                     (item['MB_FIVE_STAR_RATE_PRO'] ? toPercent(item['MB_FIVE_STAR_RATE_PRO']) : '') + 
                                 `</span>
                             </div>
-                            <div>承接：横 :
-                                <span>` + 
+                            <div>承接 : 横` + 
+                                `<span>` + 
                                     (item['SWD'] - 0).toFixed(1) + 
                                 `</span>/` + 
                                 `<span>` + 
@@ -526,8 +541,8 @@ $(function () {
                                 `<span>` + 
                                     toPercent(item['LSZF']) + 
                                 `</span>` + 
-                                `，纵 :
-                                <span>` + 
+                                `，纵` + 
+                                `<span>` + 
                                     toPercent(item['FGL']) + 
                                 `</span>/` + 
                                 `<span>` + 
@@ -540,7 +555,7 @@ $(function () {
                         </div>
                     </div>
                 </div>`;
-        }else if (item['YEAR']) {
+        } else if (item['YEAR']) {
             str +=
                 `<div class="roll flex_center">
                     <div class="pointer pointer_year" data-sqname=${item['SQ_NAME']} data-sqz=${item['SQZ']} data-sqcode=${item['SQ_CODE']} data-sqz=${item['SQZ']} >
@@ -554,7 +569,7 @@ $(function () {
                                 `<span class="` + (item['HQ_FLAG'] == '1' ? 'p_on_img' : '') + `"></span>
                             </div>
                             <div>
-                                目标 : 横 ` + 
+                                目标 : 横` + 
                                 (item['MB_SWD'] - 0).toFixed(1) + `/` + 
                                 toPercent(item['MB_SRZF']) + `/` + 
                                 toPercent(item['MB_LSZF']) + 
@@ -563,8 +578,8 @@ $(function () {
                                 toPercent(item['MB_DBL']) + `/` + 
                                 toPercent(item['MB_FIVE_STAR_RATE_PRO']) + 
                             `</div>
-                            <div>承接 : 横 
-                                <span style="color:` + ((item['YS_SWD'] - 0).toFixed(1) < (item['MB_SWD'] - 0).toFixed(1) ? 'red' : '') + `;"> ` + 
+                            <div>承接 : 横` + 
+                                `<span style="color:` + ((item['YS_SWD'] - 0).toFixed(1) < (item['MB_SWD'] - 0).toFixed(1) ? 'red' : '') + `;">` + 
                                     (item['YS_SWD'] - 0).toFixed(1) + 
                                 `</span>/` + 
                                 `<span style="color:` + (toPercent(item['YS_SRZF']) < toPercent(item['MB_SRZF']) ? 'red' : '') + `;">` + 
@@ -600,7 +615,7 @@ $(function () {
                                 `<span class="` + (item['HQ_FLAG'] == '1' ? 'p_on_img' : '') + `"></span>
                                 <span class="` + rise(item) + `"></span>
                             </div>
-                            <div>横 :
+                            <div>横 : 
                                 <span style="color:` + ((item['SWD'] - 0).toFixed(1) < (item['MB_SWD'] - 0).toFixed(1) ? 'red' : '') + `;">` + 
                                     (item['SWD'] - 0).toFixed(1) + 
                                 `</span>/
@@ -611,14 +626,14 @@ $(function () {
                                     toPercent(item['LSZF']) + 
                                 `</span>
                             </div>
-                            <div>纵 :
+                            <div>纵 : 
                                 <span style="color:` + (toPercent(item['CYFGL']) < toPercent(item['MB_CYFGL']) ? 'red' : '') + `;">` + 
                                     toPercent(item['CYFGL']) + 
                                 `</span>/
                                 <span style="color:` + (toPercent(item['DBL']) < toPercent(item['MB_DBL']) ? 'red' : '') + `;">` + 
                                     toPercent(item['DBL']) + 
                                 `</span>/
-                                <span style="color:` + (toPercent(item['SJ_FIVE_STAR_RATE_PRO']) < toPercent(item['MB_FIVE_STAR_RATE_PRO']) ? 'red' : '') + `;">`  + 
+                                <span style="color:` + (toPercent(item['SJ_FIVE_STAR_RATE_PRO']) < toPercent(item['MB_FIVE_STAR_RATE_PRO']) ? 'red' : '') + `;">` +
                                     toPercent(item['SJ_FIVE_STAR_RATE_PRO']) + 
                                 `</span>
                             </div>
@@ -639,8 +654,8 @@ $(function () {
                             `<span class="` + (item['HQ_FLAG'] == '1' ? 'p_on_img' : '') + `"></span>
                             <span class="` + rise(item) + `"></span>
                         </div>
-                            <div>横 :
-                                <span style="color:` + ((item['SWD'] - 0).toFixed(1)  < (item['MB_SWD'] - 0).toFixed(1)  ? 'red' : '') + `;">` + 
+                            <div>横 : 
+                                <span style="color:` + ((item['SWD'] - 0).toFixed(1) < (item['MB_SWD'] - 0).toFixed(1) ? 'red' : '') + `;">` +
                                     (item['SWD'] - 0).toFixed(1) + 
                                 `</span>/
                                 <span style="color:` + (toPercent(item['SRZF']) < toPercent(item['MB_SRZF']) ? 'red' : '') + `;">` + 
@@ -649,7 +664,7 @@ $(function () {
                                 <span style="color:` + (toPercent(item['LSZF']) < toPercent(item['MB_LSZF']) ? 'red' : '') + `;">` + 
                                     toPercent(item['LSZF']) + 
                                 `</span></div>
-                            <div>纵 :
+                            <div>纵 : 
                                 <span style="color:` + (item['CYFGL'] < item['MB_CYFGL'] ? 'red' : '') + `;">` + 
                                     (item['CYFGL'] ? toPercent(item['CYFGL']) : '') + 
                                 `</span>/
@@ -663,7 +678,7 @@ $(function () {
                         </div>
                     </div>
                 </div>`
-        } else{
+        } else {
             str +=
                 `<div class="roll flex_center">
                     <div class="pointer pointer_month" data-sqname=${item['SQ_NAME']} data-sqz=${item['SQZ']} data-sqcode=${item['SQ_CODE']} >
@@ -677,7 +692,7 @@ $(function () {
                                 `<span class="` + (item['HQ_FLAG'] == '1' ? 'p_on_img' : '') + `"></span>
                                 <span class="` + rise(item) + `"></span>
                             </div>
-                            <div>横 :
+                            <div>横 : 
                                 <span>` + 
                                     (item['SWD'] - 0).toFixed(1) + 
                                 `</span>/
@@ -688,7 +703,7 @@ $(function () {
                                     toPercent(item['LSZF']) + 
                                 `</span>
                             </div>
-                            <div>纵 :
+                            <div>纵 : 
                                 <span>` + 
                                     (item['CYFGL'] ? toPercent(item['CYFGL']) : '') + 
                                 `</span>/
@@ -706,7 +721,19 @@ $(function () {
                 </div>`;
         }
     }
-
+    //获取所有产业收入增幅和零售增幅的最大值
+    function setMAX(data) {
+        max = (data['690_cdwl_yhxw'][0]['MAX'] - 0).toFixed(2);
+        beilv = 5 / max;
+        //顶部柱状图
+        getDateByCommonInterface('690_cdwl_z006', chartsParams, nextYear);
+        getDateByCommonInterface('690_cdwl_z001', chartsParams, muBiao);
+        //轮播柱状图
+        getDateByCommonInterface('690_cdwl_z004', chartsParams, t1Month);
+        getDateByCommonInterface('690_cdwl_z005', chartsParams, t2Month);
+        getDateByCommonInterface('690_cdwl_z007', chartsParams, quarter1);
+        getDateByCommonInterface('690_cdwl_z008', chartsParams, quarter2);
+    }
     /**
      * 绘制柱状图，并转为图片
      * @param   data     请求得到的数据
@@ -717,31 +744,25 @@ $(function () {
     function createChart(data, dataType, oDiv, str) {
         let abledata = data[dataType];
         let barWidth = "30%";
-        let max = 10;
         $(oDiv).empty();
         $(`${oDiv}_img`).css('background', 'none');
         if (!abledata[0]) {
             console.log(`${oDiv}无轮播图数据`);
-        }else{
+        } else {
             var xdata = ['首位度', '收入增幅', '零售增幅'];
-            var ydata = [abledata[0][`${str}_SWD`], abledata[0][`${str}_SRZF`] * 10, abledata[0][`${str}_LSZF`] * 10];
+            var ydata = [abledata[0][`${str}_SWD`] / beilv, abledata[0][`${str}_SRZF`], abledata[0][`${str}_LSZF`]];
             if (dataType == '690_cdwl_331') {
                 muBiaoData = [].concat(ydata);
             };            
             if (dataType == '690_cdwl_331' || dataType == '690_cdwl_332' || dataType == '690_cdwl_333') {
                 barWidth = '35%';
             };
-            $.each(ydata, function(i, item){
-                if(item >= 10){
-                    max = item;
-                }
-            })
             $(oDiv).removeAttr('_echarts_instance_');
             let ec0001_bar = echarts.init($(oDiv)[0]);
             ec0001_bar.clear();
             ec0001_bar.setOption(opt_bar_vertical);
             ec0001_bar.setOption({
-                animation:false,
+                animation: false,
                 color: "#0083b3",
                 grid: {
                     left: '-5%',
@@ -754,7 +775,7 @@ $(function () {
                         margin: 2 * bodyScale,
                         fontSize: 12 * bodyScale,
                         interval: 0,
-                        color:'#0083b3'
+                        color: '#0083b3'
                     },
                     axisLine: {
                         lineStyle: {
@@ -787,10 +808,9 @@ $(function () {
                                 formatter: function (data) {
                                     let dataValue = data.data;
                                     if (data.dataIndex === 0) {
-                                        dataValue = (dataValue - 0).toFixed(1);
+                                        dataValue = (dataValue * beilv).toFixed(1);
                                     }
                                     if (data.dataIndex != 0) {
-                                        dataValue /= 10;
                                         dataValue = toPercent(dataValue);
                                     }
                                     if (dataType == '690_cdwl_332' || dataType == '690_cdwl_333') {
@@ -813,7 +833,7 @@ $(function () {
                     },
                 }
                 ].map(function (item) {
-                    return $.extend(item, {type: 'bar'})
+                    return $.extend(item, { type: 'bar' })
                 }),
             });
             //转为图片
@@ -829,14 +849,14 @@ $(function () {
         let year = date.getFullYear();
         let month = date.getMonth() + 1;
         let day = date.getDate();
-        if(day <= 4){
+        if (day <= 4) {
             month--;
-            if(month == 0){
+            if (month == 0) {
                 month = 12;
                 year--;
             }
             day = getLastDay(year, month);
-        }else {
+        } else {
             day -= 1;
         }
         sqCode = "ALL";
@@ -851,7 +871,7 @@ $(function () {
             year = havDate[0];
             month = havDate[1];
             day = havDate[2];
-        }else {
+        } else {
             // if (day < 10) {
             //     $("#dateIpt").val(year + "-" + month + "-0" + day);
             // } else {
@@ -872,20 +892,15 @@ $(function () {
             if (displayType === 'none') {
                 $('.right_arrow').css('display', 'block');
             }
-        }else {
+        } else {
             $('.left_arrow').css('display', 'block');
         }
         //拼接参数
         params = `inCode::${inCode};;time::${dateIpt};;sqCode::${sqCode}`;
         chartsParams = `inCode::${inCode};;time::${dateIpt}`;
-        wg_params = `inCode::ALL;;sqCode::${sqCode}`;
         sq_params = `inCode::ALL`;
-        //发送请求
-        getData();
         //触点网络-商圈下拉框
         getDateByCommonInterface('690_cdwl_sq', sq_params, setSQIndustryData);
-        //触点网络-网格下拉框
-        getDateByCommonInterface('690_cdwl_wg', wg_params, setWGIndustryData);
         //日期显示
         setMonth(month, year, day);
     };
@@ -896,7 +911,7 @@ $(function () {
         var isYes = true;
         if (selectdata.length == 0) {
             console.log('无产业下拉框数据');
-        }else {
+        } else {
             $.each(data["690_cdwl_sw499"], function (index, item) {
                 if (item.INDUSTRY_CODE == 'BAA') {
                     //默认产业
@@ -907,7 +922,7 @@ $(function () {
                 }
                 $("#select_indust").append(htmls);
             });
-            if( isYes){
+            if (isYes) {
                 $("#select_indust option").eq(0).attr('selected', 'selected');
             }
         }
@@ -926,27 +941,18 @@ $(function () {
     //封装商圈下拉框
     function setSQIndustryData(data) {
         let abledata = data['690_cdwl_sq'];
-        //let sqArr = [];
+        sqArr = abledata;
         if (abledata.length == 0) {
-            //sqArr.push({sq_code: "ALL", sq_name: "全部商圈"})
             console.log("无商圈下拉框数据");
-        }else{
-            // sqArr.push({sq_code: abledata[0].SQ_CODE, sq_name: abledata[0].SQ_NAME});
-            // for (let i = 1; i < abledata.length; i++) {
-            //     let isYes = true;
-            //     for (let j = 0; j < sqArr.length; j++) {
-            //         if (abledata[i].SQ_CODE == sqArr[j].sq_code) {
-            //             isYes = false;
-            //         }
-            //     }
-            //     if (isYes) {
-            //         sqArr.push({sq_code: abledata[i].SQ_CODE, sq_name: abledata[i].SQ_NAME});
-            //     }
-            // } 
-            $("#select_sq").append(`<option value="ALL">全部商圈</option>`);
+        } else {
             $.each(abledata, function (index, item) {
+                if (item.SQ_NAME == '青岛') {
+                    $("#select_sq").prepend("<option value=" + item.SQ_CODE + " selected>" + item.SQ_NAME + "</option>")
+                } else {
                 $("#select_sq").append("<option value=" + item.SQ_CODE + ">" + item.SQ_NAME + "</option>")
+                }
             });
+            $("#select_sq").prepend(`<option value="ALL">全部商圈</option>`);
         }
         if (localStorage.getItem('selectData')) {
             console.log('~~~~', localStorage.selectData)
@@ -956,24 +962,15 @@ $(function () {
                 }
             })
         }
+        sqCode = $("#select_sq").val();
+        //发送请求
+        getData();
+        // 单个商圈轮换
+        rotateSQData();
     }
 
     //封装网格下拉框
     function setWGIndustryData(data) {
-        //console.log(abledata)
-        // let wgArr = [];
-        // wgArr.push({wg_code: abledata[0].WG_CODE, wg_name: abledata[0].WG_NAME});
-        // for (let i = 1; i < abledata.length; i++) {
-        //     let isYes = true;
-        //     for (let j = 0; j < wgArr.length; j++) {
-        //         if (abledata[i].WG_NAME == wgArr[j]) {
-        //             isYes = false;
-        //         }
-        //     }
-        //     if (isYes) {
-        //         wgArr.push({wg_code: abledata[i].WG_CODE, wg_name: abledata[i].WG_NAME});
-        //     }
-        // }
         var abledata = data['690_cdwl_wg'];
         $("#select_wg").html(`<option value='ALL'>全部网格</option>`);
         $.each(abledata, function (index, item) {
@@ -987,6 +984,64 @@ $(function () {
         //         }
         //     })
         // }
+    }
+
+    //单个商圈轮换
+    function rotateSQData() {
+        wg_params = `inCode::ALL;;sqCode::${sqCode}`;
+        //触点网络-网格下拉框
+        getDateByCommonInterface('690_cdwl_wg', wg_params, setWGIndustryData);
+        sqDataOpts = document.querySelectorAll('#select_sq option');
+        rotate_timer = setInterval(rotate_interval, 4000);
+    }
+    // 单个商圈轮换定时器函数
+    function rotate_interval() {
+        if (rotate_index == sqDataOpts.length) {
+            rotate_index = 1;
+        }
+        for (let i = 0; i < sqDataOpts.length; i++) {
+            if (sqDataOpts[rotate_index] == sqDataOpts[i]) {
+                sqDataOpts[i].setAttribute('selected', true);
+            } else {
+                sqDataOpts[i].removeAttribute('selected');
+            }
+        }
+        rotate_index++;
+        $("#select_sq").change();
+        sqCode = $("#select_sq option:selected").val();
+        params = "inCode::" + inCode + ";;time::" + dateIpt + ";;sqCode::" + sqCode;
+        // 690触点网络-商圈-位置-年
+        getDateByCommonInterface('690_cdwl_001', params, setYearData);
+        // 690触点网络-商圈-位置-本月-目标
+        getDateByCommonInterface('690_cdwl_002', params, setMonthMBData);
+        // 690触点网络-商圈-位置-本月-承接
+        getDateByCommonInterface('690_cdwl_003', params, setMonthYSxData);
+        // 690触点网络-商圈-位置-本月-实际
+        getDateByCommonInterface('690_cdwl_004', params, setMonthSJData);
+        // 690触点网络-商圈-位置-T+1月
+        getDateByCommonInterface('690_cdwl_005', params, setMonthT1Data);
+        // 690触点网络-商圈-位置-T+2月
+        getDateByCommonInterface('690_cdwl_006', params, setMonthT2Data);
+        // 690触点网络-商圈-位置-Q1季度
+        getDateByCommonInterface('690_cdwl_007', params, setQuarter1Data);
+        // 690触点网络-商圈-位置-Q2季度
+        getDateByCommonInterface('690_cdwl_008', params, setQuarter2Data);
+        // 690触点网络-商圈-年-数量占比
+        getDateByCommonInterface('690_cdwl_011', params, ltitle_1);
+        // 690触点网络-商圈-月-承接-数量占比
+        getDateByCommonInterface('690_cdwl_012', params, ltitle_2);
+        // 690触点网络-商圈-月-目标-数量占比
+        getDateByCommonInterface('690_cdwl_013', params, ltitle_3);
+        // 690触点网络-商圈-月-实际-数量占比
+        getDateByCommonInterface('690_cdwl_014', params, ltitle_4);
+        // 690触点网络-商圈-T+1月-数量占比
+        getDateByCommonInterface('690_cdwl_015', params, ltitle_5);
+        // 690触点网络-商圈-T+2月-数量占比
+        getDateByCommonInterface('690_cdwl_016', params, ltitle_6);
+        // 690触点网络-商圈-Q1季度-数量占比
+        getDateByCommonInterface('690_cdwl_017', params, ltitle_7);
+        // 690触点网络-商圈-Q2季度-数量占比
+        getDateByCommonInterface('690_cdwl_018', params, ltitle_8);
     }
 
     // 用上次的选择结果初始化时间控件

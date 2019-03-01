@@ -273,13 +273,13 @@ $(function () {
         if (item['PT_NAME']) {
             // console.log(item)
             str +=
-                `<div class="roll flex_center" style="height:` + diced(item) + `%;">
+            `<div class="roll flex_center" style=` + diced(item) + `>
                     <div class="pointer pointer_year" data-id="`+ countScroll + `" data-xwcode="` + item.XW_CODE + `"data-xwname="` + item['XW_NAME'] + `"data-xwz="` + item['XWZ'] + `"data-year="` + item['YEAR'] + `">
                         <div class="p_on `+ xJudge(item) + `" >
                             <span class=`+ starColor(item) + `></span>
                             <div class="p_on_tit" style="display:inline-block;margin-left:1rem;">` + item['INDUSTRY_NAME'] + `<span class="rise_ico ` + rise(item) + `"></span></div>
                             <div class=`+ centerTxt(xJudge(item)) + `>目标 ：` + toPercent3(item['MB_SWD']) + `/` + toPercent2(item['MB_SR']) + `/` + toPercent(item['MB_LRL']) +
-                `，实际 ：<span style="color:` + (toPercent3(item['SJ_SWD']) < toPercent3(item['MB_SWD']) ? 'red' : '') + `;">` + toPercent3(item['SJ_SWD']) + `</span>/<span style="color:` + (toPercent2(item['SJ_SR']) < toPercent2(item['MB_SR']) ? 'red' : '') + `;">` + toPercent2(item['SJ_SR']) + `</span>/<span style="color:` + (toPercent(item['SJ_LRL']) < toPercent(item['MB_LRL']) ? 'red' : '') + `;">` + toPercent(item['SJ_LRL']) + `</span></div>
+                            `，实际 ：<span style="color:` + (toPercent3(item['SJ_SWD']) < toPercent3(item['MB_SWD']) ? 'red' : '') + `;">` + toPercent3(item['SJ_SWD']) + `</span>/<span style="color:` + (parseFloat(toPercent2(item['SJ_SR'])) < parseFloat(toPercent2(item['MB_SR'])) ? 'red' : '') + `;">` + toPercent2(item['SJ_SR']) + `</span>/<span style="color:` + (parseFloat(toPercent(item['SJ_LRL'])) < parseFloat(toPercent(item['MB_LRL'])) ? 'red' : '') + `;">` + toPercent(item['SJ_LRL']) + `</span></div>
                         </div>
                     </div>
                 </div>`;
@@ -346,17 +346,20 @@ $(function () {
      * 判断产业数量决定高度（平台产业展示）
      */
     function diced(item) {
-        if (document.body.clientWidth > 1400) {
-            return 17;
-        }else{
-            return 25;
-        }
+        var style = '';
+        style = 'height:'
         switch (item['XJ']) {
-            case '1': return 50 / item['SL5'];
-            case '2': return 50 / item['SL4'];
-            case '3': return 50 / item['SL3'];
-            case '4': return 50 / item['SL2'];
-            case '5': return 50 / item['SL1'];
+            case '1': style += (50 / item['SL5']) + '%;';break;
+            case '2': style += (50 / item['SL4']) + '%;';break;
+            case '3': style += (50 / item['SL3']) + '%;';break;
+            case '4': style += (50 / item['SL2']) + '%;';break;
+            case '5': style += (50 / item['SL1']) + '%;';break;
+        }
+        if (document.body.clientWidth > 1400) {
+            return style;
+        }else{
+            style += 'transform:scale(.8);'
+            return style;
         }
     }
     /**

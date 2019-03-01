@@ -29,10 +29,10 @@
 }
 
 .nav_btns .pt_btn.home_btn {
-    display: block;
+    /* display: block; */
     width: 2rem;
     height: 2rem;
     border: 0;
-    background: url("/690Project_web/images/home.png") no-repeat;
+    background: url("/690/images/home.png") no-repeat;
     background-size: 2rem 2rem;
 }

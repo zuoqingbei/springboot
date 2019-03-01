@@ -11,9 +11,10 @@ import java.util.Enumeration;
 import java.util.List;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
+
 import de.innosystec.unrar.Archive;
 import de.innosystec.unrar.NativeStorage;
-import de.innosystec.unrar.rarfile.FileHeader;  
+import de.innosystec.unrar.rarfile.FileHeader;
 
 /**
  * 

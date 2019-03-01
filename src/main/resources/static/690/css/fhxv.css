@@ -275,7 +275,7 @@ main>div {
     position: relative;
     height: 75.9%;
     /* border-bottom: 1px solid var(--borderColor); */
-    /* background: url("/690Project_web/images/fhxw_y1.jpg") no-repeat; */
+    /* background: url("/690/images/fhxw_y1.jpg") no-repeat; */
     /* background-size: 100% 100%; */
 }
 
@@ -348,7 +348,7 @@ main>div {
 .line_2 {
     top: 63%;
     height: 37%;
-    background-image: url('/690Project_web/images/A.png');
+    background-image: url('/690/images/A.png');
     border-top: .05rem solid var(--fontColor);
     border-bottom: .1rem solid var(--fontColor);
 }
@@ -356,7 +356,7 @@ main>div {
 .turndown {
     height: 24%;
     position: relative;
-    background: url("/690Project_web/images/fhxw_y2.jpg") no-repeat;
+    background: url("/690/images/fhxw_y2.jpg") no-repeat;
     background-size: 104% 100%;
     background-position: -5px 0%;
 }
@@ -948,7 +948,7 @@ main>div {
 .x_axis {
     width: 100%;
     height: 16px;
-    background: url(/690Project_web/images/xAxis.png) no-repeat;
+    background: url(/690/images/xAxis.png) no-repeat;
     position: absolute;
     bottom: 14.4%;
     background-size: 100% 100%;
@@ -959,7 +959,7 @@ main>div {
 .x_axis2 {
     width: 96.5%;
     height: 10px;
-    background: url(/690Project_web/images/xAxis2.png) no-repeat;
+    background: url(/690/images/xAxis2.png) no-repeat;
     position: absolute;
     bottom: 4.1%;
     left: 3%;
@@ -974,7 +974,7 @@ main>div {
     height: 63%;
     top: 38%;
     left: 14.3%;
-    background: url(/690Project_web/images/yAxis.png) no-repeat;
+    background: url(/690/images/yAxis.png) no-repeat;
     z-index: 98;
     background-size: 75% 100%;
 }
@@ -1005,11 +1005,11 @@ main>div {
 }
 span.left_arrow {
     display: block;
-    background-image: url(/690Project_web/images/left_month.png);
+    background-image: url(/690/images/left_month.png);
     left: 20.5%;
 }
 span.right_arrow {
     display: none;
-    background-image: url(/690Project_web/images/right_month.png);
+    background-image: url(/690/images/right_month.png);
     right: 22%;
 }
