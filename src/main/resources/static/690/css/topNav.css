@@ -29,7 +29,7 @@
 }
 
 .nav_btns .pt_btn.home_btn {
-    display: block;
+    /* display: block; */
     width: 2rem;
     height: 2rem;
     border: 0;
