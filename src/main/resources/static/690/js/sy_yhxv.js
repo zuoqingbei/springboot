@@ -274,16 +274,16 @@ $(function () {
             // console.log(item)
             str +=
             `<div class="roll flex_center" style=` + diced(item) + `>
-                    <div class="pointer pointer_year" data-id="`+ countScroll + `" data-xwcode="` + item.XW_CODE + `"data-xwname="` + item['XW_NAME'] + `"data-xwz="` + item['XWZ'] + `"data-year="` + item['YEAR'] + `">
-                        <div class="p_on `+ xJudge(item) + `" >
-                            <span class=`+ starColor(item) + `></span>
-                            <div class="p_on_tit" style="display:inline-block;margin-left:1rem;">` + item['INDUSTRY_NAME'] + `<span class="rise_ico ` + rise(item) + `"></span></div>
-                            <div class=`+ centerTxt(xJudge(item)) + `>目标 ：` + toPercent3(item['MB_SWD']) + `/` + toPercent2(item['MB_SR']) + `/` + toPercent(item['MB_LRL']) +
-                            `，实际 ：<span style="color:` + (toPercent3(item['SJ_SWD']) < toPercent3(item['MB_SWD']) ? 'red' : '') + `;">` + toPercent3(item['SJ_SWD']) + `</span>/<span style="color:` + (parseFloat(toPercent2(item['SJ_SR'])) < parseFloat(toPercent2(item['MB_SR'])) ? 'red' : '') + `;">` + toPercent2(item['SJ_SR']) + `</span>/<span style="color:` + (parseFloat(toPercent(item['SJ_LRL'])) < parseFloat(toPercent(item['MB_LRL'])) ? 'red' : '') + `;">` + toPercent(item['SJ_LRL']) + `</span></div>
-                        </div>
-                    </div>
-                </div>`;
-        } else {
+            <div class="pointer pointer_year" data-id="`+ countScroll + `" data-xwcode="` + item.XW_CODE + `"data-xwname="` + item['XW_NAME'] + `"data-xwz="` + item['XWZ'] + `"data-year="` + item['YEAR'] + `">
+                <div class="p_on `+ xJudge(item) + `" >
+                    <span class=`+ starColor(item) + `></span>
+                    <div class="p_on_tit" style="display:inline-block;margin-left:1rem;">` + item['INDUSTRY_NAME'] + `<span class="rise_ico ` + rise(item) + `"></span></div>
+                    <div class=`+ centerTxt(xJudge(item)) + `>目标 ：` + toPercent3(item['MB_SWD']) + `/` + toPercent2(item['MB_SR']) + `/` + toPercent(item['MB_LRL']) +
+        `，实际 ：<span style="color:` + (toPercent3(item['SJ_SWD']) < toPercent3(item['MB_SWD']) ? 'red' : '') + `;">` + toPercent3(item['SJ_SWD']) + `</span>/<span style="color:` + (parseFloat(toPercent2(item['SJ_SR'])) < parseFloat(toPercent2(item['MB_SR'])) ? 'red' : '') + `;">` + toPercent2(item['SJ_SR']) + `</span>/<span style="color:` + (parseFloat(toPercent(item['SJ_LRL'])) < parseFloat(toPercent(item['MB_LRL'])) ? 'red' : '') + `;">` + toPercent(item['SJ_LRL']) + `</span></div>
+                </div>
+            </div>
+        </div>`;
+} else {
             str +=
                 `<div class="roll flex_center">
                     <div class="pointer pointer_year" data-id="`+ countScroll + `" data-xwcode="` + item.XW_CODE + `"data-xwname="` + item['XW_NAME'] + `"data-xwz="` + item['XWZ'] + `"data-year="` + item['YEAR'] + `">
